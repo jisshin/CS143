@@ -3,6 +3,18 @@
 #include "link.hpp"
 #include "router.hpp"
 
+static NetworkManager::manager = NULL;
+
+NetworkManager* NetworkManager::getInstance()
+{
+	if(manager){
+		return manager;
+	}
+	else{
+		return (manager = new NetworkManager());
+	}
+}
+
 int Network::registerFlow(char* id, FlowInfo&)
 {
 

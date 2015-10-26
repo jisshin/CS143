@@ -1,9 +1,7 @@
-#ifndef NETWORK_H
-#define NETWORK_H
+#ifndef NETWORKMANAGER_H
+#define NETWORKMANAGER_H
 
 #include <map>
-
-#include "eventqueue.hpp"
 
 class Flow;
 class FlowInfo;
@@ -12,9 +10,9 @@ class Link;
 class LinkInfo;
 class Router;
 
-class Network {
+class NetworkManager {
 public:
-	Network(){}
+	static NetworkManager* getInstance();
 
 	int registerFlow(char* id, FlowInfo&);
 	int registerHost(char* id);
@@ -28,11 +26,14 @@ public:
 	Link* getLink(char* id) { return m_links[*id];}
 	Router* getRouter(char* id){ return m_routers[*id];}
 
-private:
+private:	
+	NetworkManager(){}
+	static NetworkManager* manager;
+
 	std::map<char, Flow*> m_flows;
 	std::map<char, Host*> m_hosts;
 	std::map<char, Link*> m_links;
 	std::map<char, Router*> m_routers;
 };
 
-#endif //NETWORK_H
+#endif //NETWORKMANAGER_H
