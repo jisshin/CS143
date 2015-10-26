@@ -1,4 +1,4 @@
-#ifdef EVENT_QUEUE_H
+#ifndef EVENT_QUEUE_H
 #define EVENT_QUEUE_H
 
 /* C/C++ lib */
@@ -6,14 +6,15 @@
 #include <stdlib.h>
 
 /* other lib */
-#include "Event.h"
+#include "event.hpp"
 
 class EventQueue{
 	public:
-		static EventQueue* get_instance(){
-			static S instance; 
-			return &instance; 
-			count = 0;
+		static EventQueue& get_instance(){
+			static EventQueue instance; 
+			instance.count = 0;
+			return instance; 
+	
 		}
 		int test_count();
 	private:
