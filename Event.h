@@ -12,7 +12,7 @@ enum  EventID_t{
 
 class Event{
 	public:
-		Event();
+		Event(EventID_t ID);
 		EventID_t EventID;
 		string dest;
 		string src;  
