@@ -1,10 +1,10 @@
 #ifndef HOST_H
 #define HOST_H
 
-class Host(){
+class Host {
 public:
 	Host(){}
 
 };
 
-#endif HOST_H
+#endif //HOST_H

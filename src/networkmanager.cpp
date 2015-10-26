@@ -1,9 +1,10 @@
+#include "networkmanager.hpp"
 #include "flow.hpp"
 #include "host.hpp"
 #include "link.hpp"
 #include "router.hpp"
 
-static NetworkManager::manager = NULL;
+NetworkManager* NetworkManager::manager = NULL;
 
 NetworkManager* NetworkManager::getInstance()
 {
@@ -15,27 +16,28 @@ NetworkManager* NetworkManager::getInstance()
 	}
 }
 
-int Network::registerFlow(char* id, FlowInfo&)
+int NetworkManager::registerFlow(char* id, Flow&)
 {
-
+	return 1;
 }
 
-int Network::registerHost(char* id)
+int NetworkManager::registerHost(char* id)
 {
-	
+	return 1;	
 }
 
-int Network::registerLink(char* id, LinkInfo&)
+int NetworkManager::registerLink(std::string id, Link& link)
 {
-	
+	m_links[id] = &link;
+	return 1;
 }
 
-int Network::registerRouter(char* id)
+int NetworkManager::registerRouter(char* id)
 {
-	
+	return 1;
 }
 
-int Network::connectLink(char* link_id, char* node1_id, char* node2_id)
+int NetworkManager::connectLink(char* link_id, char* node1_id, char* node2_id)
 {
-
+	return 1;
 }
