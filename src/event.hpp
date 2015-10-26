@@ -8,14 +8,14 @@
 
 using std::string; 
 
-enum EventID_t{
-	STUB_EVENT_ID
-};
 
 class Event{
 	public:
-		Event(EventID_t ID);
-		EventID_t EventID;
+		Event();
+
+		virtual int handleEvent() = 0;
+
+	private:
 		string dest;
 		string src;  
 		int 	time; 
