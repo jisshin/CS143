@@ -1,5 +1,4 @@
-#include "EventQueue.h"
-
+#include "eventqueue.hpp"
 
 int EventQueue::test_count(){
 	count++;
