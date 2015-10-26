@@ -5,7 +5,12 @@
 
 #include "eventqueue.hpp"
 
-class Flow, FlowInfo, Host, Link, LinkInfo, Router;
+class Flow;
+class FlowInfo;
+class Host;
+class Link;
+class LinkInfo;
+class Router;
 
 class Network {
 public:
@@ -18,16 +23,16 @@ public:
 
 	int connectLink(char* link_id, char* node1_id, char* node2_id);
 	
-	Flow* getFlow(char* id) { return m_flows[id]};
-	Host* getHost(char* id) { return m_hosts[id]};
-	Link* getLink(char* id) { return m_links[id]};
-	Router* getRouter(char* id){ return m_routers[id]};	
+	Flow* getFlow(char* id) { return m_flows[*id];}
+	Host* getHost(char* id) { return m_hosts[*id];}
+	Link* getLink(char* id) { return m_links[*id];}
+	Router* getRouter(char* id){ return m_routers[*id];}
 
 private:
-	std::map<char* id, Flow*> m_flows;
-	std::map<char* id, Host*> m_hosts;
-	std::map<char* id, Link*> m_links;
-	std::map<char* id, Router*> m_routers;
+	std::map<char, Flow*> m_flows;
+	std::map<char, Host*> m_hosts;
+	std::map<char, Link*> m_links;
+	std::map<char, Router*> m_routers;
 };
 
 #endif //NETWORK_H

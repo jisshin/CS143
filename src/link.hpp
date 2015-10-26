@@ -1,6 +1,14 @@
 #ifndef LINK_H
 #define LINK_H
 
+class LinkInfo {
+public:
+	LinkInfo(){}
+	int link_rate;
+	int link_delay;
+	int link_buffer;
+};
+
 class Link {
 public:
 	Link(char* ID, int link_rate, int link_delay, int link_buffer)\
