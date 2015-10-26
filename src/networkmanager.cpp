@@ -4,6 +4,8 @@
 #include "link.hpp"
 #include "router.hpp"
 
+using namespace std;
+
 NetworkManager* NetworkManager::manager = NULL;
 
 NetworkManager* NetworkManager::getInstance()
@@ -16,28 +18,28 @@ NetworkManager* NetworkManager::getInstance()
 	}
 }
 
-int NetworkManager::registerFlow(char* id, Flow&)
+int NetworkManager::registerFlow(string id, Flow&)
 {
 	return 1;
 }
 
-int NetworkManager::registerHost(char* id)
+int NetworkManager::registerHost(string id)
 {
 	return 1;	
 }
 
-int NetworkManager::registerLink(std::string id, Link& link)
+int NetworkManager::registerLink(string id, Link& link)
 {
 	m_links[id] = &link;
 	return 1;
 }
 
-int NetworkManager::registerRouter(char* id)
+int NetworkManager::registerRouter(string id)
 {
 	return 1;
 }
 
-int NetworkManager::connectLink(char* link_id, char* node1_id, char* node2_id)
+int NetworkManager::connectLink(string link_id, string node1_id, string node2_id)
 {
 	return 1;
 }

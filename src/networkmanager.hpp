@@ -5,36 +5,34 @@
 #include <string>
 
 class Flow;
-class FlowInfo;
 class Host;
 class Link;
-class LinkInfo;
 class Router;
 
 class NetworkManager {
 public:
 	static NetworkManager* getInstance();
 
-	int registerFlow(char* id, Flow&);
-	int registerHost(char* id);
+	int registerFlow(std::string id, Flow&);
+	int registerHost(std::string id);
 	int registerLink(std::string id, Link&);
-	int registerRouter(char* id);
+	int registerRouter(std::string id);
 
-	int connectLink(char* link_id, char* node1_id, char* node2_id);
+	int connectLink(std::string link_id, std::string node1_id, std::string node2_id);
 	
-	Flow* getFlow(char* id) { return m_flows[*id];}
-	Host* getHost(char* id) { return m_hosts[*id];}
+	Flow* getFlow(std::string id) { return m_flows[id];}
+	Host* getHost(std::string id) { return m_hosts[id];}
 	Link* getLink(std::string id) { return m_links[id];}
-	Router* getRouter(char* id){ return m_routers[*id];}
+	Router* getRouter(std::string id){ return m_routers[id];}
 
 private:	
 	NetworkManager(){}
 	static NetworkManager* manager;
 
-	std::map<char, Flow*> m_flows;
-	std::map<char, Host*> m_hosts;
+	std::map<std::string, Flow*> m_flows;
+	std::map<std::string, Host*> m_hosts;
 	std::map<std::string, Link*> m_links;
-	std::map<char, Router*> m_routers;
+	std::map<std::string, Router*> m_routers;
 };
 
 #endif //NETWORKMANAGER_H
