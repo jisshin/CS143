@@ -23,7 +23,7 @@ int NetworkManager::registerFlow(string id, Flow&)
 	return 1;
 }
 
-int NetworkManager::registerHost(string id)
+int NetworkManager::registerNode(string id)
 {
 	return 1;	
 }
@@ -31,11 +31,6 @@ int NetworkManager::registerHost(string id)
 int NetworkManager::registerLink(string id, Link& link)
 {
 	m_links[id] = &link;
-	return 1;
-}
-
-int NetworkManager::registerRouter(string id)
-{
 	return 1;
 }
 
