@@ -1,4 +1,4 @@
-#include "eventqueue.hpp"
+#include "../include/eventqueue.hpp"
 
 
 void EventQueue::push(Event event)

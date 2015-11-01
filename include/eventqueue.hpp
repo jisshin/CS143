@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <queue>
 #include <vector>
-#include <functional>
 
 /* other lib */
 #include "event.hpp"

@@ -2,12 +2,9 @@
 #define EVENT_H
 
 /* C/C++ lib */
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include <string>
-
-using std::string; 
-
 
 class Event{
 	public:
@@ -16,8 +13,8 @@ class Event{
 		virtual int handleEvent() { return 0; }
 
 	//private:
-		string dest;
-		string src;  
+		std::string dest;
+		std::string src;  
 		double time = -1; 
 };
 

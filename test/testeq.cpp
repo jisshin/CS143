@@ -1,4 +1,4 @@
-#include "eventqueue.hpp"
+#include "../include/eventqueue.hpp"
 
 #include <cassert>
 #include <cstdlib>
@@ -32,5 +32,6 @@ int main()
 
 	assert(event.pop().time == -1);
 	assert(event.pop().time == -1);
+	printf("Test Success - event queue\n");
 	return EXIT_SUCCESS;
 }
