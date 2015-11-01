@@ -4,8 +4,10 @@
 /* C/C++ lib */
 #include <cstdio>
 #include <cstdlib>
+#include <queue>
 #include <vector>
-#include <map>
+#include <functional>
+
 /* other lib */
 #include "event.hpp"
 
@@ -13,21 +15,17 @@ class EventQueue{
 	public:
 		static EventQueue& get_instance(){
 			static EventQueue instance; 
-			instance.count = 0;
-			return instance; 
-	
+			return instance; 	
 		}
 		
-		void push(double time, Event event);
+		void push(Event event);
 		Event pop();
 
 	private:
 		EventQueue(){};
-		EventQueue(EventQueue const&);	 	 // Don't implement 
-		void operator=(EventQueue const&);	 // Dont' implement 
 		
-		std::map<double, std::vector<Event>> registered_events;
-
+		std::priority_queue<Event, std::vector<Event>, \
+			CompareEvent > registered_events;
 };
 
 

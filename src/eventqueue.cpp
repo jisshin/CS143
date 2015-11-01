@@ -1,37 +1,18 @@
-#include "../include/eventqueue.hpp"
+#include "eventqueue.hpp"
 
-#include <vector>
-#include <map>
 
-void EventQueue::enqueue(double time, Event event)
+void EventQueue::push(Event event)
 {
-	std::map<double, std::vector<Event>>::iterator iter;
-	iter = registered_events.find(time);
-
-	if (iter != registered_events.end())
-	{
-		std::vector<Event> e;
-		e.push_back(event);	
-		registered_events[time] = e;
-	}
-	else
-	{
-		registered_events[time].push_back(event);
-	}
-
+	registered_events.push(event);
 }
 
-Event EventQueue::dequeue()
+Event EventQueue::pop()
 {
-	std::map<double, std::vector<Event>>::iterator iter;
-	iter = registered_events.begin();
-
-	Event event = (iter->second()).pop_back();
-
-	if (e.size() == 0)
-	{
-		registered_events.erase(iter);
+	if (registered_events.size() == 0) {
+		return Event();
 	}
 
-	return event;
+	Event e = registered_events.top();
+	registered_events.pop();
+	return e;
 }

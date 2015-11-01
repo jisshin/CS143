@@ -11,13 +11,21 @@ using std::string;
 
 class Event{
 	public:
-		Event();
+		Event() {}
 
-		virtual int handleEvent() = 0;
+		virtual int handleEvent() { return 0; }
 
-	private:
+	//private:
 		string dest;
 		string src;  
-		int 	time; 
+		double time = -1; 
+};
+
+struct CompareEvent
+{
+	bool operator()(const Event& lhs, const Event& rhs) const
+	{
+		return lhs.time > rhs.time;
+	}
 };
 #endif //EVENT_H
