@@ -14,7 +14,6 @@ public:
 	std::string flow_src;
 	std::string flow_dest;
 	int flow_data_amt;
-	double flow_start_time;
 };
 
 #endif //FLOW_H

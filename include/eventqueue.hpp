@@ -2,9 +2,10 @@
 #define EVENT_QUEUE_H
 
 /* C/C++ lib */
-#include <stdio.h>
-#include <stdlib.h>
-
+#include <cstdio>
+#include <cstdlib>
+#include <vector>
+#include <map>
 /* other lib */
 #include "event.hpp"
 
@@ -16,12 +17,17 @@ class EventQueue{
 			return instance; 
 	
 		}
-		int test_count();
+		
+		void push(double time, Event event);
+		Event pop();
+
 	private:
 		EventQueue(){};
 		EventQueue(EventQueue const&);	 	 // Don't implement 
 		void operator=(EventQueue const&);	 // Dont' implement 
-		int count;
+		
+		std::map<double, std::vector<Event>> registered_events;
+
 };
 
 
