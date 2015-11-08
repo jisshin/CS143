@@ -8,7 +8,7 @@
 #include "packet.hpp"
 #endif
 
-std::string Node::lookupRouting(std::string dest){
+Link* Node::lookupRouting(std::string dest){
 	//if the size of the adj_links is one, the node acts like
 	//a host. it does not do "dynamic routing".
 	if (adj_links.size() == 1)
@@ -17,20 +17,10 @@ std::string Node::lookupRouting(std::string dest){
 	return routing_table[dest];
 }
 
-double Node::transmitPacket(Packet* tx_packet){
+double Node::transmitPacket(Packet* tx_packet, Node* rx_node){
 
-	std::string tx_link_id = lookupRouting(tx_packet->packet_dest);
-
-	Link* tx_link = NULL;
-
-	for (int i = 0; i < adj_links.size(); i++)
-	{
-		if (tx_link_id == (std::string) *(adj_links[i]))
-		{
-			tx_link = adj_links[i];
-			break;
-		}
-	}
+	Link* tx_link = lookupRouting(tx_packet->packet_dest);
+	rx_node = (tx_link->get_nodes()) ^ this;
 
 	//there is no tx_link with such tx_link_id that is adjacent
 	//to node. this shouldn't happen.

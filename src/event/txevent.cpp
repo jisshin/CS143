@@ -30,11 +30,22 @@ int TxEvent::handleEvent(){
 	std::cout << "txevent: " << event_owner << tx_packet->packet_id << std::endl;
 #endif
 
+<<<<<<< HEAD
 	//First, transmit packet, and set up rx event
 	double delay = tx_node->transmitPacket(tx_packet);
 	if(delay >= 0){
 		RxEvent* next_rx = new RxEvent(tx_node->lookupRouting(event_owner)\
 				,tx_packet);
+=======
+	//First, transmit packet
+	Node* rx_node = NULL
+	double delay = tx_node->transmitPacket(tx_packet, rx_node);
+
+	if(delay >= 0){
+		RxEvent* next_rx = new RxEvent(rx_node, tx_packet);
+		// TODO: update the receive event time with correct
+		// value ( according to link delay )
+>>>>>>> d8614fc2dcdde4b5bbb9214e1fba40dc5389a1dd
 		next_rx->time = time + delay;
 		eventq->push(next_rx);
 	}
