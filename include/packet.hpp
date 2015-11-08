@@ -3,6 +3,8 @@
 
 #include <string>
 
+const int BITS_PER_BYTE;
+
 /* forward declaration class */
 class Flow; 
 
@@ -22,7 +24,8 @@ class Packet {
 		// -1 for source packet as default
 		int ack_id = -1;
 		Flow* parent_flow;
-
+		// fixed packet size in byte
+		static int packet_size;
 };
 
 #endif //PACKET_H
