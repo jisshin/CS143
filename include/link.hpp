@@ -26,6 +26,8 @@ public:
 		return 1;
 	}
 
+	operator std::string() { return link_id; }
+	
 private:
 	int link_rate;
 	// in Mbps

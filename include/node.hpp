@@ -15,6 +15,7 @@ using std::unordered_map;
 using std::vector;
 using std::string;
 
+//host destination address -> link address
 typedef std::unordered_map<std::string, std::string> routing_table_t;
 
 class Node {
@@ -23,8 +24,6 @@ public:
 	{}
 
 	void establishLink(Link* link);
-	// lookupRouting return the link for routing to dest
-	std::string lookupRouting(std::string dest);
 
 	// transmitPacket put the Packet on the link and return the
 	// estimated time for the packet to be transmitted.
@@ -32,6 +31,9 @@ public:
 	double transmitPacket(Packet* tx_packet);
 	
 private:
+	// lookupRouting return the link for routing to dest
+	std::string lookupRouting(std::string dest);
+
 	std::string node_id;
 	std::vector<Link*> adj_links;
 
