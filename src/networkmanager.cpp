@@ -30,9 +30,9 @@ int NetworkManager::registerFlow(string id, Flow& flow)
 	return 1;
 }
 
-int NetworkManager::registerNode(string id, Node&)
+int NetworkManager::registerNode(string id, Node& node)
 {
-	m_nodes[id] = 
+	m_nodes[id] = &node;
 	return 1;	
 }
 

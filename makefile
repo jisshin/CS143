@@ -1,4 +1,12 @@
-.PHONY: testeq
+run_test:
+	./bin/testeq
+
+testeq:
+	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
+	gcc -c $(CXXFLAG) ./test/testeq.cpp -o ./obj/testeq.o
+
+	gcc ./obj/*.o -o ./bin/testeq -lstdc++
+	
 CXXFLAG = 
 all:
 	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
