@@ -1,63 +1,19 @@
-ifdef VERBOSE
-		Q =
-		E = @true 
-else
-		Q = @
-		E = @echo 
-endif
+.PHONY: testeq
+CXXFLAG = 
+all:
+	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
+	gcc -c $(CXXFLAG) ./src/event.cpp -o ./obj/event.o
+	gcc -c $(CXXFLAG) ./src/flow.cpp -o ./obj/flow.o
+	gcc -c $(CXXFLAG) ./src/node.cpp -o ./obj/node.o
+	gcc -c $(CXXFLAG) ./src/event/ackevent.cpp -o ./obj/ackevent.o
+	gcc -c $(CXXFLAG) ./src/event/txevent.cpp -o ./obj/txevent.o
+	gcc -c $(CXXFLAG) ./src/event/rxevent.cpp -o ./obj/rxevent.o
+	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
+	gcc -c $(CXXFLAG) ./test/testevent.cpp -o ./obj/testeq.o
+	
+	gcc ./obj/*.o -o ./bin/testevent -lstdc++
 
-CFILES := $(shell find src -mindepth 1 -maxdepth 4 -name "*.c")
-CXXFILES := $(shell find src -mindepth 1 -maxdepth 4 -name "*.cpp")
-
-INFILES := $(CFILES) $(CXXFILES)
-
-OBJFILES := $(CXXFILES:src/%.cpp=%) $(CFILES:src/%.c=%)
-DEPFILES := $(CXXFILES:src/%.cpp=%) $(CFILES:src/%.c=%)
-OFILES := $(OBJFILES:%=obj/%.o)
-
-BINFILE = network_sim
-
-COMMONFLAGS = -Wall -Wextra -pedantic
-LDFLAGS =
-
-ifdef DEBUG
-		COMMONFLAGS := $(COMMONFLAGS) -g
-endif
-CFLAGS = $(COMMONFLAGS) --std=c99
-CXXFLAGS = $(COMMONFLAGS) --std=c++0x
-DEPDIR = deps
-all: $(BINFILE)
-ifeq ($(MAKECMDGOALS),)
--include Makefile.dep
-endif
-ifneq ($(filter-out clean, $(MAKECMDGOALS)),)
--include Makefile.dep
-endif
-
-CC = gcc
-CXX = g++
-
-
--include Makefile.local
-
-.PHONY: clean all depend
-.SUFFIXES:
-obj/%.o: src/%.c
-		$(E)C-compiling $<
-		$(Q)if [ ! -d `dirname $@` ]; then mkdir -p `dirname $@`; fi
-		$(Q)$(CC) -o $@ -c $< $(CFLAGS)
-obj/%.o: src/%.cpp
-		$(E)C++-compiling $<
-		$(Q)if [ ! -d `dirname $@` ]; then mkdir -p `dirname $@`; fi
-		$(Q)$(CXX) -o $@ -c $< $(CXXFLAGS)
-Makefile.dep: $(CFILES) $(CXXFILES)
-		$(E)Depend
-		$(Q)for i in $(^); do $(CXX) $(CXXFLAGS) -MM "$${i}" -MT obj/`basename $${i%.*}`.o; done > $@
-
-		
-$(BINFILE): $(OFILES)
-		$(E)Linking $@
-		$(Q)$(CXX) -o $@ $(OFILES) $(LDFLAGS)
+.PHONY: clean
 clean:
-		$(E)Removing files
-		$(Q)rm -f $(BINFILE) obj/* Makefile.dep
+	rm -rf ./obj/*
+	rm -rf ./bin/*
