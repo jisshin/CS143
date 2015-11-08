@@ -22,6 +22,7 @@ public:
 	{
 		A = pointA;
 		B = pointB;
+		return 1;
 	}
 
 private:

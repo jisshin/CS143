@@ -1,9 +1,17 @@
 #include <cstdlib>
 #include <string>
 
+#ifndef _MSC_VER
+#include "../include/link.hpp"
+#include "../include/networkmanager.hpp"
+#include "../include/flow.hpp"
+#else
 #include "link.hpp"
 #include "networkmanager.hpp"
 #include "flow.hpp"
+#endif
+
+#include <cassert>
 
 int main()
 {
@@ -13,13 +21,19 @@ int main()
 	
 	NetworkManager* instance = NetworkManager::getInstance();
 
+	Flow flow("H1", "H2", 30);
+	int result = instance->registerFlow("F1", flow);
+	assert(result == -1);
+
 	std::string str("L1");
 	instance->registerLink(str, link);
 	std::string str2("L12");
 	instance->registerLink(str2, link2);
 
 	std::string str3("L12");
-	Link* l1 = instance->getLink(str3);
-	printf("%d", l1->link_rate);
+	assert(instance->getLink(str3)->getRate() == 4);
+
+
+	printf("Test Success - network manager\n");
 	return EXIT_SUCCESS;
 }
