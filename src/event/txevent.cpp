@@ -31,10 +31,11 @@ int TxEvent::handleEvent(){
 #endif
 
 	//First, transmit packet
-	double delay = tx_node->transmitPacket(tx_packet);
+	Node* rx_node = NULL
+	double delay = tx_node->transmitPacket(tx_packet, rx_node);
+
 	if(delay >= 0){
-		RxEvent* next_rx = new RxEvent(tx_node->lookupRouting(event_owner)\
-				,tx_packet);
+		RxEvent* next_rx = new RxEvent(rx_node, tx_packet);
 		// TODO: update the receive event time with correct
 		// value ( according to link delay )
 		next_rx->time = time + delay;

@@ -25,6 +25,7 @@ public:
 	
 	Node* get_node_A() { return A; }
 	Node* get_node_B() { return B; }
+	Node* get_nodes() { return A ^ B; }
 
 	operator std::string() { return link_id; }
 	
