@@ -29,9 +29,9 @@ class Event{
  */
 struct CompareEvent
 {
-	bool operator()(const Event& lhs, const Event& rhs) const
+	bool operator()(const Event* lhs, const Event* rhs) const
 	{
-		return lhs.time > rhs.time;
+		return lhs->time > rhs->time;
 	}
 };
 #endif //EVENT_H

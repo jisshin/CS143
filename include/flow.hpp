@@ -20,6 +20,8 @@ public:
 	std::string getDest() { return flow_dest; }
 	int getDataAmt() {return flow_data_amt; }
 	void setDataAmt(int new_data_amt){ flow_data_amt = new_data_amt; }
+	Packet* genNextPacket();
+	void update_flow(int id, int status);
 
 private:
 	std::string flow_src;
@@ -27,10 +29,7 @@ private:
 	int flow_data_amt;
 	//next_id is just temporary packet id counter to test txevent
 	int next_id = 0;
-	//genNextPacket should be where the congestion 
-	//algorithm is applied. 
-	Packet* genNextPacket();
-	void update_flow(int id, int status);
+
 
 };
 

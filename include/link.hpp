@@ -2,6 +2,8 @@
 #ifndef LINK_H
 #define LINK_H
 
+class Node;
+
 class Link {
 public:
 	Link(int rate, int delay, int buffer_size)\
@@ -14,12 +16,21 @@ public:
 	int getDelay() { return link_delay; }
 	int getBufferSize() { return link_buffer_size; }
 
-	int putPacket() {}
+	int putPacket() { return 1; }
+
+	int establishLink(Node* pointA, Node* pointB)
+	{
+		A = pointA;
+		B = pointB;
+	}
 
 private:
 	int link_rate;
 	int link_delay;
 	int link_buffer_size;
+
+	Node* A;
+	Node* B;
 };
 
 #endif //LINK_H

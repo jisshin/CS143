@@ -44,5 +44,15 @@ int NetworkManager::registerLink(string id, Link& link)
 
 int NetworkManager::connectLink(string link_id, string node1_id, string node2_id)
 {
+	if (m_nodes.count(node1_id) == 0)
+		return -1;
+
+	if (m_nodes.count(node2_id) == 0)
+		return -1;	
+	
+	if (m_links.count(link_id) == 0)
+		return -1;
+
+	m_links[link_id]->establishLink(m_nodes[node1_id], m_nodes[node2_id]);
 	return 1;
 }
