@@ -13,8 +13,7 @@ class Event{
 		Event(std::string owner):event_owner(owner){};
 		~Event(){};
 
-		virtual int handleEvent(){std::cout<< "fail"<<std::endl;
-		return 0;}
+		virtual int handleEvent() { return 0; }
 		//private:
 		//std::string event_dest;
 		//std::string evemt_src;  

@@ -10,11 +10,6 @@ class Packet;
 class Node;
 class Link;
 
-
-using std::unordered_map;
-using std::vector;
-using std::string;
-
 //host destination address -> link address
 typedef std::unordered_map<std::string, std::string> routing_table_t;
 
@@ -30,6 +25,7 @@ public:
 	// if packed is dropped, return -1
 	double transmitPacket(Packet* tx_packet);
 	
+	operator std::string() { return node_id; }
 private:
 	// lookupRouting return the link for routing to dest
 	std::string lookupRouting(std::string dest);

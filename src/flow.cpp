@@ -1,5 +1,11 @@
+#ifndef _MSC_VER
 #include "../include/flow.hpp"
 #include "../include/packet.hpp"
+#else
+#include "flow.hpp"
+#include "packet.hpp"
+#endif
+
 #include <iostream>
 
 

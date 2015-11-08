@@ -4,6 +4,17 @@
 #include "eventqueue.hpp"
 #endif
 
+EventQueue* EventQueue::eventqueue = NULL;
+
+EventQueue* EventQueue::getInstance()
+{
+	if (eventqueue) {
+		return eventqueue;
+	}
+	else {
+		return (eventqueue = new EventQueue());
+	}
+}
 
 void EventQueue::push(Event* event)
 {
@@ -23,6 +34,16 @@ Event* EventQueue::pop()
 	//and delete the event from the queue.
 	registered_events.pop();
 	return e;
+}
+
+int EventQueue::run()
+{
+	while (registered_events.size() > 0)
+	{
+		Event* e = registered_events.top();
+		registered_events.pop();
+		e->handleEvent();
+	}
 }
 
 int EventQueue::empty(){

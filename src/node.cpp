@@ -1,12 +1,19 @@
-/*
- * node.cpp
- *
- *  Created on: Nov 4, 2015
- *      Author: jenniferlin
- */
+#ifndef _MSC_VER
 #include "../include/node.hpp"
+#include "../include/link.hpp"
+#include "../include/packet.hpp"
+#else
+#include "node.hpp"
+#include "link.hpp"
+#include "packet.hpp"
+#endif
 
 std::string Node::lookupRouting(std::string dest){
+	//if the size of the adj_links is one, the node acts like
+	//a host. it does not do "dynamic routing".
+	if (adj_links.size() == 1)
+		return (std::string) *adj_links[0];
+
 	return routing_table[dest];
 }
 
@@ -16,11 +23,11 @@ double Node::transmitPacket(Packet* tx_packet){
 
 	Link* tx_link = NULL;
 
-	for (int i = 0; i < adj_links; i++)
+	for (int i = 0; i < adj_links.size(); i++)
 	{
-		if (tx_link_id == (std::string) adj_links[i])
+		if (tx_link_id == (std::string) *(adj_links[i]))
 		{
-			tx_link = adj_links[i]
+			tx_link = adj_links[i];
 			break;
 		}
 	}
