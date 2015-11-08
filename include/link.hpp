@@ -13,10 +13,10 @@ public:
 	{}
 
 	int getRate() { return link_rate; }
-	int getDelay() { return link_delay; }
+	double getDelay() { return link_delay; }
 	int getBufferSize() { return link_buffer_size; }
 
-	int putPacket() { return 1; }
+	double putPacket() { return 1; }
 
 	int establishLink(Node* pointA, Node* pointB)
 	{
@@ -27,7 +27,7 @@ public:
 
 private:
 	int link_rate;
-	int link_delay;
+	double link_delay;
 	int link_buffer_size;
 
 	Node* A;
