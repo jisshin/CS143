@@ -32,7 +32,6 @@ int NetworkManager::registerFlow(string id, Flow& flow)
 
 int NetworkManager::registerNode(string id, Node&)
 {
-	m_nodes[id] = 
 	return 1;	
 }
 

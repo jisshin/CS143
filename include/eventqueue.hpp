@@ -18,7 +18,7 @@ class EventQueue{
 		}
 		
 		void push(Event* event);
-		Event pop();
+		Event* pop();
 		int empty();
 
 	private:
