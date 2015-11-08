@@ -15,18 +15,19 @@ int TxEvent::handleEvent(){
 			getNode(event_owner);
 	EventQueue eventq = EventQueue::get_instance();
 	Flow* tx_flow = tx_packet->parent_flow;
-	std::cout<<"here"<<std::endl;
+
 #ifdef DEBUG
 	std::cout << "txevent: " << event_owner << tx_packet->packet_id << std::endl;
 #endif
 
 	//First, transmit packet
-	if(tx_node->transmitPacket(tx_packet)){
+	double delay = tx_node->transmitPacket(tx_packet);
+	if(delay >= 0){
 		RxEvent* next_rx = new RxEvent(tx_node->lookupRouting(event_owner)\
 				,tx_packet);
 		// TODO: update the receive event time with correct
 		// value ( according to link delay )
-		next_rx->time = time + 1;
+		next_rx->time = time + delay;
 		eventq.push(next_rx);
 	}
 
@@ -39,7 +40,5 @@ int TxEvent::handleEvent(){
 		next_tx->time = time + 1;
 		eventq.push(next_tx);
 	}
-
-
 }
 

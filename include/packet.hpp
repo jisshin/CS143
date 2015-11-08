@@ -19,6 +19,8 @@ class Packet {
 		std::string packet_src;
 		std::string packet_dest;
 		int packet_id;
+		// -1 for source packet as default
+		int ack_id = -1;
 		Flow* parent_flow;
 
 };
