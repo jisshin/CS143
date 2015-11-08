@@ -15,25 +15,30 @@ using std::unordered_map;
 using std::vector;
 using std::string;
 
+typedef std::unordered_map<std::string, std::string> routing_table_t;
 
 class Node {
 public:
 	Node(std::vector<Node*>adj_n, std::vector<Link*>adj_l)\
-		: adj_nodes(adj_n),\
-		  adj_links(adj_l) {};
-	void genRoutingTable();
-	std::vector<Node*> getAdjNodes();
-	std::vector<Link*> getAdjLinks();
-	//std::map<std::string, std::string> getRoutingTable();
+		: adj_links(adj_l) {};
+
+	// used for default routing table before dynamic routing is
+	// implemented
+	void addRouting(routing_table_t);
+
+	// lookupRouting return the link for routing to dest
 	std::string lookupRouting(std::string dest);
-	int transmitPacket(Packet* tx_packet){return 1;};
+
+	// transmitPacket put the Packet on the link and return the
+	// estimated time for the packet to be transmitted.
+	// if packed is dropped, return -1
+	double transmitPacket(Packet* tx_packet);
 	
 private:
-	/* 1 adjacent node means host, more than 1 means router */
-	std::vector<Node*> adj_nodes;
+
 	std::vector<Link*> adj_links;
-	/* routing table uses IDs of nodes created by NetworkManager */
-	std::unordered_map<std::string, std::string> routing_table;
+
+	routing_table_t routing_table;
 };
 
 #endif //NODE_H
