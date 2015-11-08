@@ -2,7 +2,7 @@
 test:
 	make testeq
 	make testnm
-	make testament
+	make testevent
 
 run:
 	@./bin/testeq
@@ -33,6 +33,7 @@ testevent:
 	gcc -c $(CXXFLAG) ./test/testevent.cpp -o ./obj/testevent.o
 	
 	gcc ./obj/*.o -o ./bin/testevent -lstdc++
+
 
 .PHONY: clean
 clean:

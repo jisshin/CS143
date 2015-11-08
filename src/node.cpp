@@ -20,3 +20,8 @@ double Node::transmitPacket(Packet* tx_packet){
 	}
 	return queue_delay + tx_link->getDelay();
 }
+
+void Node::establishLink(Link* link)
+{
+	adj_links.push_back(link);
+}

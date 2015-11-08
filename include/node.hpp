@@ -19,13 +19,10 @@ typedef std::unordered_map<std::string, std::string> routing_table_t;
 
 class Node {
 public:
-	Node(std::vector<Node*>adj_n, std::vector<Link*>adj_l)\
-		: adj_links(adj_l) {};
+	Node(std::string id): node_id(id) 
+	{}
 
-	// used for default routing table before dynamic routing is
-	// implemented
-	void addRouting(routing_table_t);
-
+	void establishLink(Link* link);
 	// lookupRouting return the link for routing to dest
 	std::string lookupRouting(std::string dest);
 
@@ -35,7 +32,7 @@ public:
 	double transmitPacket(Packet* tx_packet);
 	
 private:
-
+	std::string node_id;
 	std::vector<Link*> adj_links;
 
 	routing_table_t routing_table;

@@ -58,5 +58,7 @@ int NetworkManager::connectLink(string link_id, string node1_id, string node2_id
 		return -1;
 
 	m_links[link_id]->establishLink(m_nodes[node1_id], m_nodes[node2_id]);
+	m_nodes[node1_id]->establishLink(m_links[link_id]);
+	m_nodes[node2_id]->establishLink(m_links[link_id]);
 	return 1;
 }
