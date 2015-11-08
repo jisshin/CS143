@@ -2,7 +2,11 @@
 #include <iostream>
 
 int RxEvent::handleEvent(){
-	std::cout << "Handle RxEvent" << std::endl;
-	return 0;
+	NetworkManager* nm = NetworkManager::getInstance();
+	EventQueue* eventq = EventQueue::getInstance();
+	Node* tx_node = nm->getNode(event_owner);
+
+	if()
+
 }
 
