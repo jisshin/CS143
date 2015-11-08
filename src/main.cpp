@@ -1,4 +1,5 @@
 #include "eventqueue.hpp"
+#include "retrieve_network_info.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -9,9 +10,9 @@ int main(){
 	EventQueue& queue1 = EventQueue::get_instance();
 	EventQueue& queue2 = EventQueue::get_instance();
 	EventQueue& queue3 = EventQueue::get_instance();
-	
+
 	cout<<queue1.test_count()<<endl;
 	cout<<queue2.test_count()<<endl;
 	cout<<queue3.test_count()<<endl;
-	
+
 }
