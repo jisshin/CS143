@@ -13,7 +13,7 @@ std::string Node::lookupRouting(std::string dest){
 double Node::transmitPacket(Packet* tx_packet){
 	Link* tx_link = NetworkManager::getInstance()\
 			->getFlow(lookupRouting(tx_packet->packet_dest));
-	double queue_delay = tx_link->pushPacket();
+	double queue_delay = tx_link->putPacket();
 	if (queue_delay < 0){
 		// packet is dropped due to a full link buffer
 		return -1;
