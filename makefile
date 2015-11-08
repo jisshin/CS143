@@ -17,9 +17,17 @@ testeq:
 
 testnm:
 	gcc -c ./src/networkmanager.cpp -o ./obj/networkmanager.o
-	gcc -c ./test/testnm.cpp -o ./obj/testeq.o
+	gcc -c ./test/testnm.cpp -o ./obj/testnm.o
 
 	gcc ./obj/*.o -o ./bin/testnm -lstdc++ 
+
+testnl:
+	gcc -c ./src/link.cpp -o ./obj/link.o
+	gcc -c ./src/node.cpp -o ./obj/node.o
+	gcc -c ./test/testnl.cpp -o ./obj/testnl.o
+
+	gcc ./obj/*.o -o ./bin/testnl -lstdc++ 
+
 	
 testevent:
 	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
