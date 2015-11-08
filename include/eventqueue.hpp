@@ -17,14 +17,14 @@ class EventQueue{
 			return instance; 	
 		}
 		
-		void push(Event event);
+		void push(Event* event);
 		Event pop();
 		int empty();
 
 	private:
 		EventQueue(){};
 		
-		std::priority_queue<Event, std::vector<Event>, \
+		std::priority_queue<Event*, std::vector<Event*>, \
 			CompareEvent > registered_events;
 };
 
