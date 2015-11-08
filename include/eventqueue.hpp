@@ -19,6 +19,7 @@ class EventQueue{
 		
 		void push(Event event);
 		Event pop();
+		int empty();
 
 	private:
 		EventQueue(){};

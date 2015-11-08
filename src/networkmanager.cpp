@@ -1,8 +1,8 @@
-#include "networkmanager.hpp"
-#include "flow.hpp"
-#include "host.hpp"
-#include "link.hpp"
-#include "router.hpp"
+#include "../include/networkmanager.hpp"
+#include "../include/flow.hpp"
+//#include "../include/host.hpp"
+#include "../include/link.hpp"
+//#include "../include/router.hpp"
 
 using namespace std;
 
@@ -30,7 +30,7 @@ int NetworkManager::registerFlow(string id, Flow& flow)
 	return 1;
 }
 
-int NetworkManager::registerNode(string id)
+int NetworkManager::registerNode(string id, Node&)
 {
 	m_nodes[id] = 
 	return 1;	

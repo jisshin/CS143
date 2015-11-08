@@ -5,17 +5,21 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+#include <iostream>
 
 class Event{
 	public:
-		Event() {}
+		Event(){};
+		Event(std::string owner):event_owner(owner){};
+		~Event(){};
 
-		virtual int handleEvent() { return 0; }
-
-	//private:
-		std::string dest;
-		std::string src;  
-		double time = -1; 
+		virtual int handleEvent(){std::cout<< "fail"<<std::endl;
+		return 0;}
+		//private:
+		//std::string event_dest;
+		//std::string evemt_src;  
+		std::string event_owner;
+		double time = -1;
 };
 
 /*

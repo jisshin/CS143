@@ -5,7 +5,7 @@
 #include <string>
 
 class Flow;
-class Host;
+class Node;
 class Link;
 class Router;
 
@@ -15,7 +15,7 @@ public:
 
 	int registerFlow(std::string id, Flow&);
 	int registerLink(std::string id, Link&);
-	int registerNode(std::string id);
+	int registerNode(std::string id, Node&);
 
 	int connectLink(std::string link_id, std::string node1_id, std::string node2_id);
 	
