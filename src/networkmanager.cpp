@@ -18,13 +18,21 @@ NetworkManager* NetworkManager::getInstance()
 	}
 }
 
-int NetworkManager::registerFlow(string id, Flow&)
+int NetworkManager::registerFlow(string id, Flow& flow)
 {
+	if (m_nodes.count(flow.getSrc()) == 0)
+		return -1;
+
+	if (m_nodes.count(flow.getDest()) == 0)
+		return -1;
+
+	m_flows[id] = &flow;
 	return 1;
 }
 
 int NetworkManager::registerNode(string id)
 {
+	m_nodes[id] = 
 	return 1;	
 }
 
