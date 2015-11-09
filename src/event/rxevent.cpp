@@ -44,15 +44,13 @@ int RxEvent::handleEvent(){
 			std::string dest = rx_packet->packet_src;
 			rx_packet->packet_src = rx_packet->packet_dest;
 			rx_packet->packet_dest = dest;
-			Node* tx_node = nm->getNode(dest);
+			Node* tx_node = NULL;
 			// And transmit back to sender
 			double delay = rx_node->transmitPacket(rx_packet,tx_node);
 
 			// Create receive event if not dropped;
 			if (delay >= 0){
-				RxEvent* next_rx = new RxEvent(\
-						rx_node->lookupRouting(rx_packet->packet_dest)->get_other_node(rx_node)\
-						, rx_packet);
+				RxEvent* next_rx = new RxEvent(tx_node, rx_packet);
 				next_rx->time = time + delay;
 				eventq->push(next_rx);
 			}
@@ -72,11 +70,10 @@ int RxEvent::handleEvent(){
 	// If this is not the final destination, forward the packet
 	// regardless of whether ack or src
 	else{
-		double delay = rx_node->transmitPacket(rx_packet, nm->getNode(rx_packet->packet_dest));
+		Node* tx_node = NULL;
+		double delay = rx_node->transmitPacket(rx_packet, tx_node);
 		if (delay >= 0){
-			RxEvent* next_rx =  new RxEvent(\
-					rx_node->lookupRouting(rx_packet->packet_dest)->get_other_node(rx_node)\
-					, rx_packet);
+			RxEvent* next_rx =  new RxEvent(tx_node, rx_packet);
 			next_rx->time = time + delay;
 			eventq->push(next_rx);
 		}
