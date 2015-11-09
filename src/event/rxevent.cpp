@@ -37,9 +37,9 @@ int RxEvent::handleEvent(){
 		std::string dest = rx_packet->packet_src;
 		rx_packet->packet_src = rx_packet->packet_dest;
 		rx_packet->packet_dest = dest;
-
+		Node* tx_node = nm->getNode(dest);
 		// And transmit back to sender
-		double delay = rx_node->transmitPacket(rx_packet);
+		double delay = rx_node->transmitPacket(rx_packet,tx_node);
 		// Create receive event if not dropped;
 		if (delay >= 0){
 			RxEvent* next_rx = new RxEvent(rx_node, rx_packet);
