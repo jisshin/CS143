@@ -17,7 +17,7 @@
 #endif
 
 #include <iostream>
-
+#define DEBUG
 int RxEvent::handleEvent(){
 	NetworkManager* nm = NetworkManager::getInstance();
 	EventQueue* eventq = EventQueue::getInstance();
@@ -32,6 +32,10 @@ int RxEvent::handleEvent(){
 		// TCP, use 1 for now to differentiate ack and
 		// src packet
 
+#ifdef DEBUG
+			std::cout<<"rxevent: receive src packet " << rx_packet->packet_id\
+					<<std::endl;
+#endif//DEBUG
 		// convert to ack packet
 		rx_packet->ack_id = 1;
 		std::string dest = rx_packet->packet_src;
@@ -50,6 +54,10 @@ int RxEvent::handleEvent(){
 
 	// Update flow if the rx packet is an ack packet
 	else{
+#ifdef DEBUG
+			std::cout<<"rxevent: receive ack packet " << rx_packet->packet_id\
+					<<std::endl;
+#endif//DEBUG
 		rx_flow->update_flow(rx_packet->packet_id, PACKET_RECEIVED)
 	}
 }
