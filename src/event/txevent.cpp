@@ -36,9 +36,9 @@ int TxEvent::handleEvent(){
 	// Create rx event
 	if(delay >= 0){
 		std::string rx_node_id = tx_packet->packet_dest;
-		RxEvent* next_rx = new RxEvent(rx_node_id, tx_packet);
-		// TODO: update the receive event time with correct
-		// value ( according to link delay )
+		RxEvent* next_rx = new RxEvent(\
+				tx_node->lookupRouting(tx_packet->packet_dest)->get_other_node(tx_node),\
+				tx_packet);
 		next_rx->time = time + delay;
 		eventq->push(next_rx);
 	}
