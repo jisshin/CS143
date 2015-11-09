@@ -27,7 +27,7 @@ int TxEvent::handleEvent(){
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 
 #ifdef DEBUG
-	std::cout << "txevent: " << event_owner << tx_packet->packet_id << std::endl;
+	std::cout << "txevent: " << event_owner<< " " << tx_packet->packet_id << std::endl;
 #endif
 
 	//First, transmit packet
@@ -51,8 +51,10 @@ int TxEvent::handleEvent(){
 			TxEvent* next_tx = new TxEvent(event_owner,\
 						next_tx_packet);
 			// this time should be TCP dependent
-			next_tx->time = time + 1;
+			delay = tx_flow->getTxDelay();
+			next_tx->time = time + delay;
 			eventq->push(next_tx);
 		}
 	}
+	return 0;
 }
