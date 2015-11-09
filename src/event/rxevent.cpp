@@ -40,7 +40,8 @@ int RxEvent::handleEvent(){
 			<<std::endl;
 #endif//DEBUG
 			// convert to ack packet
-			rx_packet->ack_id = rx_flow->getAckID(rx_packet->packet_id);
+			//rx_packet->ack_id = rx_flow->getAckID(rx_packet->packet_id);
+			rx_packet->ack_id = 1;
 			std::string dest = rx_packet->packet_src;
 			rx_packet->packet_src = rx_packet->packet_dest;
 			rx_packet->packet_dest = dest;

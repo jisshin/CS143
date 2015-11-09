@@ -34,7 +34,7 @@ public:
 	operator std::string() { return flow_id; }
 
 	//TCP dependent
-	double getTxDelay();
+	double getTxDelay(){return 1;};
 	Packet* genNextPacket();
 	//int getAckID(int packet_id);
 
