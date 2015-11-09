@@ -46,7 +46,7 @@ int RxEvent::handleEvent(){
 		double delay = rx_node->transmitPacket(rx_packet,tx_node);
 		// Create receive event if not dropped;
 		if (delay >= 0){
-			RxEvent* next_rx = new RxEvent(rx_node, rx_packet);
+			RxEvent* next_rx = new RxEvent(rx_packet->packet_dest, rx_packet);
 			next_rx->time = time + delay;
 			eventq->push(next_rx);
 		}
@@ -58,7 +58,7 @@ int RxEvent::handleEvent(){
 			std::cout<<"rxevent: receive ack packet " << rx_packet->packet_id\
 					<<std::endl;
 #endif//DEBUG
-		rx_flow->update_flow(rx_packet->packet_id, PACKET_RECEIVED)
+		rx_flow->update_flow(rx_packet->packet_id, PACKET_RECEIVED);
 	}
 }
 

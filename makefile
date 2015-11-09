@@ -3,13 +3,13 @@ test:
 	make testeq
 	make testnm
 	make testnl
-	#make testevent
+	make testcase0
 
 run:
 	@./bin/testeq
 	@./bin/testnm
 	@./bin/testnl
-	#./bin/testevent
+	@./bin/testcase0
 
 testeq:
 	gcc -c ./src/eventqueue.cpp -o ./obj/eventqueue.o
@@ -34,17 +34,18 @@ testnl:
 	gcc ./obj/link.o ./obj/node.o ./obj/testnl.o -o ./bin/testnl -lstdc++ 
 
 	
-testevent:
+testcase0:
 	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
 	gcc -c $(CXXFLAG) ./src/event.cpp -o ./obj/event.o
 	gcc -c $(CXXFLAG) ./src/flow.cpp -o ./obj/flow.o
 	gcc -c $(CXXFLAG) ./src/node.cpp -o ./obj/node.o
+	gcc -c $(CXXFLAG) ./src/link.cpp -o ./obj/link.o	
 	gcc -c $(CXXFLAG) ./src/event/txevent.cpp -o ./obj/txevent.o
 	gcc -c $(CXXFLAG) ./src/event/rxevent.cpp -o ./obj/rxevent.o
 	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
-	gcc -c $(CXXFLAG) ./test/testevent.cpp -o ./obj/testevent.o
+	gcc -c $(CXXFLAG) ./test/testcase0.cpp -o ./obj/testcase0.o
 	
-	gcc ./obj/eventqueue.o ./obj/event.o ./obj/flow.o ./obj/node.o ./obj/ackevent.o ./obj/txevent.o ./obj/rxevent.o ./obj/networkmanager.o ./obj/testevent.o -o ./bin/testevent -lstdc++
+	gcc ./obj/eventqueue.o ./obj/link.o ./obj/event.o ./obj/flow.o ./obj/node.o ./obj/ackevent.o ./obj/txevent.o ./obj/rxevent.o ./obj/networkmanager.o ./obj/testcase0.o -o ./bin/testcase0 -lstdc++
 
 
 .PHONY: clean

@@ -18,6 +18,7 @@ class RxEvent : public Event
 
 	private:
 		Packet* rx_packet;
+		std::string event_owner;
 
 };
 

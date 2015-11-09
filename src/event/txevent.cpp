@@ -22,7 +22,7 @@
 int TxEvent::handleEvent(){
 	NetworkManager* nm = NetworkManager::getInstance();
 	EventQueue* eventq = EventQueue::getInstance();
-
+	Node* rx_node = nm->getNode(tx_packet->packet_dest);
 	Node* tx_node = nm->getNode(event_owner);
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 
@@ -31,11 +31,12 @@ int TxEvent::handleEvent(){
 #endif
 
 	//First, transmit packet
-	Node* rx_node = NULL;
 	double delay = tx_node->transmitPacket(tx_packet, rx_node);
 
+	// Create rx event
 	if(delay >= 0){
-		RxEvent* next_rx = new RxEvent(rx_node, tx_packet);
+		std::string rx_node_id = tx_packet->packet_dest;
+		RxEvent* next_rx = new RxEvent(rx_node_id, tx_packet);
 		// TODO: update the receive event time with correct
 		// value ( according to link delay )
 		next_rx->time = time + delay;
