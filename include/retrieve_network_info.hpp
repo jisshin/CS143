@@ -9,7 +9,7 @@ public:
   // holds JSON data
   string networkInfo;
   // Set the JSON data
-  void setNetworkInfo();
+  void setNetworkInfo(string file_name);
 
   /** extracts flow info from JSON then registers into networkmanager
   * using registerFlow

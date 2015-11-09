@@ -1,27 +1,37 @@
 #include "../include/retrieve_network_info.hpp"
 #include "../include/networkmanager.hpp"
+//#include "../lib/include/json/json.h"
+#include "../lib/json/json.h"
 #include "../lib/json/reader.h"
 #include "../lib/json/value.h"
 #include <string>
+#include <vector>
+#include <iostream>
+#include <fstream>
 
+using std::vector;
+using std::string;
+using std::cout;
 
-public string link_ids[];
-public int link_rates[];
-public int link_delays[];
-public int link_buffers[];
+std::vector<string> link_ids;
+std::vector<double> link_rates;
+std::vector<double> link_delays;
+std::vector<double> link_buffers;
 
-public string flow_ids[];
-public string flow_srcs[];
-public string flow_dests[];
-public int data_amts[];
-public int flow_starts[];
+std::vector<string> flow_ids;
+std::vector<string> flow_srcs;
+std::vector<string> flow_dests;
+std::vector<double> data_amts;
+std::vector<double> flow_starts;
+
 
 void RetrieveNetworkInfo::setNetworkInfo(string file_name)
 {
-  Json::Value file;
+  std::ifstream file(file_name, std::ifstream::binary);
+  Json::Value root;
   Json::Reader reader;
 
-  bool parsingSuccessful = reader.parse(file_name, file);
+  bool parsingSuccessful = reader.parse(file, root);
 
   if ( !parsingSuccessful )
   {
@@ -30,25 +40,26 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
                << reader.getFormattedErrorMessages();
     return;
   }
-  Json::Value links = file["Links"];
-  Json::Value flows = file["Flows"];
+  Json::Value links = root["Links"];
+  Json::Value flows = root["Flows"];
 
   for (int i = 0; i < links.size(); i++){
-    link_ids[i] = links[i]["link_id"].asString();
-    link_rates[i] = links[i]["link_rate"].asInt(); //check if exists
-    link_delays[i] = link[i]["link_delay"].asInt();
-    link_buffers[i] = link[i]["link_buffer"].asInt();
+    link_ids.push_back(links[i]["link_id"].asString());
+    link_rates.push_back(links[i]["link_rate"].asDouble()); //check if exists
+    link_delays.push_back(links[i]["link_delay"].asDouble());
+    link_buffers.push_back(links[i]["link_buffer"].asDouble());
 
 
   }
 
   for (int i = 0; i < flows.size(); i++){
-    flow_ids[i] = flow[i]["flow_id"].asString();
-    flow_srcs[i] = flow[i]["flow_src"].asString();
-    flow_dests[i] = flow[i]["flow_dest"].asString();
-    data_amts = flow[i]["data_amt"].asInt();
-    flow_starts = flow[i]["flow_start"].asFloat(); // CHeck if exists
+    flow_ids.push_back(flows[i]["flow_id"].asString());
+    flow_srcs.push_back(flows[i]["flow_src"].asString());
+    flow_dests.push_back(flows[i]["flow_dest"].asString());
+    data_amts.push_back(flows[i]["data_amt"].asDouble());
+    flow_starts.push_back(flows[i]["flow_start"].asDouble()); // CHeck if exists
   }
+
 
   return;
 }

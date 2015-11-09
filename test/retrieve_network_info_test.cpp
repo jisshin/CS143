@@ -10,7 +10,7 @@
 int main() {
   RetrieveNetworkInfo retrieve;
 
-  retrieve.setNetworkInfo();
+  retrieve.setNetworkInfo("network0.json");
 
 
 }
