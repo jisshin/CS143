@@ -26,7 +26,7 @@ Event* EventQueue::pop()
 	if (registered_events.size() == 0) {
 		//if no event is there, then return default
 		//event. 
-		return (new Event());
+		return (new Event(""));
 	}
 
 	//otherwise, return the event with highest priority.
@@ -44,6 +44,8 @@ int EventQueue::run()
 		registered_events.pop();
 		e->handleEvent();
 	}
+
+	return 1;
 }
 
 int EventQueue::empty(){

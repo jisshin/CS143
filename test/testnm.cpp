@@ -39,8 +39,8 @@ int main()
 
 	instance->connectLink("L1", "N1", "N2");
 
-	assert((std::string) *(instance->getLink("L1")->get_other_node(&n2)) == "N1");
-	assert((std::string) *(instance->getLink("L1")->get_other_node(&n1)) == "N2");
+	assert((std::string) *(instance->getLink("L1")->get_node_A()) == "N1");
+	assert((std::string) *(instance->getLink("L1")->get_node_B()) == "N2");
 
 	printf("Test Success - network manager\n");
 	return EXIT_SUCCESS;

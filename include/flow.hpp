@@ -1,7 +1,11 @@
 #ifndef FLOW_H
 #define FLOW_H
 
+#ifndef _MSC_VER
 #include "../include/TCPAlgorithm.hpp"
+#else
+#include "TCPAlgorithm.hpp"
+#endif
 
 #include <string>
 

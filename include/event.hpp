@@ -9,14 +9,10 @@
 
 class Event{
 	public:
-		Event(){};
-		Event(std::string owner):event_owner(owner){};
-		~Event(){};
+		Event(std::string owner) : event_owner(owner) {}
 
 		virtual int handleEvent() { return 0; }
-		//private:
-		//std::string event_dest;
-		//std::string evemt_src;  
+		
 		std::string event_owner;
 		double time = -1;
 };

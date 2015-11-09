@@ -60,5 +60,7 @@ int RxEvent::handleEvent(){
 #endif//DEBUG
 		rx_flow->update_flow(rx_packet->packet_id, PACKET_RECEIVED);
 	}
+
+	return 1;
 }
 
