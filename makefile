@@ -48,7 +48,7 @@ testcase0:
 	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
 	gcc -c $(CXXFLAG) ./test/testcase0.cpp -o ./obj/testcase0.o
 	
-	gcc ./obj/eventqueue.o ./obj/link.o ./obj/event.o ./obj/flow.o ./obj/node.o ./obj/ackevent.o ./obj/txevent.o ./obj/rxevent.o ./obj/networkmanager.o ./obj/testcase0.o -o ./bin/testcase0 -lstdc++
+	gcc ./obj/eventqueue.o ./obj/link.o ./obj/event.o ./obj/flow.o ./obj/node.o ./obj/txevent.o ./obj/rxevent.o ./obj/networkmanager.o ./obj/testcase0.o -o ./bin/testcase0 -lstdc++
 
 
 .PHONY: clean
