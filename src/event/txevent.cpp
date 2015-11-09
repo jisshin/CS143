@@ -50,6 +50,7 @@ int TxEvent::handleEvent(){
 		if (next_tx_packet != NULL){
 			TxEvent* next_tx = new TxEvent(event_owner,\
 						next_tx_packet);
+			// this time should be TCP dependent
 			next_tx->time = time + 1;
 			eventq->push(next_tx);
 		}
