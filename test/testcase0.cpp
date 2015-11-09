@@ -34,8 +34,8 @@ int main()
 	
 	nm->connectLink("L1", "H1", "H2");
 
-	Packet packet("F1", "H1", "H2", -1);
-	TxEvent init_tx("H1", &packet);
+	Packet* init_tx_packet = flow.genNextPacket();
+	TxEvent init_tx("H1", init_tx_packet);
 	EventQueue* eq = EventQueue::getInstance();
 
 	eq->push(&init_tx);

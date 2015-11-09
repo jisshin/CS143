@@ -1,4 +1,7 @@
 .PHONY: test
+
+CXXFLAG=-g -std=c++11
+
 test:
 	make testeq
 	make testnm

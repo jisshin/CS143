@@ -9,10 +9,15 @@
 #endif
 
 #include <stdint.h>
-
+#include <iostream>
 Link* Node::lookupRouting(std::string dest){
 	//if the size of the adj_links is one, the node acts like
 	//a host. it does not do "dynamic routing".
+
+	//should not happen
+	if (adj_links.size() < 1)
+		return NULL;
+
 	if (adj_links.size() == 1)
 		return adj_links[0];
 
