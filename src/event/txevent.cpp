@@ -36,8 +36,7 @@ int TxEvent::handleEvent(){
 
 	// Create rx event
 	if(delay >= 0){
-		std::string rx_node_id = tx_packet->packet_dest;
-		RxEvent* next_rx = new RxEvent(rx_node, tx_packet);
+		RxEvent* next_rx = new RxEvent(*rx_node, tx_packet);
 		next_rx->time = time + delay;
 		eventq->push(next_rx);
 	}
@@ -55,7 +54,5 @@ int TxEvent::handleEvent(){
 			eventq->push(next_tx);
 		}
 	}
-
-
 	return 1;
 }

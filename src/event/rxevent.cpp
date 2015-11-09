@@ -44,13 +44,13 @@ int RxEvent::handleEvent(){
 			std::string dest = rx_packet->packet_src;
 			rx_packet->packet_src = rx_packet->packet_dest;
 			rx_packet->packet_dest = dest;
-			Node* tx_node = NULL;
+			Node* ack_rx_node = NULL;
 			// And transmit back to sender
-			double delay = rx_node->transmitPacket(rx_packet,tx_node);
+			double delay = rx_node->transmitPacket(rx_packet,ack_rx_node);
 
 			// Create receive event if not dropped;
 			if (delay >= 0){
-				RxEvent* next_rx = new RxEvent(tx_node, rx_packet);
+				RxEvent* next_rx = new RxEvent(*ack_rx_node, rx_packet);
 				next_rx->time = time + delay;
 				eventq->push(next_rx);
 			}
@@ -73,7 +73,7 @@ int RxEvent::handleEvent(){
 		Node* tx_node = NULL;
 		double delay = rx_node->transmitPacket(rx_packet, tx_node);
 		if (delay >= 0){
-			RxEvent* next_rx =  new RxEvent(tx_node, rx_packet);
+			RxEvent* next_rx =  new RxEvent(*tx_node, rx_packet);
 			next_rx->time = time + delay;
 			eventq->push(next_rx);
 		}
