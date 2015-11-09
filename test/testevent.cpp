@@ -4,29 +4,19 @@
 #include "../include/flow.hpp"
 #include "../include/event/txevent.hpp"
 #include "../include/networkmanager.hpp"
-
+#include <cassert>
 using std::vector;
 using std::string;
 
 int main(){
-	EventQueue eventq = EventQueue::get_instance();
+	EventQueue* eventq = EventQueue::getInstance();
 	NetworkManager* mgr = NetworkManager::getInstance();
-	Node* node1;
-	Node* node2;
-	Link* link1;
-	vector<Node*>adj_n1;
-	vector<Node*>adj_n2;
-	vector<Link*>adj_l1;
-	vector<Link*>adj_l2;
-	adj_n1.push_back(node1);
-	adj_n2.push_back(node2);
-	adj_l1.push_back(link1);
-	adj_l2.push_back(link1);
 
-	node1 = new Node(adj_n1, adj_l1);
-	node2 = new Node(adj_n2, adj_l2);
-	Flow testflow1("node1","node2",10);
-	mgr->registerNode(string("node1"), *node1);
+	Node node1("N1");
+	Node node2("N2");
+	Flow flow1("F1", "N1", "N2",10);
+	int result = mgr->registerFlow(flow1);
+	assert(result == -1);
 
 	mgr->registerFlow(string("flow1"),testflow1);
 

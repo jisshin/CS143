@@ -39,7 +39,6 @@ testevent:
 	gcc -c $(CXXFLAG) ./src/event.cpp -o ./obj/event.o
 	gcc -c $(CXXFLAG) ./src/flow.cpp -o ./obj/flow.o
 	gcc -c $(CXXFLAG) ./src/node.cpp -o ./obj/node.o
-	gcc -c $(CXXFLAG) ./src/event/ackevent.cpp -o ./obj/ackevent.o
 	gcc -c $(CXXFLAG) ./src/event/txevent.cpp -o ./obj/txevent.o
 	gcc -c $(CXXFLAG) ./src/event/rxevent.cpp -o ./obj/rxevent.o
 	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
