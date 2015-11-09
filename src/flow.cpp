@@ -18,7 +18,7 @@ void Flow::update_flow(int id, int status){
 
 Packet* Flow::genNextPacket(){
 	//TODO next_packet id generate should based on TCP
-	Packet* next_packet = new Packet(flow_src, flow_dest, next_id, this);
+	Packet* next_packet = new Packet(flow_id, flow_src, flow_dest, next_id);
 	next_id++;
 	return next_packet;
 }

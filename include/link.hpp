@@ -3,6 +3,7 @@
 #define LINK_H
 
 #include <string>
+#include <stdint.h>
 
 class Node;
 
@@ -23,9 +24,7 @@ public:
 	double getDelay() { return link_delay; }
 	int getBufferSize() { return max_buffer_size; }
 	
-	Node* get_node_A() { return A; }
-	Node* get_node_B() { return B; }
-	Node* get_nodes() { return A ^ B; }
+	Node* get_other_node(Node*);
 
 	operator std::string() { return link_id; }
 	

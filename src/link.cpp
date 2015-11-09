@@ -23,3 +23,8 @@ int Link::establishLink(Node* pointA, Node* pointB)
 	B = pointB;
 	return 1;
 }
+
+Node* Link::get_other_node(Node* node)
+{
+	return (Node *)((uintptr_t)A ^ (uintptr_t)B ^ (uintptr_t)node);
+}

@@ -2,10 +2,12 @@
 #include "../include/networkmanager.hpp"
 #include "../include/flow.hpp"
 #include "../include/link.hpp"
+#include "../include/node.hpp"
 #else
 #include "networkmanager.hpp"
 #include "flow.hpp"
 #include "link.hpp"
+#include "node.hpp"
 #endif
 
 using namespace std;
@@ -22,7 +24,7 @@ NetworkManager* NetworkManager::getInstance()
 	}
 }
 
-int NetworkManager::registerFlow(string id, Flow& flow)
+int NetworkManager::registerFlow(Flow& flow)
 {
 	if (m_nodes.count(flow.getSrc()) == 0)
 		return -1;
@@ -30,20 +32,41 @@ int NetworkManager::registerFlow(string id, Flow& flow)
 	if (m_nodes.count(flow.getDest()) == 0)
 		return -1;
 
-	m_flows[id] = &flow;
+	m_flows[(std::string) flow] = &flow;
 	return 1;
 }
 
-int NetworkManager::registerNode(string id, Node& node)
+int NetworkManager::registerNode(Node& node)
 {
-	m_nodes[id] = &node;
+	m_nodes[(std::string) node] = &node;
 	return 1;	
 }
 
-int NetworkManager::registerLink(string id, Link& link)
+int NetworkManager::registerLink(Link& link)
 {
-	m_links[id] = &link;
+	m_links[(std::string) link] = &link;
 	return 1;
+}
+
+Flow* NetworkManager::getFlow(std::string id) {
+	if (m_flows.count(id) == 0)
+		return NULL;
+	
+	return m_flows[id];
+}
+
+Node* NetworkManager::getNode(std::string id) {
+	if (m_nodes.count(id) == 0)
+		return NULL;
+	
+	return m_nodes[id];
+}
+
+Link* NetworkManager::getLink(std::string id) {
+	if (m_links.count(id) == 0)
+		return NULL;
+	
+	return m_links[id];
 }
 
 int NetworkManager::connectLink(string link_id, string node1_id, string node2_id)

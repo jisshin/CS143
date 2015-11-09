@@ -1,7 +1,9 @@
 #include "../include/node.hpp"
 #include "../include/link.hpp"
 
-#inclue <cstdlib>
+#include <stdint.h>
+#include <cassert>
+#include <cstdlib>
 
 int main()
 {
@@ -11,8 +13,10 @@ int main()
 
 	link.establishLink(&node1, &node2);
 
-	assert(link.get_nodes() ^ (&node1) == (&node2));
-	assert(link.get_nodes() ^ (^node2) == (&node2));
+	assert(link.get_other_node(&node1) == &node2);
+	assert(link.get_other_node(&node2) == &node1);
+
+	printf("Test success - Link & node\n");
 
 	return EXIT_SUCCESS;
 }

@@ -23,7 +23,7 @@ public:
 	// transmitPacket put the Packet on the link and return the
 	// estimated time for the packet to be transmitted.
 	// if packed is dropped, return -1
-	double transmitPacket(Packet* tx_packet);
+	double transmitPacket(Packet* tx_packet, Node* rx_node);
 	
 	operator std::string() { return node_id; }
 private:
