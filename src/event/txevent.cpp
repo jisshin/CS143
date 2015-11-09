@@ -32,7 +32,7 @@ int TxEvent::handleEvent(){
 
 	//First, transmit packet
 	Node* rx_node = NULL;
-	double delay = tx_node->transmitPacket(tx_packet);
+	double delay = tx_node->transmitPacket(tx_packet, rx_node);
 
 	if(delay >= 0){
 		RxEvent* next_rx = new RxEvent(rx_node, tx_packet);
