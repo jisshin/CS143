@@ -1,12 +1,15 @@
 #ifndef FLOW_H
 #define FLOW_H
 
+#include "TCPAlgorithm.h"
+
 #include <string>
 
 //TODO move status constant to a ENUM
 #define PACKET_DROPPED = 0;
 
 class Packet;
+class TCPAlgorithm;
 
 class Flow {
 public:
@@ -18,6 +21,7 @@ public:
 
 	Packet* genNextPacket();
 	void update_flow(int id, int status);
+	void setTCPStrategy(TCPAlgorithm* alg) { TCP_strategy = alg; }
 
 	std::string getSrc() { return flow_src; }
 	std::string getDest() { return flow_dest; }
@@ -30,6 +34,7 @@ private:
 	std::string flow_src;
 	std::string flow_dest;
 	int flow_data_amt;
+	TCPAlgorithm* TCP_strategy;
 	//next_id is just temporary packet id counter to test txevent
 	int next_id = 0;
 
