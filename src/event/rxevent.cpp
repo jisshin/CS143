@@ -16,6 +16,7 @@
 #include "../node.hpp"
 #endif
 
+#include <stdint.h>
 #include <iostream>
 #define DEBUG
 int RxEvent::handleEvent(){
@@ -45,13 +46,13 @@ int RxEvent::handleEvent(){
 			std::string dest = rx_packet->packet_src;
 			rx_packet->packet_src = rx_packet->packet_dest;
 			rx_packet->packet_dest = dest;
-			Node* ack_rx_node = NULL;
+			uintptr_t ack_rx_node = NULL;
 			// And transmit back to sender
-			double delay = rx_node->transmitPacket(rx_packet,ack_rx_node);
+			double delay = rx_node->transmitPacket(rx_packet, &ack_rx_node);
 
 			// Create receive event if not dropped;
 			if (delay >= 0){
-				RxEvent* next_rx = new RxEvent(*ack_rx_node, rx_packet);
+				RxEvent* next_rx = new RxEvent(*(Node *)ack_rx_node, rx_packet);
 				next_rx->time = time + delay;
 				eventq->push(next_rx);
 			}
@@ -71,10 +72,10 @@ int RxEvent::handleEvent(){
 	// If this is not the final destination, forward the packet
 	// regardless of whether ack or src
 	else{
-		Node* tx_node = NULL;
-		double delay = rx_node->transmitPacket(rx_packet, tx_node);
+		uintptr_t tx_node = NULL;
+		double delay = rx_node->transmitPacket(rx_packet, &tx_node);
 		if (delay >= 0){
-			RxEvent* next_rx =  new RxEvent(*tx_node, rx_packet);
+			RxEvent* next_rx =  new RxEvent(*(Node*)tx_node, rx_packet);
 			next_rx->time = time + delay;
 			eventq->push(next_rx);
 		}

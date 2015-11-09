@@ -15,8 +15,8 @@
 
 int main()
 {
-	EventQueue event = EventQueue::get_instance();
-	Event event1, event2, event3, event4, event5;
+	EventQueue event = *EventQueue::getInstance();
+	Event event1("H1"), event2("H2"), event3("H3"), event4("H4"), event5("H5");
 	
 	event1.time = 0.5;
 	event2.time = 0.6;

@@ -24,10 +24,10 @@ Link* Node::lookupRouting(std::string dest){
 	return routing_table[dest];
 }
 
-double Node::transmitPacket(Packet* tx_packet, Node* rx_node){
+double Node::transmitPacket(Packet* tx_packet, uintptr_t* rx_node){
 
 	Link* tx_link = lookupRouting(tx_packet->packet_dest);
-	rx_node = tx_link->get_other_node(this);
+	*rx_node = (uintptr_t)tx_link->get_other_node(this);
 
 	//there is no tx_link with such tx_link_id that is adjacent
 	//to node. this shouldn't happen.

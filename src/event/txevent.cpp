@@ -31,12 +31,12 @@ int TxEvent::handleEvent(){
 #endif
 
 	//First, transmit packet
-	Node* rx_node = NULL;
-	double delay = tx_node->transmitPacket(tx_packet, rx_node);
+	uintptr_t rx_node = NULL;
+	double delay = tx_node->transmitPacket(tx_packet, &rx_node);
 
 	// Create rx event
 	if(delay >= 0){
-		RxEvent* next_rx = new RxEvent(*rx_node, tx_packet);
+		RxEvent* next_rx = new RxEvent(*(Node*)rx_node, tx_packet);
 		next_rx->time = time + delay;
 		eventq->push(next_rx);
 	}
