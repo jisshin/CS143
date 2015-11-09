@@ -32,7 +32,7 @@ public:
 	//TCP dependent
 	double getTxDelay();
 	Packet* genNextPacket();
-	int getAckID(int packet_id);
+	//int getAckID(int packet_id);
 
 private:
 	std::string flow_id;
