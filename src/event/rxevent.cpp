@@ -82,5 +82,6 @@ int RxEvent::handleEvent(){
 		}
 	}
 
+	return 1;
 }
 

@@ -56,5 +56,7 @@ int TxEvent::handleEvent(){
 			eventq->push(next_tx);
 		}
 	}
-	return 0;
+
+
+	return 1;
 }

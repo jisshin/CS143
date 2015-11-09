@@ -1,29 +1,44 @@
+#ifndef _MSC_VER
 #include "../include/logger.hpp"
+#else
+#include "logger.hpp"
+#endif
 
-static Loggger* Logger::logger = NULL;
+Logger* Logger::logger = NULL;
 
 Logger* Logger::getInstance()
 {
-	if(logger){
+	if (logger) {
 		return logger;
 	}
-	else{
-		return (logger = new Logger());
+	else {
+		return (logger = new Logger(LOGGER_OUTPUT));
 	}
 }
 
-template<typename T>
-void Logger::log(int column_num, T data)
+Logger::Logger(std::string file_dir)
 {
-	std::vector<std::string>::iterator iter = current_line.begin();
-	iter = iter + column_num;
-	current_line.insert(iter, std::to_string(data));
+	file.open(file_dir);
+}
+
+Logger::~Logger()
+{
+	flush_current_line();
+	file.close();
 }
 
 void Logger::flush_current_line()
 {
-	//output here
+	std::string output_str = "";
 	
+	for (int i = 0; i < current_line.size(); i++)
+	{
+		output_str += current_line[i];
+		output_str += ",";
+	}
+	output_str += "\n";
+
+	file << output_str;
 	current_line.clear();
 }
 

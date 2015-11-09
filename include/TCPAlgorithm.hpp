@@ -1,8 +1,9 @@
 #ifndef TCPALGORITHM_H
 #define TCPALGORITHM_H
 
-class TCPAlgorithm(){
-
+class TCPAlgorithm {
+public:
+	TCPAlgorithm() {}
 	
-}
+};
 #endif
