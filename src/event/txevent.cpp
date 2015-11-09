@@ -31,24 +31,26 @@ int TxEvent::handleEvent(){
 #endif
 
 	//First, transmit packet
-	Node* rx_node = NULL
-	double delay = tx_node->transmitPacket(tx_packet, rx_node);
+	Node* rx_node = NULL;
+	double delay = tx_node->transmitPacket(tx_packet);
 
 	if(delay >= 0){
 		RxEvent* next_rx = new RxEvent(rx_node, tx_packet);
 		// TODO: update the receive event time with correct
 		// value ( according to link delay )
 		next_rx->time = time + delay;
-		eventq.push(next_rx);
+		eventq->push(next_rx);
 	}
 
 	// generate next_tx event regardless the status of
 	// transmit;
-	Packet* next_tx_packet = tx_flow->genNextPacket();
-	if (next_tx_packet != NULL){
-		TxEvent* next_tx = new TxEvent(event_owner,\
-					next_tx_packet);
-		next_tx->time = time + 1;
-		eventq.push(next_tx);
+	if(tx_packet->ack_id == -1){
+		Packet* next_tx_packet = tx_flow->genNextPacket();
+		if (next_tx_packet != NULL){
+			TxEvent* next_tx = new TxEvent(event_owner,\
+						next_tx_packet);
+			next_tx->time = time + 1;
+			eventq->push(next_tx);
+		}
 	}
 }
