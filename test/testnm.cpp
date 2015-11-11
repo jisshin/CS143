@@ -5,10 +5,12 @@
 #include "../include/link.hpp"
 #include "../include/networkmanager.hpp"
 #include "../include/flow.hpp"
+#include "../include/node.hpp"
 #else
 #include "link.hpp"
 #include "networkmanager.hpp"
 #include "flow.hpp"
+#include "node.hpp"
 #endif
 
 #include <cassert>
@@ -16,23 +18,29 @@
 int main()
 {
 	char x[] = "hello";
-	Link link(1, 2, 3);
-	Link link2(4, 5, 6);
+	Link link("L1", 1, 2, 3);
+	Link link2("L2", 4, 5, 6);
 	
 	NetworkManager* instance = NetworkManager::getInstance();
 
-	Flow flow("H1", "H2", 30);
-	int result = instance->registerFlow("F1", flow);
+	Flow flow("F1", "H1", "H2", 30);
+	int result = instance->registerFlow(flow);
 	assert(result == -1);
 
-	std::string str("L1");
-	instance->registerLink(str, link);
-	std::string str2("L12");
-	instance->registerLink(str2, link2);
+	instance->registerLink(link);
+	instance->registerLink(link2);
 
-	std::string str3("L12");
-	assert(instance->getLink(str3)->getRate() == 4);
+	assert(instance->getLink("L12") == NULL);
 
+	Node n1("N1");
+	Node n2("N2");
+	instance->registerNode(n1);
+	instance->registerNode(n2);
+
+	instance->connectLink("L1", "N1", "N2");
+
+	assert((std::string) *(instance->getLink("L1")->get_other_node(&n2)) == "N1");
+	assert((std::string) *(instance->getLink("L1")->get_other_node(&n1)) == "N2");
 
 	printf("Test Success - network manager\n");
 	return EXIT_SUCCESS;

@@ -12,18 +12,18 @@
 
 class EventQueue{
 	public:
-		static EventQueue& get_instance(){
-			static EventQueue instance; 
-			return instance; 	
-		}
+		static EventQueue* getInstance();
 		
 		void push(Event* event);
 		Event* pop();
 		int empty();
 
+		int run();
+
 	private:
 		EventQueue(){};
-		
+		static EventQueue* eventqueue;
+
 		std::priority_queue<Event*, std::vector<Event*>, \
 			CompareEvent > registered_events;
 };

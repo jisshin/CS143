@@ -11,14 +11,12 @@ public:
   // Set the JSON data
   void setNetworkInfo(string file_name);
 
-  /** extracts flow info from JSON then registers into networkmanager
-  * using registerFlow
+  /**
+  * Creates data out of data obtained from network. 
   */
-  int createFlow();
-  /** extracts link info from JSON then registers into networkmanager
-  * using registerLink
-  */
-  int createLink();
+  int createNetwork();
+
+
 
 };
 #endif //RETRIEVENETWORKINFO_H

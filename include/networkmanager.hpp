@@ -13,15 +13,15 @@ class NetworkManager {
 public:
 	static NetworkManager* getInstance();
 
-	int registerFlow(std::string id, Flow&);
-	int registerLink(std::string id, Link&);
-	int registerNode(std::string id, Node&);
+	int registerFlow(Flow&);
+	int registerLink(Link&);
+	int registerNode(Node&);
 
 	int connectLink(std::string link_id, std::string node1_id, std::string node2_id);
 	
-	Flow* getFlow(std::string id) { return m_flows[id];}
-	Node* getNode(std::string id) { return m_nodes[id];}
-	Link* getLink(std::string id) { return m_links[id];}
+	Flow* getFlow(std::string id);
+	Node* getNode(std::string id);
+	Link* getLink(std::string id);
 
 private:	
 	NetworkManager(){}

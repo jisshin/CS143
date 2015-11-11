@@ -1,9 +1,14 @@
 #include "../include/retrieve_network_info.hpp"
 #include "../include/networkmanager.hpp"
+#include "../include/event/txevent.hpp"
+#include "../include/eventqueue.hpp"
 //#include "../lib/include/json/json.h"
 #include "../lib/json/json.h"
 #include "../lib/json/reader.h"
 #include "../lib/json/value.h"
+#include "../include/flow.hpp"
+#include "../include/link.hpp"
+#include "../include/packet.hpp"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -24,6 +29,16 @@ std::vector<string> flow_dests;
 std::vector<double> data_amts;
 std::vector<double> flow_starts;
 
+std::vector<string> nodes;
+
+std::vector<string> c_link;
+std::vector<string> c_node1;
+std::vector<string> c_node2;
+
+int flow_no;
+int link_no;
+int connection_no;
+int packet_no;
 
 void RetrieveNetworkInfo::setNetworkInfo(string file_name)
 {
@@ -42,7 +57,13 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
   }
   Json::Value links = root["Links"];
   Json::Value flows = root["Flows"];
-
+  Json::Value connections = root["Connections"];
+  Json::Value packets = root["Packets"];
+  flow_no = flows.size();
+  link_no = links.size();
+  connection_no = connections.size();
+  packet_no = packets.size();
+  // get all link info
   for (int i = 0; i < links.size(); i++){
     link_ids.push_back(links[i]["link_id"].asString());
     link_rates.push_back(links[i]["link_rate"].asDouble()); //check if exists
@@ -60,24 +81,47 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
     flow_starts.push_back(flows[i]["flow_start"].asDouble()); // CHeck if exists
   }
 
+  for (int i = 0; i < connections.size(); i++){
+    c_link.push_back(connections[i][0].asString());
+    c_node1.push_back(connections[i][1].asString());
+    c_node2.push_back(connections[i][2].asString());
+
+  }
+
 
   return;
 }
 
-/*int RetrieveNetworkInfo::createFlow()
+int RetrieveNetworkInfo::createNetwork()
 {
-  for (int i = 0; i < flows.size(); i++){
-    Flow flow = new Flow(flow_srcs[i], flow_dests[i], data_amts[i]);
-    registerFlow(flow_ids[i], flow);
-  }
-  return 1;
-}
 
-int RetrieveNetworkInfo::createLink()
-{
-  for (int i = 0; i < links.size(); i++){
-    Link link = new Link(link_rates[i], link_delays[i], link_buffers[i]);
-    registerLink(link_ids[i], link);
+  NetworkManager *manager = NetworkManager::getInstance();
+
+  // register links
+  for (int i = 0; i < link_no; i++){
+    Link link(link_ids[i], link_rates[i], link_delays[i], link_buffers[i]);
+    manager->registerLink(link);
   }
-  return 1;
-}*/
+
+  for (int i = 0; i < connection_no; i++){
+    manager->connectLink(c_link[i], c_node1[i], c_node2[i]);
+
+  }
+
+  // register flows
+  for (int i = 0; i < flow_no; i++){
+    Flow flow(flow_ids[i], flow_srcs[i], flow_dests[i], data_amts[i]);
+    manager->registerFlow(flow);
+    Packet packet(flow_ids[i], flow_srcs[i], flow_dests[i], -1);
+    TxEvent init_tx("H1", &packet);
+    EventQueue* eq = EventQueue::getInstance();
+
+  	eq->push(&init_tx);
+
+  	eq->run();
+  }
+
+
+	return EXIT_SUCCESS;
+
+}
