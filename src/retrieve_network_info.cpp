@@ -9,6 +9,7 @@
 #include "../include/flow.hpp"
 #include "../include/link.hpp"
 #include "../include/packet.hpp"
+#include "../include/node.hpp"
 #include <string>
 #include <vector>
 #include <iostream>
@@ -29,7 +30,7 @@ std::vector<string> flow_dests;
 std::vector<double> data_amts;
 std::vector<double> flow_starts;
 
-std::vector<string> nodes;
+std::vector<string> all_nodes;
 
 std::vector<string> c_link;
 std::vector<string> c_node1;
@@ -39,6 +40,7 @@ int flow_no;
 int link_no;
 int connection_no;
 int packet_no;
+int node_no;
 
 void RetrieveNetworkInfo::setNetworkInfo(string file_name)
 {
@@ -59,12 +61,14 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
   Json::Value flows = root["Flows"];
   Json::Value connections = root["Connections"];
   Json::Value packets = root["Packets"];
+  Json::Value nodes = root["Nodes"];
   flow_no = flows.size();
   link_no = links.size();
   connection_no = connections.size();
   packet_no = packets.size();
+  node_no = nodes.size();
   // get all link info
-  for (int i = 0; i < links.size(); i++){
+  for (int i = 0; i < link_no; i++){
     link_ids.push_back(links[i]["link_id"].asString());
     link_rates.push_back(links[i]["link_rate"].asDouble()); //check if exists
     link_delays.push_back(links[i]["link_delay"].asDouble());
@@ -73,7 +77,7 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
 
   }
 
-  for (int i = 0; i < flows.size(); i++){
+  for (int i = 0; i < flow_no; i++){
     flow_ids.push_back(flows[i]["flow_id"].asString());
     flow_srcs.push_back(flows[i]["flow_src"].asString());
     flow_dests.push_back(flows[i]["flow_dest"].asString());
@@ -81,10 +85,15 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
     flow_starts.push_back(flows[i]["flow_start"].asDouble()); // CHeck if exists
   }
 
-  for (int i = 0; i < connections.size(); i++){
+  for (int i = 0; i < connection_no; i++){
     c_link.push_back(connections[i][0].asString());
     c_node1.push_back(connections[i][1].asString());
     c_node2.push_back(connections[i][2].asString());
+
+  }
+  for (int i = 0; i < node_no; i++){
+    all_nodes.push_back(nodes[i].asString());
+
 
   }
 
@@ -101,6 +110,11 @@ int RetrieveNetworkInfo::createNetwork()
   for (int i = 0; i < link_no; i++){
     Link link(link_ids[i], link_rates[i], link_delays[i], link_buffers[i]);
     manager->registerLink(link);
+  }
+
+  for (int i = 0; i < node_no; i++){
+    Node node(all_nodes[i]);
+    manager->registerNode(node);
   }
 
   for (int i = 0; i < connection_no; i++){
