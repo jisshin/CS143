@@ -10,15 +10,15 @@ class Packet;
 class RxEvent : public Event
 {
 	public: 
-		RxEvent(std::string owner,Packet* packet):\
-		Event(owner),\
-		rx_packet(packet){};
+		RxEvent(std::string owner, Packet* packet) :\
+			Event(owner), \
+			rx_packet(packet) {};
+
 		int handleEvent();
-		~RxEvent();
+
 
 	private:
 		Packet* rx_packet;
-		std::string event_owner;
 
 };
 

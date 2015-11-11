@@ -9,20 +9,25 @@
 #endif
 
 #include <stdint.h>
-
+#include <iostream>
 Link* Node::lookupRouting(std::string dest){
 	//if the size of the adj_links is one, the node acts like
 	//a host. it does not do "dynamic routing".
+
+	//should not happen
+	if (adj_links.size() < 1)
+		return NULL;
+
 	if (adj_links.size() == 1)
 		return adj_links[0];
 
 	return routing_table[dest];
 }
 
-double Node::transmitPacket(Packet* tx_packet, Node* rx_node){
+double Node::transmitPacket(Packet* tx_packet, uintptr_t* rx_node){
 
 	Link* tx_link = lookupRouting(tx_packet->packet_dest);
-	rx_node = tx_link->get_other_node(this);
+	*rx_node = (uintptr_t)tx_link->get_other_node(this);
 
 	//there is no tx_link with such tx_link_id that is adjacent
 	//to node. this shouldn't happen.

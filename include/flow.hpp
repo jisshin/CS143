@@ -1,7 +1,11 @@
 #ifndef FLOW_H
 #define FLOW_H
 
+#ifndef _MSC_VER
 #include "../include/TCPAlgorithm.hpp"
+#else
+#include "TCPAlgorithm.hpp"
+#endif
 
 #include <string>
 
@@ -20,7 +24,6 @@ public:
 	  flow_dest(dest), \
 	  flow_data_amt(data_amt){};
 
-	Packet* genNextPacket();
 	void update_flow(int id, int status);
 	void setTCPStrategy(TCPAlgorithm* alg) { TCP_strategy = alg; }
 
@@ -29,6 +32,13 @@ public:
 	int getDataAmt() { return flow_data_amt; }
 	void setDataAmt(int new_data_amt) { flow_data_amt = new_data_amt; }
 	operator std::string() { return flow_id; }
+	int getAckID(int packet_id);
+
+
+	//TCP dependent
+	double getTxDelay(){return 1;};
+	Packet* genNextPacket();
+
 
 private:
 	std::string flow_id;
@@ -36,11 +46,10 @@ private:
 	std::string flow_dest;
 	int flow_data_amt;
 	TCPAlgorithm* TCP_strategy;
+	int last_ack_id = 0;
 
 	//next_id is just temporary packet id counter to test txevent
 	int next_id = 0;
-
-
 };
 
 

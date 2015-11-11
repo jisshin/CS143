@@ -22,23 +22,21 @@
 int TxEvent::handleEvent(){
 	NetworkManager* nm = NetworkManager::getInstance();
 	EventQueue* eventq = EventQueue::getInstance();
-	Node* rx_node = nm->getNode(tx_packet->packet_dest);
+
 	Node* tx_node = nm->getNode(event_owner);
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 
 #ifdef DEBUG
-	std::cout << "txevent: " << event_owner << tx_packet->packet_id << std::endl;
+	std::cout << "txevent: " << event_owner<< " " << tx_packet->packet_id << std::endl;
 #endif
 
 	//First, transmit packet
-	double delay = tx_node->transmitPacket(tx_packet, rx_node);
+	uintptr_t rx_node = NULL;
+	double delay = tx_node->transmitPacket(tx_packet, &rx_node);
 
 	// Create rx event
 	if(delay >= 0){
-		std::string rx_node_id = tx_packet->packet_dest;
-		RxEvent* next_rx = new RxEvent(rx_node_id, tx_packet);
-		// TODO: update the receive event time with correct
-		// value ( according to link delay )
+		RxEvent* next_rx = new RxEvent(*(Node*)rx_node, tx_packet);
 		next_rx->time = time + delay;
 		eventq->push(next_rx);
 	}
@@ -51,8 +49,10 @@ int TxEvent::handleEvent(){
 			TxEvent* next_tx = new TxEvent(event_owner,\
 						next_tx_packet);
 			// this time should be TCP dependent
-			next_tx->time = time + 1;
+			delay = tx_flow->getTxDelay();
+			next_tx->time = time + delay;
 			eventq->push(next_tx);
 		}
 	}
+	return 1;
 }

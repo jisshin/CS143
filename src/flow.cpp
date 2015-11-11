@@ -29,3 +29,10 @@ Packet* Flow::genNextPacket(){
 		return next_packet;
 	}
 }
+
+int Flow::getAckID(int packet_id){
+	if(packet_id == last_ack_id){
+		last_ack_id++;
+	}
+	return last_ack_id;
+}
