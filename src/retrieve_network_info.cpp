@@ -91,12 +91,10 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
     c_node2.push_back(connections[i][2].asString());
 
   }
+
   for (int i = 0; i < node_no; i++){
     all_nodes.push_back(nodes[i].asString());
-
-
   }
-
 
   return;
 }
@@ -118,23 +116,27 @@ int RetrieveNetworkInfo::createNetwork()
   }
 
   for (int i = 0; i < connection_no; i++){
-    manager->connectLink(c_link[i], c_node1[i], c_node2[i]);
-
+    int result = manager->connectLink(c_link[i], c_node1[i], c_node2[i]);
+    if (result == -1)
+      return -1;
   }
 
+  EventQueue* eq = EventQueue::getInstance();
   // register flows
   for (int i = 0; i < flow_no; i++){
     Flow flow(flow_ids[i], flow_srcs[i], flow_dests[i], data_amts[i]);
-    manager->registerFlow(flow);
+    
+    int result = manager->registerFlow(flow);
+    if (result == -1) 
+        return -1;
+
     Packet packet(flow_ids[i], flow_srcs[i], flow_dests[i], -1);
     TxEvent init_tx("H1", &packet);
-    EventQueue* eq = EventQueue::getInstance();
 
   	eq->push(&init_tx);
 
-  	eq->run();
   }
-
+    eq->run();
 
 	return EXIT_SUCCESS;
 
