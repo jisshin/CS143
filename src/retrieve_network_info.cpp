@@ -19,30 +19,8 @@ using std::vector;
 using std::string;
 using std::cout;
 
-std::vector<string> link_ids;
-std::vector<double> link_rates;
-std::vector<double> link_delays;
-std::vector<double> link_buffers;
 
-std::vector<string> flow_ids;
-std::vector<string> flow_srcs;
-std::vector<string> flow_dests;
-std::vector<double> data_amts;
-std::vector<double> flow_starts;
-
-std::vector<string> all_nodes;
-
-std::vector<string> c_link;
-std::vector<string> c_node1;
-std::vector<string> c_node2;
-
-int flow_no;
-int link_no;
-int connection_no;
-int packet_no;
-int node_no;
-
-void RetrieveNetworkInfo::setNetworkInfo(string file_name)
+int RetrieveNetworkInfo::setNetworkInfo(string file_name)
 {
   std::ifstream file(file_name, std::ifstream::binary);
   Json::Value root;
@@ -55,7 +33,7 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
     // report to the user the failure and their locations in the document.
     std::cout  << "Failed to parse configuration\n"
                << reader.getFormattedErrorMessages();
-    return;
+    return -1;
   }
   Json::Value links = root["Links"];
   Json::Value flows = root["Flows"];
@@ -73,8 +51,6 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
     link_rates.push_back(links[i]["link_rate"].asDouble()); //check if exists
     link_delays.push_back(links[i]["link_delay"].asDouble());
     link_buffers.push_back(links[i]["link_buffer"].asDouble());
-
-
   }
 
   for (int i = 0; i < flow_no; i++){
@@ -96,7 +72,7 @@ void RetrieveNetworkInfo::setNetworkInfo(string file_name)
     all_nodes.push_back(nodes[i].asString());
   }
 
-  return;
+  return 1;
 }
 
 int RetrieveNetworkInfo::createNetwork()
@@ -136,7 +112,8 @@ int RetrieveNetworkInfo::createNetwork()
   	eq->push(&init_tx);
 
   }
-    eq->run();
+  
+  eq->run();
 
 	return EXIT_SUCCESS;
 
