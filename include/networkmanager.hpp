@@ -9,6 +9,10 @@ class Node;
 class Link;
 class Router;
 
+typedef std::map<std::string, Flow*> flow_t;
+typedef std::map<std::string, Node*> node_t;
+typedef std::map<std::string, Link*> link_t;
+
 class NetworkManager {
 public:
 	static NetworkManager* getInstance();
@@ -18,18 +22,23 @@ public:
 	int registerNode(Node&);
 
 	int connectLink(std::string link_id, std::string node1_id, std::string node2_id);
-	
+
 	Flow* getFlow(std::string id);
 	Node* getNode(std::string id);
 	Link* getLink(std::string id);
 
-private:	
+	Node* resetNodeIterator();
+	Node* getNextNodeIterator();
+
+private:
 	NetworkManager(){}
 	static NetworkManager* manager;
 
-	std::map<std::string, Flow*> m_flows;
-	std::map<std::string, Node*> m_nodes;
-	std::map<std::string, Link*> m_links;
+	flow_t m_flows;
+	node_t m_nodes;
+	link_t m_links;
+
+	node_t::iterator m_node_iter;
 };
 
 #endif //NETWORKMANAGER_H
