@@ -25,7 +25,7 @@ Event* EventQueue::pop()
 {
 	if (registered_events.size() == 0) {
 		//if no event is there, then return default
-		//event. 
+		//event.
 		return (new Event(""));
 	}
 
@@ -47,6 +47,10 @@ int EventQueue::run()
 	}
 
 	return 1;
+}
+
+int EventQueue::size(){
+	return registered_events.size();
 }
 
 int EventQueue::empty(){

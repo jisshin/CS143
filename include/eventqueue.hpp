@@ -13,9 +13,11 @@
 class EventQueue{
 	public:
 		static EventQueue* getInstance();
-		
+
 		void push(Event* event);
 		Event* pop();
+
+		int size();
 		int empty();
 
 		int run();
@@ -30,5 +32,4 @@ class EventQueue{
 
 
 
-#endif 
-
+#endif

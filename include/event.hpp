@@ -15,6 +15,7 @@ class Event{
 
 	protected:
 		int commonTransmit();
+		int commonIsSimOver();
 
 		double time = -1;
 };

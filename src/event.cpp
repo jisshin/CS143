@@ -1,5 +1,6 @@
 #ifndef _MSC_VER
 #include "../include/event.hpp"
+#include "../include/networkmanager.hpp"
 #include "../../include/event/rxeventfactory.hpp"
 #else
 #include "event.hpp"
@@ -20,4 +21,21 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 	}
 
   return result;
+}
+
+int Event::commonIsSimOver()
+{
+  Flow* flow = nm->resetFlowIterator();
+  while(flow != NULL)
+  {
+    if(flow->getDataAmt() > 0)
+    {
+      //still some data left to send
+      return 0;
+    }
+    flow = nm->getNextFlowIterator();
+  }
+
+  //all data is sent. simulation is over
+  return 1;
 }

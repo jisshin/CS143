@@ -1,4 +1,5 @@
 #include "../include/networkmanager.hpp"
+#include "../include/eventqueue.hpp"
 #include "../include/node.hpp"
 #include "../include/link.hpp"
 #include "../include/flow.hpp"
@@ -7,6 +8,7 @@
 int LogEvent::handleEvent()
 {
   NetworkManager* nm = NetworkManager::getInstance();
+  EventQueue* eq = EventQueue::getInstance();
 
   Link* link = nm->resetLinkIterator();
   Flow* flow = nm->resetFlowIterator();
@@ -26,11 +28,18 @@ int LogEvent::handleEvent()
 
   while(node != NULL)
   {
-    logData(node);
+    if (node->getAdjNodes()->size() == 1)
+    {
+      //there is only one node connected to this node
+      //thus this is host. we are interested in logging
+      //data for only host.
+      logData(node);
+    }
     node = nm->getNextNodeIterator();
   }
 
-  //add next event
+  if (!commonIsSimOver())
+    eq->push(new LogEvent());
 }
 
 int LogEvent::logData(Link* link)
@@ -48,12 +57,12 @@ int LogEvent::logData(Link* link)
 
 int LogEvent::logData(Flow* flow)
 {
-
+  //TODO flow related logging
 }
 
 int LogEvent::logData(Node* node)
 {
-
+  //TODO host related logging
 }
 
 int LogEvent::getBufOccupancy(Link* link)

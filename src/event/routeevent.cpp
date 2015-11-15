@@ -13,5 +13,6 @@ int RouteEvent::handleEvent()
     node = nm->getNextNodeIterator();
   }
 
-  //Add next event
+  if (!commonIsSimOver())
+    eq->push(new RouteEvent());
 }

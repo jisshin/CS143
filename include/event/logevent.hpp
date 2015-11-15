@@ -17,5 +17,6 @@ class LogEvent : public Event
 
     int getBufOccupancy(Link*);
     int getPacketLoss(Link*);
+    int getFlowRate(Link*);
 }
 #endif

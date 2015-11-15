@@ -21,8 +21,6 @@ class RxEvent : public Event
 	protected:
 		Link* rx_link;
 		Node* rx_node;
-
-
 };
 
 #endif //RXEVENT_H
