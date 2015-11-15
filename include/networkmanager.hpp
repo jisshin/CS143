@@ -27,8 +27,12 @@ public:
 	Node* getNode(std::string id);
 	Link* getLink(std::string id);
 
+	Flow* resetFlowIterator();
+	Flow* getNextFlowIterator();
 	Node* resetNodeIterator();
 	Node* getNextNodeIterator();
+	Link* resetLinkIterator();
+	Link* getNextLinkIterator();
 
 private:
 	NetworkManager(){}
@@ -38,7 +42,9 @@ private:
 	node_t m_nodes;
 	link_t m_links;
 
+	flow_t::iterator m_flow_iter;
 	node_t::iterator m_node_iter;
+	link_t::iterator m_link_iter;
 };
 
 #endif //NETWORKMANAGER_H

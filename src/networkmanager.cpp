@@ -86,6 +86,21 @@ int NetworkManager::connectLink(string link_id, string node1_id, string node2_id
 	return 1;
 }
 
+Flow* NetworkManager::resetFlowIterator()
+{
+	m_flow_iter = m_flows.begin();
+	return m_flow_iter->second;
+}
+
+Flow* NetworkManager::getNextFlowIterator()
+{
+	if(++m_flow_iter != m_flows.end())
+		return m_flow_iter->second;
+	else{
+		return NULL;
+	}
+}
+
 Node* NetworkManager::resetNodeIterator()
 {
 	m_node_iter = m_nodes.begin();
@@ -96,6 +111,21 @@ Node* NetworkManager::getNextNodeIterator()
 {
 	if(++m_node_iter != m_nodes.end())
 		return m_node_iter->second;
+	else{
+		return NULL;
+	}
+}
+
+Link* NetworkManager::resetLinkIterator()
+{
+	m_link_iter = m_links.begin();
+	return m_link_iter->second;
+}
+
+Link* NetworkManager::getNextLinkIterator()
+{
+	if(++m_link_iter != m_links.end())
+		return m_link_iter->second;
 	else{
 		return NULL;
 	}
