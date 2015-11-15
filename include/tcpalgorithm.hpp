@@ -4,11 +4,9 @@
 class TCPAlgorithm {
 public:
 	TCPAlgorithm() {}
-	virtual int getNextPacketID(){return 0;}
-	virtual int updateWindow(int w){return 0;}
-	virtual double getNextPacketTime(){return 0;}
-	virtual int getWindow();
-	virtual void updateAck(int id);
-	virtual void updateLoss(int id);
+	virtual int getWindow(){return 0;}
+	virtual void updateAck(int id){}
+	virtual void updateLoss(int id){}
+	int window_size;
 };
 #endif //TCPALGORITHM_H

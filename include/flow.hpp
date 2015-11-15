@@ -19,7 +19,8 @@ class TCPAlgorithm;
 class Flow {
 public:
 	Flow(std::string id, std::string src, std::string dest, int data_amt);
-	void update_flow(int id, int status);
+
+	void receive_ack(int id);
 	void setTCPStrategy(TCPAlgorithm* alg) { TCP_strategy = alg; }
 
 	std::string getSrc() { return flow_src; }
@@ -28,11 +29,16 @@ public:
 	void setDataAmt(int new_data_amt) { flow_data_amt = new_data_amt; }
 	operator std::string() { return flow_id; }
 	int getAckID(int packet_id);
-	int setRTTmin(int RTTmin);
+
+	// TODO: implement setRTT and set base tx delay when
+	// registering flow
+	void setRTTmin(int RTTmin);
+	void
 
 	//TCP dependent
-	double getTxDelay(double t);
-	Packet* genNextPacket();
+	double getTxDelay();
+	Packet* genNextPacketFromRx();
+	Packet* genNextPacketFromTx();
 
 
 private:
@@ -41,10 +47,9 @@ private:
 	std::string flow_dest;
 	int flow_data_amt;
 	TCPAlgorithm* TCP_strategy;
-	//int window_size;
+
 	int last_ack_id = 0;
 	int dup_count = 0;
-	int current_id = 0;
 	int outstanding_count = 0;
 	double base_tx_delay;
 	double last_transmit_t;

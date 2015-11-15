@@ -6,12 +6,9 @@
 class TCPReno:public TCPAlgorithm{
 public:
 	TCPReno():TCPAlgorithm(){};
-	int getNextPacketID() override;
-	int updateWindow() override;
-	double getNextPacketTime() override;
-	void updateRxAck(int id) override;
-private:
-	int dup_count;
+	int getWindow() override;
+	void updateAck(int id) override;
+	void updateLoss(int id) override;
 };
 
 #endif // TCPALGORITHM_TCPRENO_H

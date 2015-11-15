@@ -7,20 +7,21 @@
 #endif
 
 #include <iostream>
-
+#include <cassert>
 Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
 : flow_id(id), \
   flow_src(src), \
   flow_dest(dest), \
   flow_data_amt(data_amt){
-
 }
 
-void Flow::update_flow(int id, int status){
+void Flow::receive_ack(int id){
 	if (last_ack_id == id){
 		dup_count++;
 		if(dup_count == 3){
 			// report a packet lost to TCP
+			// and set to retransmit
+			next_id = last_ack_id;
 			TCP_strategy->updateLoss(id);
 		}
 	}
@@ -32,18 +33,36 @@ void Flow::update_flow(int id, int status){
 	}
 }
 
-Packet* Flow::genNextPacket(){
+Packet* Flow::genNextPacketFromTx(){
 	//TODO: Assume fast recovery by default, may change in the future
-	int window_size;
-	if (dup_count >= 3){
-		current_id = last_ack_id;
+
+	// if currently the window is full, don't generate new
+	// packet
+	if (outstanding_count >= TCP_strategy->getWindow()){
+			window_full_flag = 1;
+			return NULL;
 	}
-	else{
-		current_id++;
+
+	// send next packet, if window is not full, and have more
+	// data to send
+	else if(next_id < flow_data_amt/PACKET_SIZE){
+		Packet* next_packet = new Packet(flow_id, flow_src, flow_dest, next_id);
+		outstanding_count++;
+		next_id++;
+		return next_packet;
 	}
-	Packet* next_packet = new Packet(flow_id, flow_src, flow_dest, current_id);
-	outstanding_count++;
-	return next_packet;
+	return NULL;
+}
+
+Packet* Flow::genNextPacketFromRx(){
+	if((window_full_flag)&&(outstanding_count < TCP_strategy->getWindow())){
+		window_full_flag = 0;
+		Packet* next_packet = new Packet(flow_id, flow_src, flow_dest, next_id);
+		outstanding_count++;
+		next_id++;
+		return next_packet;
+	}
+	return NULL;
 }
 
 int Flow::getAckID(int packet_id){
@@ -54,6 +73,10 @@ int Flow::getAckID(int packet_id){
 }
 
 
-double Flow::getTxDelay(double t){
-	return TCP_strategy->getNextPacketTime();
+double Flow::getTxDelay(){
+	double delay = \
+			((last_transmit_t + base_tx_delay) > EventQueue::cur_time)?\
+					base_tx_delay:0;
+	last_transmit_t = EventQueue::cur_time + delay;
+	return delay;
 }

@@ -18,6 +18,7 @@
 
 #include <stdint.h>
 #include <iostream>
+#include <cassert>
 #define DEBUG
 int RxEvent::handleEvent(){
 	NetworkManager* nm = NetworkManager::getInstance();
@@ -32,9 +33,7 @@ int RxEvent::handleEvent(){
 		// a src packet and has reached the final destination
 
 		if(rx_packet->ack_id == -1){
-		// TODO ack_id should be updated according to
-		// TCP, use 1 for now to differentiate ack and
-		// src packet
+
 
 		#ifdef DEBUG
 			std::cout<<"rxevent: receive src packet " << rx_packet->packet_id\
@@ -42,7 +41,6 @@ int RxEvent::handleEvent(){
 #endif//DEBUG
 			// convert to ack packet
 			rx_packet->ack_id = rx_flow->getAckID(rx_packet->packet_id);
-			//rx_packet->ack_id = 1;
 			std::string dest = rx_packet->packet_src;
 			rx_packet->packet_src = rx_packet->packet_dest;
 			rx_packet->packet_dest = dest;
@@ -65,7 +63,14 @@ int RxEvent::handleEvent(){
 			std::cout<<"rxevent: receive ack packet " << rx_packet->packet_id\
 					<<std::endl;
 #endif//DEBUG
-			rx_flow->update_flow(rx_packet->packet_id, PACKET_RECEIVED);
+			rx_flow->receive_ack(rx_packet->packet_id);
+			// Check if suppose to send out new src packet
+			Packet* new_src_packet = rx_flow->genNextPacketFromRx();
+			if(new_src_packet != NULL){
+				TxEvent* next_tx = new TxEvent(*(Node *)rx_node, new_src_packet);
+				next_tx->time = time + rx_flow->getTxDelay();
+				eventq->push(next_tx);
+			}
 		}
 	}
 

@@ -41,10 +41,11 @@ int TxEvent::handleEvent(){
 		eventq->push(next_rx);
 	}
 
+	// if this is the first tx event from source,
 	// check if next packet is available from flow, generate next_tx event regardless the status of
 	// transmit;
-	if(tx_packet->ack_id == -1){
-		Packet* next_tx_packet = tx_flow->genNextPacket();
+	if((tx_packet->ack_id == -1)&&(tx_packet->packet_src == event_owner)){
+		Packet* next_tx_packet = tx_flow->genNextPacketFromTx();
 		if (next_tx_packet != NULL){
 			TxEvent* next_tx = new TxEvent(event_owner,\
 						next_tx_packet);

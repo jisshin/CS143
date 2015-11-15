@@ -23,7 +23,7 @@ class EventQueue{
 	private:
 		EventQueue(){};
 		static EventQueue* eventqueue;
-
+		static double cur_time = 0;
 		std::priority_queue<Event*, std::vector<Event*>, \
 			CompareEvent > registered_events;
 };
