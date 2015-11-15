@@ -18,6 +18,7 @@ public:
 	{}
 
 	int pushPacket(Packet*);
+	Packet* lastPacket();
 	Packet* peekPacket();
 	Packet* popPacket();
 

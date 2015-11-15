@@ -8,7 +8,7 @@
 
 RxEvent* RxEventFactory::makeRxEvent(Link *pLink, Node *pNode)
 {
-  Packet* rpkt = pLink->peekPacket();
+  Packet* rpkt = pLink->lastPacket();
 
   if (rpkt->packet_type == SRC_PACKET)
     if (rpkt->packet_dest == (std::string)*pNode)

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include "common.hpp"
 
 const int BITS_PER_BYTE = 8;
 
@@ -29,7 +30,7 @@ const std::unordered_map<int, int> SIZE_TABLE( {
 // Assume that packet size are fix
 class Packet {
 	public:
-		Packet(std::string flow_id, std::string src, std::string dest, int type, int size)\
+		Packet(std::string flow_id, std::string src, std::string dest, int type)\
 		: packet_flow_id(flow_id),
 		  packet_src(src), 
 		  packet_dest(dest), 
@@ -45,8 +46,14 @@ class Packet {
 		std::string packet_src;
 		std::string packet_dest;
 		int packet_type;
+
+		
+#ifndef TESTCASE0
 		int packet_size;
-		int id = -1;
+#else
+		int test = 0;
+		int packet_size = PACKET_SIZE;
+#endif
 };
 
 

@@ -19,6 +19,11 @@ Packet* Link::peekPacket()
 	return link_buffer.front();
 }
 
+Packet* Link::lastPacket()
+{
+	return link_buffer.back();
+}
+
 Packet* Link::popPacket(){
 	Packet* packet = link_buffer.front();
 	link_buffer.pop();

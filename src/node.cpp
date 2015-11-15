@@ -83,7 +83,7 @@ void Node::updateRoute(){
 	}
 }
 
-std::vector<Node*> getAdjNodes()
+std::vector<Node*> Node::getAdjNodes()
 {
 	return std::vector<Node*>();
 }
