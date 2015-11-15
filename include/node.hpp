@@ -3,6 +3,7 @@
 
 /* C/C++ lib */
 #include <unordered_map>
+#include <pair>
 #include <vector>
 #include <string>
 /* forward declaration */
@@ -11,7 +12,7 @@ class Node;
 class Link;
 
 //host destination address -> link to use
-typedef std::unordered_map<std::string, Link*> routing_table_t;
+typedef std::unordered_map<std::string, std::pair<Link*, int> > routing_table_t;
 
 class Node {
 public:
@@ -25,6 +26,12 @@ public:
 	// if packed is dropped, return -1
 	double transmitPacket(Packet* tx_packet, uintptr_t* rx_node);
 	
+	void updateRoute();
+	
+	routing_table_t getRoutingTable();
+	
+	std::vector<Node*> getAdjNodes();
+	
 	operator std::string() { return node_id; }
 private:
 	// lookupRouting return the link for routing to dest
@@ -32,7 +39,6 @@ private:
 
 	std::string node_id;
 	std::vector<Link*> adj_links;
-
 	routing_table_t routing_table;
 };
 

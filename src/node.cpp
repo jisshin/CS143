@@ -21,7 +21,7 @@ Link* Node::lookupRouting(std::string dest){
 	if (adj_links.size() == 1)
 		return adj_links[0];
 
-	return routing_table[dest];
+	return routing_table[dest]->first;
 }
 
 double Node::transmitPacket(Packet* tx_packet, uintptr_t* rx_node){
@@ -41,6 +41,52 @@ double Node::transmitPacket(Packet* tx_packet, uintptr_t* rx_node){
 	}
 
 	return queue_delay + tx_link->getDelay();
+}
+
+void Node::updateRoute(){
+	routing_table_t this_routing_table = this->getRoutingTable();
+
+	for(std::vector<Link*>::size_type i = 0; i != adj_links.size(); i++) {
+		Node* nbr = adj_links[i]->get_other_node(this);
+		//TODO: send request routing table packet out to nbr to get nbr routing table
+		nbr_routing_table = adj_nodes[i]->getRoutingTable();
+		
+		//Get link weight.
+		int wt = adj_links[i].weight();
+		
+		//Loop through neighbor's routing table to update this routing table
+		for(routing_table_t::iterator it = nbr_routing_table.begin(); it != nbr_routing_table.end(); ++it)
+		{
+			std::string id = it->first;
+			int dist = it->second->second;
+			
+			//look for the id in this routing table
+			std::unordered_map<std::string, std::pair<Link*, int> >::const_iterator got = this_routing_table.find(id);
+			
+			//id is not found
+			if( got == this_routing_table.end() )
+			{
+				//current distance is distance to nbr + distance in nbr's routing table
+				std::pair<Link*, int> link_entry (adj_links[i], wt + dist);
+				std::pair<std::string, std::pair<Link*, int> > new_entry (id, link_entry);
+				this_routing_table.insert(new_entry);
+			}
+			
+			//id is found but the new path is better
+			else if( got->second->second > wt + dist )
+			{
+				//update current distance
+				std::pair<Link*, int> link_entry (adj_links[i], wt + dist);
+				std::pair<std::string, std::pair<Link*, int> > new_entry (id, link_entry);
+				this_routing_table.erase(got);
+				this_routing_table.insert(new_entry);
+			}
+		}
+	}
+}
+
+routing_table_t Node::getRoutingTable(){
+	return routing_table;
 }
 
 void Node::establishLink(Link* link)
