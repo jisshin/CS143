@@ -41,7 +41,7 @@ int TxEvent::handleEvent(){
 		eventq->push(next_rx);
 	}
 
-	// generate next_tx event regardless the status of
+	// check if next packet is available from flow, generate next_tx event regardless the status of
 	// transmit;
 	if(tx_packet->ack_id == -1){
 		Packet* next_tx_packet = tx_flow->genNextPacket();
