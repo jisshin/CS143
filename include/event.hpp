@@ -13,6 +13,9 @@ class Event{
 
 		virtual int handleEvent() { return 0; }
 
+	protected:
+		int commonTransmit();
+
 		double time = -1;
 };
 

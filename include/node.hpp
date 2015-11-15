@@ -24,8 +24,7 @@ public:
 	// transmitPacket put the Packet on the link and return the
 	// estimated time for the packet to be transmitted.
 	// if packed is dropped, return -1
-	// rx_link is an output argument
-	int transmitPacket(Packet* tx_packet, uintptr_t* rx_link);
+	int transmitPacket(Packet* tx_packet);
 	int receivePacket(Packet*);
 
 	void updateRoute();

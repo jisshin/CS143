@@ -18,7 +18,9 @@
 
 #include <stdint.h>
 #include <iostream>
+#include <cassert>
 #define DEBUG
+
 int RxEvent::handleEvent(){
 	NetworkManager* nm = NetworkManager::getInstance();
 	EventQueue* eventq = EventQueue::getInstance();
@@ -28,33 +30,28 @@ int RxEvent::handleEvent(){
 	Packet* rx_packet = rx_link->popPacket();
 	rx_node->receivePacket(rx_packet);
 
+
 	if(rx_packet->packet_dest == event_owner){
-		// generate acknowledge packet if the rx packet is
+		// Case 1: generate acknowledge packet if the rx packet is
+
 		// a src packet and has reached the final destination
 
-		if(rx_packet->ack_id == -1){
-		// TODO ack_id should be updated according to
-		// TCP, use 1 for now to differentiate ack and
-		// src packet
+		if(rx_packet->packet_type == SRC_PACKET){
+
 
 		#ifdef DEBUG
-			std::cout<<"rxevent: receive src packet " << rx_packet->packet_id\
+			std::cout<<"rxevent: receive src packet " << rx_packet->id\
 			<<std::endl;
 #endif//DEBUG
 			// convert to ack packet
-			rx_packet->ack_id = rx_flow->getAckID(rx_packet->packet_id);
-			//rx_packet->ack_id = 1;
-			std::string dest = rx_packet->packet_src;
-			rx_packet->packet_src = rx_packet->packet_dest;
-			rx_packet->packet_dest = dest;
-			uintptr_t ack_rx_link = NULL;
+			Packet* ack_packet = rx_flow->genAckPacket(rx_packet);
+			uintptr_t ack_rx_node = NULL;
 			// And transmit back to sender
-			int result = rx_node->transmitPacket(rx_packet, &ack_rx_link);
+			double delay = rx_node->transmitPacket(ack_packet, &ack_rx_node);
 
-			double delay;
 			// Create receive event if not dropped;
 			if (result > 0){
-				
+
 				RxEvent* next_rx = new RxEvent(*(Node *)ack_rx_node, rx_packet);
 				next_rx->time = time + delay;
 				eventq->push(next_rx);
@@ -62,17 +59,24 @@ int RxEvent::handleEvent(){
 
 		}
 
-		// Update flow if the rx packet is an ack packet
-		else{
+		// Case2: Update flow if the rx packet is an ack packet
+		else if (rx_packet->packet_type == ACK_PACKET){
 #ifdef DEBUG
-			std::cout<<"rxevent: receive ack packet " << rx_packet->packet_id\
+			std::cout<<"rxevent: receive ack packet " << rx_packet->id\
 					<<std::endl;
 #endif//DEBUG
-			rx_flow->update_flow(rx_packet->packet_id, PACKET_RECEIVED);
+			rx_flow->receive_ack(rx_packet->id);
+			// Check if suppose to send out new src packet
+			Packet* new_src_packet = rx_flow->genNextPacketFromRx();
+			if(new_src_packet != NULL){
+				TxEvent* next_tx = new TxEvent(*(Node *)rx_node, new_src_packet);
+				next_tx->time = time + rx_flow->getTxDelay();
+				eventq->push(next_tx);
+			}
 		}
 	}
 
-	// If this is not the final destination, forward the packet
+	// Case3: If this is not the final destination, forward the packet
 	// regardless of whether ack or src
 	else{
 		uintptr_t tx_node = NULL;
@@ -83,6 +87,5 @@ int RxEvent::handleEvent(){
 			eventq->push(next_rx);
 		}
 	}
-
 	return 1;
 }

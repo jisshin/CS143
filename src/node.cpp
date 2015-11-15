@@ -10,6 +10,7 @@
 
 #include <stdint.h>
 #include <iostream>
+
 Link* Node::lookupRouting(std::string dest){
 	//if the size of the adj_links is one, the node acts like
 	//a host. it does not do "dynamic routing".
@@ -24,12 +25,9 @@ Link* Node::lookupRouting(std::string dest){
 	return routing_table[dest]->first;
 }
 
-int Node::transmitPacket(Packet* tx_packet, uintptr_t* rx_link){
+int Node::transmitPacket(Packet* tx_packet){
 
 	Link* link = lookupRouting(tx_packet->packet_dest);
-
-	//rx_link is an output argument
-	*rx_link = (uintptr_t)link;
 
 	//there is no tx_link with such tx_link_id that is adjacent
 	//to node. this shouldn't happen.

@@ -18,6 +18,7 @@ public:
 	{}
 
 	int pushPacket(Packet*);
+	Packet* peekPacket();
 	Packet* popPacket();
 
 	double getDelay();
@@ -34,7 +35,7 @@ public:
 
 	int cur_buffer_size = 0;
 	int num_packet_drop = 0;
-	int num_packet_thru = 0;
+	int packet_thru = 0;
 
 private:
 	const std::string link_id;

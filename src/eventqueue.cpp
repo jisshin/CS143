@@ -42,6 +42,7 @@ int EventQueue::run()
 	{
 		Event* e = registered_events.top();
 		registered_events.pop();
+		cur_time = e->time;
 		e->handleEvent();
 	}
 

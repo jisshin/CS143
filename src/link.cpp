@@ -20,10 +20,15 @@ int Link::pushPacket(Packet* packet){
 	}
 }
 
+Packet* Link::peekPacket()
+{
+	return link_buffer.front();
+}
+
 Packet* Link::popPacket(){
 	Packet* packet = link_buffer.front();
 	link_buffer.pop();
-	num_packet_thru++;
+	packet_thru = packet_thru + packet->packet_size;
 	return packet;
 }
 

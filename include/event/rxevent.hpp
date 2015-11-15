@@ -18,7 +18,7 @@ class RxEvent : public Event
 
 		int handleEvent();
 
-	private:
+	protected:
 		Link* rx_link;
 		Node* rx_node;
 

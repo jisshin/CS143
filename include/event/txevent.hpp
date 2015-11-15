@@ -10,13 +10,19 @@ class Packet;
 
 class TxEvent:public Event {
 public:
-	TxEvent(std::string owner, Packet* packet): Event(owner),\
-	tx_packet(packet){};
+	TxEvent::TxEvent(Packet* pPkt, Node* pNode):\
+	tx_packet(pPkt),\
+	tx_node(pNode)
+	{
+
+	}
+
 	int handleEvent();
 
-private:
-	void createRxEvent();
+protected:
 	Packet* tx_packet;
+	Node* tx_node;
+
 };
 
 #endif //TXEVENT_H
