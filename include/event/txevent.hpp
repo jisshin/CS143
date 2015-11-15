@@ -14,7 +14,7 @@ public:
 		tx_packet(pPkt), tx_node(pNode)
 	{}
 
-	int handleEvent();
+	int handleEvent() { return 1; }
 
 protected:
 	Packet* tx_packet;
