@@ -69,7 +69,13 @@ Packet* Flow::genNextPacketFromRx(){
 	return NULL;
 }
 
+
 //TODO: implement genAckPacket and get rid of getAckID
+Packet* genAckPacket(Packet* received_packet)
+{
+	return NULL;
+}
+
 
 int Flow::getAckID(int packet_id){
 	if(packet_id == last_ack_id){

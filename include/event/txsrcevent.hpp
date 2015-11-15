@@ -8,5 +8,6 @@ public:
 	TxSrcEvent(Packet* pPkt);
 
 	int handleEvent();
-}
+};
+
 #endif

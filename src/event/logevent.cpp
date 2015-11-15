@@ -41,6 +41,8 @@ int LogEvent::handleEvent()
 
   if (!commonIsSimOver())
     eq->push(new LogEvent());
+
+  return 1;
 }
 
 void LogEvent::logData(Link* link)

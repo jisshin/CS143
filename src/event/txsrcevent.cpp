@@ -29,4 +29,6 @@ int TxSrcEvent::handleEvent()
 		next_tx->time = time + tx_flow->getTxDelay();
 		eventq->push(next_tx);
 	}
+
+	return 1;
 }

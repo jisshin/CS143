@@ -36,3 +36,4 @@ struct CompareEvent
 	}
 };
 #endif //EVENT_H
+

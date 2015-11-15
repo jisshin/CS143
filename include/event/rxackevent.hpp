@@ -3,7 +3,7 @@
 
 #include "rxevent.hpp"
 
-class RxAckEvent :public RxEvent
+class RxAckEvent : public RxEvent
 {
 public:
 	RxAckEvent(Link* pLink, Node* pNode) : RxEvent(pLink, pNode) {}
@@ -12,3 +12,5 @@ public:
 };
 
 #endif
+
+

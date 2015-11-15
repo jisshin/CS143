@@ -25,6 +25,7 @@ const std::unordered_map<int, int> SIZE_TABLE( {
 	{ ROUT_PACKET, ROUT_SIZE }
 } );
 
+
 // Assume that packet size are fix
 class Packet {
 	public:
@@ -35,7 +36,9 @@ class Packet {
 		  packet_type(type)
 		{
 			//packet_size = SIZE_TABLE[packet_type];
-			//hey jennifer this doesn't compile.
+			//hey jennifer i moved this line over here cuz this is
+			//what you probably intended to do. anyway, it still
+			//doesn't compile due to syntax error. 
 		}
 
 		std::string packet_flow_id;
@@ -47,6 +50,5 @@ class Packet {
 };
 
 
-
-
 #endif //PACKET_H
+

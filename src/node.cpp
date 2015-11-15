@@ -83,6 +83,11 @@ void Node::updateRoute(){
 	}
 }
 
+std::vector<Node*> getAdjNodes()
+{
+	return std::vector<Node*>();
+}
+
 routing_table_t Node::getRoutingTable(){
 	return routing_table;
 }

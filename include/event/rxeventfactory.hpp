@@ -12,5 +12,6 @@ public:
   RxEventFactory(){}
 
   RxEvent* makeRxEvent(Link*, Node*);
-}
+};
+
 #endif

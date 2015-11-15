@@ -10,5 +10,6 @@ class RouteEvent : public Event
 
 	int handleEvent();
 
-}
+};
+
 #endif

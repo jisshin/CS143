@@ -20,4 +20,6 @@ int RouteEvent::handleEvent()
 		EventQueue* eq = EventQueue::getInstance();
 		eq->push(new RouteEvent());
 	}
+
+	return 1;
 }
