@@ -27,7 +27,7 @@ int TxEvent::handleEvent(){
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 
 #ifdef DEBUG
-	std::cout << "txevent: " << event_owner<< " " << tx_packet->packet_id << std::endl;
+	std::cout << "txevent: " << event_owner<< " " << tx_packet->id << std::endl;
 #endif
 
 	//First, transmit packet
@@ -44,7 +44,7 @@ int TxEvent::handleEvent(){
 	// if this is the first tx event from source,
 	// check if next packet is available from flow, generate next_tx event regardless the status of
 	// transmit;
-	if((tx_packet->ack_id == -1)&&(tx_packet->packet_src == event_owner)){
+	if((tx_packet->packet_type == SRC_PACKET)&&(tx_packet->packet_src == event_owner)){
 		Packet* next_tx_packet = tx_flow->genNextPacketFromTx();
 		if (next_tx_packet != NULL){
 			TxEvent* next_tx = new TxEvent(event_owner,\

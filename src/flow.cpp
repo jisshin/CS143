@@ -1,6 +1,7 @@
 #ifndef _MSC_VER
 #include "../include/flow.hpp"
 #include "../include/packet.hpp"
+
 #else
 #include "flow.hpp"
 #include "packet.hpp"
@@ -13,6 +14,9 @@ Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
   flow_src(src), \
   flow_dest(dest), \
   flow_data_amt(data_amt){
+	NetworkManager* nm = NetworkManager::getInstance();
+	Link* src_link = nm->getNode(flow_src)->lookupRouting(flow_dest);
+	base_tx_delay = SRC_SIZE/src_link->link_rate;
 }
 
 void Flow::receive_ack(int id){
@@ -45,8 +49,9 @@ Packet* Flow::genNextPacketFromTx(){
 
 	// send next packet, if window is not full, and have more
 	// data to send
-	else if(next_id < flow_data_amt/PACKET_SIZE){
-		Packet* next_packet = new Packet(flow_id, flow_src, flow_dest, next_id);
+	else if(next_id < flow_data_amt){
+		Packet* next_packet = new Packet(flow_id, flow_src, \
+				flow_dest, next_id, SRC_PACKET);
 		outstanding_count++;
 		next_id++;
 		return next_packet;
@@ -57,13 +62,16 @@ Packet* Flow::genNextPacketFromTx(){
 Packet* Flow::genNextPacketFromRx(){
 	if((window_full_flag)&&(outstanding_count < TCP_strategy->getWindow())){
 		window_full_flag = 0;
-		Packet* next_packet = new Packet(flow_id, flow_src, flow_dest, next_id);
+		Packet* next_packet = new Packet(flow_id, flow_src, \
+				flow_dest, next_id, SRC_PACKET);
 		outstanding_count++;
 		next_id++;
 		return next_packet;
 	}
 	return NULL;
 }
+
+//TODO: implement genAckPacket and get rid of getAckID
 
 int Flow::getAckID(int packet_id){
 	if(packet_id == last_ack_id){

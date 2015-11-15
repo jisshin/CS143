@@ -39,6 +39,7 @@ public:
 	double getTxDelay();
 	Packet* genNextPacketFromRx();
 	Packet* genNextPacketFromTx();
+	Packet* genAckPacket(Packet* received_packet);
 
 
 private:

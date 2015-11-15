@@ -10,6 +10,11 @@ const int BITS_PER_BYTE = 8;
 const int SRC_PACKET = 0;
 const int ACK_PACKET = 1;
 const int ROUT_PACKET = 2;
+const int SRC_SIZE = 1500;
+
+//TODO: need to update these size
+const int ACK_SIZE = 40;
+const int ROUT_SIZE = 40;
 
 /* forward declaration class */
 class Flow; 
@@ -33,9 +38,9 @@ class Packet {
 };
 
 const std::unordered_map<int, int> SIZE_TABLE({
-	{SRC_PACKET, 1500},
-	{ACK_PACKET, 40},
-	{ROUT_PACKET, 40}
+	{SRC_PACKET, SRC_SIZE},
+	{ACK_PACKET, ACK_SIZE},
+	{ROUT_PACKET, ROUT_SIZE}
 });
 
 
