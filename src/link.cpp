@@ -28,3 +28,8 @@ Node* Link::get_other_node(Node* node)
 {
 	return (Node *)((uintptr_t)A ^ (uintptr_t)B ^ (uintptr_t)node);
 }
+
+int Link::weight()
+{
+	return 1;
+}
