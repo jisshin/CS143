@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include <string>
-/* Forward declaration */ 
+/* Forward declaration */
 class Packet;
 
 class TxEvent:public Event {
@@ -15,10 +15,8 @@ public:
 	int handleEvent();
 
 private:
+	void createRxEvent();
 	Packet* tx_packet;
 };
 
 #endif //TXEVENT_H
-
-
-

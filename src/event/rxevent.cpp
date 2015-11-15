@@ -22,12 +22,13 @@
 int RxEvent::handleEvent(){
 	NetworkManager* nm = NetworkManager::getInstance();
 	EventQueue* eventq = EventQueue::getInstance();
-	Node* rx_node = nm->getNode(event_owner);
+
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
 
+	Packet* rx_packet = rx_link->popPacket();
+	rx_node->receivePacket(rx_packet);
+
 	if(rx_packet->packet_dest == event_owner){
-
-
 		// generate acknowledge packet if the rx packet is
 		// a src packet and has reached the final destination
 
@@ -46,12 +47,14 @@ int RxEvent::handleEvent(){
 			std::string dest = rx_packet->packet_src;
 			rx_packet->packet_src = rx_packet->packet_dest;
 			rx_packet->packet_dest = dest;
-			uintptr_t ack_rx_node = NULL;
+			uintptr_t ack_rx_link = NULL;
 			// And transmit back to sender
-			double delay = rx_node->transmitPacket(rx_packet, &ack_rx_node);
+			int result = rx_node->transmitPacket(rx_packet, &ack_rx_link);
 
+			double delay;
 			// Create receive event if not dropped;
-			if (delay >= 0){
+			if (result > 0){
+				
 				RxEvent* next_rx = new RxEvent(*(Node *)ack_rx_node, rx_packet);
 				next_rx->time = time + delay;
 				eventq->push(next_rx);
@@ -83,4 +86,3 @@ int RxEvent::handleEvent(){
 
 	return 1;
 }
-

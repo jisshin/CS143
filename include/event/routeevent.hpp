@@ -6,7 +6,7 @@
 class RouteEvent : public Event
 {
   public:
-    RouteEvent() : Event(owner) {}
+    RouteEvent() : Event("ROUTE") {}
 
     int handleEvent()
 

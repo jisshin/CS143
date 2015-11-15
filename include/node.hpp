@@ -16,7 +16,7 @@ typedef std::unordered_map<std::string, std::pair<Link*, int> > routing_table_t;
 
 class Node {
 public:
-	Node(std::string id): node_id(id) 
+	Node(std::string id): node_id(id)
 	{}
 
 	void establishLink(Link* link);
@@ -24,14 +24,16 @@ public:
 	// transmitPacket put the Packet on the link and return the
 	// estimated time for the packet to be transmitted.
 	// if packed is dropped, return -1
-	double transmitPacket(Packet* tx_packet, uintptr_t* rx_node);
-	
+	// rx_link is an output argument
+	int transmitPacket(Packet* tx_packet, uintptr_t* rx_link);
+	int receivePacket(Packet*);
+
 	void updateRoute();
-	
+
 	routing_table_t getRoutingTable();
-	
+
 	std::vector<Node*> getAdjNodes();
-	
+
 	operator std::string() { return node_id; }
 private:
 	// lookupRouting return the link for routing to dest

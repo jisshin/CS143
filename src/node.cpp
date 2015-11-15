@@ -24,23 +24,25 @@ Link* Node::lookupRouting(std::string dest){
 	return routing_table[dest]->first;
 }
 
-double Node::transmitPacket(Packet* tx_packet, uintptr_t* rx_node){
+int Node::transmitPacket(Packet* tx_packet, uintptr_t* rx_link){
 
-	Link* tx_link = lookupRouting(tx_packet->packet_dest);
-	*rx_node = (uintptr_t)tx_link->get_other_node(this);
+	Link* link = lookupRouting(tx_packet->packet_dest);
+
+	//rx_link is an output argument
+	*rx_link = (uintptr_t)link;
 
 	//there is no tx_link with such tx_link_id that is adjacent
 	//to node. this shouldn't happen.
-	if (tx_link == NULL) return -2;
+	if (link == NULL) return -2;
 
-	double queue_delay = tx_link->putPacket();
+	int result = link->pushPacket(tx_packet);
 
-	if (queue_delay < 0){
-		// packet is dropped due to a full link buffer
-		return -1;
-	}
+	return result;
+}
 
-	return queue_delay + tx_link->getDelay();
+int Node::receivePacket(Packet*)
+{
+
 }
 
 void Node::updateRoute(){
@@ -50,19 +52,19 @@ void Node::updateRoute(){
 		Node* nbr = adj_links[i]->get_other_node(this);
 		//TODO: send request routing table packet out to nbr to get nbr routing table
 		nbr_routing_table = adj_nodes[i]->getRoutingTable();
-		
+
 		//Get link weight.
 		int wt = adj_links[i].weight();
-		
+
 		//Loop through neighbor's routing table to update this routing table
 		for(routing_table_t::iterator it = nbr_routing_table.begin(); it != nbr_routing_table.end(); ++it)
 		{
 			std::string id = it->first;
 			int dist = it->second->second;
-			
+
 			//look for the id in this routing table
 			std::unordered_map<std::string, std::pair<Link*, int> >::const_iterator got = this_routing_table.find(id);
-			
+
 			//id is not found
 			if( got == this_routing_table.end() )
 			{
@@ -71,7 +73,7 @@ void Node::updateRoute(){
 				std::pair<std::string, std::pair<Link*, int> > new_entry (id, link_entry);
 				this_routing_table.insert(new_entry);
 			}
-			
+
 			//id is found but the new path is better
 			else if( got->second->second > wt + dist )
 			{

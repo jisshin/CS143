@@ -2,6 +2,7 @@
 #ifndef LINK_H
 #define LINK_H
 
+#include <queue>
 #include <string>
 #include <stdint.h>
 
@@ -16,25 +17,29 @@ public:
 	  link_id(id)
 	{}
 
-	double putPacket();
+	int pushPacket(Packet*);
+	Packet* popPacket();
+
+	double getDelay();
 
 	int establishLink(Node* pointA, Node* pointB);
 
-	int getRate() { return link_rate; }
-	double getDelay() { return link_delay; }
-	int getBufferSize() { return max_buffer_size; }
-	
 	Node* get_other_node(Node*);
 
 	operator std::string() { return link_id; }
-	
+
+	const int link_rate; // in Mbps
+	const double link_delay;
+	const int max_buffer_size;
+
+	int cur_buffer_size = 0;
+	int num_packet_drop = 0;
+	int num_packet_thru = 0;
+
 private:
-	int link_rate;
-	// in Mbps
-	double link_delay;
-	int max_buffer_size;
-	int curr_buffer_size = 0;
-	std::string link_id;
+	const std::string link_id;
+
+	std::queue<Packet*> link_buffer;
 
 	Node* A;
 	Node* B;

@@ -31,16 +31,18 @@ int TxEvent::handleEvent(){
 #endif
 
 	//First, transmit packet
-	uintptr_t rx_node = NULL;
-	double delay = tx_node->transmitPacket(tx_packet, &rx_node);
+	uintptr_t rx_link = NULL;
+	int result = tx_node->transmitPacket(tx_packet, &rx_link);
+
+	double delay;
 
 	// Create rx event
-	if(delay >= 0){
-		RxEvent* next_rx = new RxEvent(*(Node*)rx_node, tx_packet);
-		next_rx->time = time + delay;
+	if(result > 0){
+		Node* rx_node = (Link*)rx_link->get_other_node(tx_node);
+		RxEvent* next_rx = new RxEvent((Link*)rx_link, rx_node);
+		next_rx->time = time + (Link*)rx_link->getDelay();
 		eventq->push(next_rx);
 	}
-
 	// generate next_tx event regardless the status of
 	// transmit;
 	if(tx_packet->ack_id == -1){
