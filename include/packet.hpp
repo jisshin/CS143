@@ -19,11 +19,11 @@ const int ROUT_SIZE = 40;
 /* forward declaration class */
 class Flow; 
 
-const std::unordered_map<int, int> SIZE_TABLE{ {
+const std::unordered_map<int, int> SIZE_TABLE( {
 	{ SRC_PACKET, SRC_SIZE },
 	{ ACK_PACKET, ACK_SIZE },
 	{ ROUT_PACKET, ROUT_SIZE }
-} };
+} );
 
 // Assume that packet size are fix
 class Packet {
