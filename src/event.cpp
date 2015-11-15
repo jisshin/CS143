@@ -1,22 +1,28 @@
-#ifndef _MSC_VER
+#include "../include/event/rxeventfactory.hpp"
 #include "../include/event.hpp"
+#include "../include/packet.hpp"
+#include "../include/link.hpp"
+#include "../include/node.hpp"
+#include "../include/flow.hpp"
 #include "../include/networkmanager.hpp"
-#include "../../include/event/rxeventfactory.hpp"
-#else
-#include "event.hpp"
-#endif
+#include "../include/eventqueue.hpp"
 
 int Event::commonTransmit(Node* node, Packet* pkt)
 {
-  int result = node->transmitPacket(pkt);
+	int result = node->transmitPacket(pkt);
 
 	// Create receive event if not dropped;
 	if (result > 0){
-    RxEventFactory rx_fac;
-    Link* mid_link = node->lookupRouting(pkt->packet_dest);
-    Node* other_node = mid_link->get_other_node(node);
+
+		Link* mid_link = node->lookupRouting(pkt->packet_dest);
+		Node* other_node = mid_link->get_other_node(node);
+
+		RxEventFactory rx_fac;
 		RxEvent* next_rx = rx_fac.makeRxEvent(mid_link, other_node);
+
 		next_rx->time = time + mid_link->getDelay();
+		
+		EventQueue* eventq = EventQueue::getInstance();
 		eventq->push(next_rx);
 	}
 
@@ -25,17 +31,18 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 
 int Event::commonIsSimOver()
 {
-  Flow* flow = nm->resetFlowIterator();
-  while(flow != NULL)
-  {
-    if(flow->getDataAmt() > 0)
-    {
-      //still some data left to send
-      return 0;
-    }
-    flow = nm->getNextFlowIterator();
-  }
+	NetworkManager* nm = NetworkManager::getInstance();
+	Flow* flow = nm->resetFlowIterator();
+	while (flow != NULL)
+	{
+		if (flow->getDataAmt() > 0)
+		{
+			//still some data left to send
+			return 0;
+		}
+		flow = nm->getNextFlowIterator();
+	}
 
-  //all data is sent. simulation is over
-  return 1;
+	//all data is sent. simulation is over
+	return 1;
 }

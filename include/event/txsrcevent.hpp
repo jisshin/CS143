@@ -1,13 +1,12 @@
 #ifndef TXSRCEVENT_H
 #define TXSRCEVENT_H
 
-#include "txevent.h"
+#include "txevent.hpp"
 
-//
-class TxSrcEvent: public TxEvent {
+class TxSrcEvent : public TxEvent {
 public:
-  TxSrcEvent(Packet* pPkt);
+	TxSrcEvent(Packet* pPkt);
 
-  int handleEvent();
+	int handleEvent();
 }
 #endif

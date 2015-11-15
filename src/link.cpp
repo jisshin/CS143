@@ -1,16 +1,10 @@
-#ifndef _MSC_VER
 #include "../include/link.hpp"
 #include "../include/node.hpp"
 #include "../include/packet.hpp"
-#else
-#include "link.hpp"
-#include "node.hpp"
-#include "packet.hpp"
-#endif
 
 int Link::pushPacket(Packet* packet){
-	if(max_buffer_size > cur_buffer_size){
-		cur_buffer_size++;
+	if(max_buf_size_in_byte > cur_buf_size_in_byte){
+		cur_buf_size_in_byte += packet->packet_size;
 		link_buffer.push(packet);
 		return 1;
 	}
@@ -28,7 +22,8 @@ Packet* Link::peekPacket()
 Packet* Link::popPacket(){
 	Packet* packet = link_buffer.front();
 	link_buffer.pop();
-	packet_thru = packet_thru + packet->packet_size;
+	packet_thru += packet->packet_size;
+	cur_buf_size_in_byte -= packet->packet_size;
 	return packet;
 }
 
@@ -41,7 +36,7 @@ int Link::establishLink(Node* pointA, Node* pointB)
 
 double Link::getDelay()
 {
-	double temp = PACKET_SIZE*BITS_PER_BYTE*cur_buffer_size;
+	double temp = cur_buf_size_in_byte*BITS_PER_BYTE;
 	double queue_delay = temp/(link_rate*10^6);
 	return queue_delay + link_delay;
 }
@@ -55,3 +50,4 @@ int Link::weight()
 {
 	return 1;
 }
+

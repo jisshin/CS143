@@ -10,8 +10,7 @@
 #include "../include/link.hpp"
 #include "../include/packet.hpp"
 #include "../include/node.hpp"
-#include <string>
-#include <vector>
+
 #include <iostream>
 #include <fstream>
 

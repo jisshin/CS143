@@ -1,11 +1,9 @@
-#ifndef _MSC_VER
 #include "../include/flow.hpp"
+#include "../include/link.hpp"
+#include "../include/node.hpp"
 #include "../include/packet.hpp"
-
-#else
-#include "flow.hpp"
-#include "packet.hpp"
-#endif
+#include "../include/eventqueue.hpp"
+#include "../include/networkmanager.hpp"
 
 #include <iostream>
 #include <cassert>
@@ -80,8 +78,8 @@ int Flow::getAckID(int packet_id){
 	return last_ack_id;
 }
 
-
-double Flow::getTxDelay(){
+double Flow::getTxDelay()
+{
 	double delay = \
 			((last_transmit_t + base_tx_delay) > EventQueue::cur_time)?\
 					base_tx_delay:0;

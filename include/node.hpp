@@ -3,7 +3,6 @@
 
 /* C/C++ lib */
 #include <unordered_map>
-#include <pair>
 #include <vector>
 #include <string>
 /* forward declaration */
@@ -34,10 +33,10 @@ public:
 	std::vector<Node*> getAdjNodes();
 
 	operator std::string() { return node_id; }
-private:
 	// lookupRouting return the link for routing to dest
 	Link* lookupRouting(std::string dest);
 
+private:
 	std::string node_id;
 	std::vector<Link*> adj_links;
 	routing_table_t routing_table;

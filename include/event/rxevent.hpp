@@ -5,22 +5,21 @@
 
 /* Forward declaration */
 class Link;
-class Packet;
-
+class Node;
 
 class RxEvent : public Event
 {
-	public:
-		RxEvent(Link* pLink, Node* pNode) :\
-			rx_link(pLink),\
-			rx_node(pNode)
-	  {}
+public:
+	RxEvent(Link* pLink, Node* pNode) :\
+		rx_link(pLink), \
+		rx_node(pNode)
+	{}
 
-		int handleEvent();
+	int handleEvent() { return 1; }
 
-	protected:
-		Link* rx_link;
-		Node* rx_node;
+protected:
+	Link* rx_link;
+	Node* rx_node;
 };
 
 #endif //RXEVENT_H

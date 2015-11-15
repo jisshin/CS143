@@ -3,17 +3,21 @@
 
 #include "../event.hpp"
 
+class Link;
+class Flow;
+class Node;
+
 class LogEvent : public Event
 {
   public:
-    LogEvent() : Event("LOG") {}
+    LogEvent() : Event() {}
 
     int handleEvent();
 
   private:
-    logData(Link*);
-    logData(Flow*);
-    logData(Node*);
+    void logData(Link*);
+    void logData(Flow*);
+    void logData(Node*);
 
     int getBufOccupancy(Link*);
     int getPacketLoss(Link*);

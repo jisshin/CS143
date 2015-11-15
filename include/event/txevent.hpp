@@ -5,17 +5,14 @@
 
 #include <iostream>
 #include <string>
+
 /* Forward declaration */
-class Packet;
 
-class TxEvent:public Event {
+class TxEvent :public Event {
 public:
-	TxEvent::TxEvent(Packet* pPkt, Node* pNode):\
-	tx_packet(pPkt),\
-	tx_node(pNode)
-	{
-
-	}
+	TxEvent(Packet* pPkt, Node* pNode) :
+		tx_packet(pPkt), tx_node(pNode)
+	{}
 
 	int handleEvent();
 

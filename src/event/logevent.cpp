@@ -1,9 +1,10 @@
-#include "../include/networkmanager.hpp"
-#include "../include/eventqueue.hpp"
-#include "../include/node.hpp"
-#include "../include/link.hpp"
-#include "../include/flow.hpp"
-#include "../include/logger.hpp"
+#include "../../include/event/logevent.hpp"
+#include "../../include/networkmanager.hpp"
+#include "../../include/eventqueue.hpp"
+#include "../../include/node.hpp"
+#include "../../include/link.hpp"
+#include "../../include/flow.hpp"
+#include "../../include/logger.hpp"
 
 int LogEvent::handleEvent()
 {
@@ -28,7 +29,7 @@ int LogEvent::handleEvent()
 
   while(node != NULL)
   {
-    if (node->getAdjNodes()->size() == 1)
+    if (node->getAdjNodes().size() == 1)
     {
       //there is only one node connected to this node
       //thus this is host. we are interested in logging
@@ -42,7 +43,7 @@ int LogEvent::handleEvent()
     eq->push(new LogEvent());
 }
 
-int LogEvent::logData(Link* link)
+void LogEvent::logData(Link* link)
 {
   Logger* logger = Logger::getInstance();
   logger->prepare();
@@ -55,26 +56,19 @@ int LogEvent::logData(Link* link)
   logger->flush_current_line();
 }
 
-int LogEvent::logData(Flow* flow)
+void LogEvent::logData(Flow* flow)
 {
   //TODO flow related logging
 }
 
-int LogEvent::logData(Node* node)
+void LogEvent::logData(Node* node)
 {
   //TODO host related logging
 }
 
 int LogEvent::getBufOccupancy(Link* link)
 {
-  return (link->cur_buffer_size)/(link->max_buffer_size);
-}
-
-int LogEvent::getPacketLoss(Link* link)
-{
-  int ret = link->num_packet_drop;
-  link->num_packet_drop = 0;
-  return ret;
+	return (link->cur_buf_size_in_byte) / (link->max_buf_size_in_byte);
 }
 
 int LogEvent::getPacketLoss(Link* link)

@@ -3,14 +3,12 @@
 
 #include "rxevent.hpp"
 
-class Link;
-class Node;
-
 class RxEndEvent: public RxEvent
 {
-  RxEndEvent(Link* pLink, Node* pNode) : RxEvent(pLink, pNode);
+public:
+	RxEndEvent(Link* pLink, Node* pNode) : RxEvent(pLink, pNode) {}
 
-  int handleEvent();
-}
+	int handleEvent();
+};
 
 #endif

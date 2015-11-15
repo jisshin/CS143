@@ -1,9 +1,6 @@
-#ifndef _MSC_VER
 #include "../include/eventqueue.hpp"
-#else
-#include "eventqueue.hpp"
-#endif
 
+double EventQueue::cur_time = 0;
 EventQueue* EventQueue::eventqueue = NULL;
 
 EventQueue* EventQueue::getInstance()
@@ -26,7 +23,7 @@ Event* EventQueue::pop()
 	if (registered_events.size() == 0) {
 		//if no event is there, then return default
 		//event.
-		return (new Event(""));
+		return (new Event());
 	}
 
 	//otherwise, return the event with highest priority.

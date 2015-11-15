@@ -3,6 +3,9 @@
 
 #include "rxevent.hpp"
 
+class Link;
+class Node;
+
 class RxEventFactory
 {
 public:

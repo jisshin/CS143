@@ -6,9 +6,9 @@
 class RouteEvent : public Event
 {
   public:
-    RouteEvent() : Event("ROUTE") {}
+    RouteEvent() : Event() {}
 
-    int handleEvent()
+	int handleEvent();
 
 }
 #endif

@@ -7,17 +7,20 @@
 #include <string>
 #include <iostream>
 
+class Node;
+class Packet;
+
 class Event{
 	public:
 		Event() {}
 
 		virtual int handleEvent() { return 0; }
 
-	protected:
-		int commonTransmit();
+		double time = -1;
+
+		int commonTransmit(Node* node, Packet* pkt);
 		int commonIsSimOver();
 
-		double time = -1;
 };
 
 /*

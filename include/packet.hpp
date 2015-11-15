@@ -19,29 +19,34 @@ const int ROUT_SIZE = 40;
 /* forward declaration class */
 class Flow; 
 
+const std::unordered_map<int, int> SIZE_TABLE{ {
+	{ SRC_PACKET, SRC_SIZE },
+	{ ACK_PACKET, ACK_SIZE },
+	{ ROUT_PACKET, ROUT_SIZE }
+} };
+
 // Assume that packet size are fix
 class Packet {
 	public:
 		Packet(std::string flow_id, std::string src, std::string dest, int type, int size)\
-		: packet_flow_id(flow_id),\
-		  packet_src(src), \
-		  packet_dest(dest), \
+		: packet_flow_id(flow_id),
+		  packet_src(src), 
+		  packet_dest(dest), 
 		  packet_type(type)
-		{};
+		{
+			//packet_size = SIZE_TABLE[packet_type];
+			//hey jennifer this doesn't compile.
+		}
 
 		std::string packet_flow_id;
 		std::string packet_src;
 		std::string packet_dest;
 		int packet_type;
-		int packet_size = SIZE_TABLE[packet_type];
+		int packet_size;
 		int id = -1;
 };
 
-const std::unordered_map<int, int> SIZE_TABLE({
-	{SRC_PACKET, SRC_SIZE},
-	{ACK_PACKET, ACK_SIZE},
-	{ROUT_PACKET, ROUT_SIZE}
-});
+
 
 
 #endif //PACKET_H
