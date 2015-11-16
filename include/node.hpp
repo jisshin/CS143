@@ -17,7 +17,9 @@ typedef std::unordered_map<std::string, std::pair<Link*, int> > routing_table_t;
 class Node {
 public:
 	Node(std::string id): node_id(id) 
-	{}
+	{
+		routing_table = routing_table_t( {{id, link_entry}} );
+	}
 
 	void establishLink(Link* link);
 

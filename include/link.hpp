@@ -23,6 +23,7 @@ public:
 	int getRate() { return link_rate; }
 	double getDelay() { return link_delay; }
 	int getBufferSize() { return max_buffer_size; }
+	int weight();
 	
 	Node* get_other_node(Node*);
 
