@@ -22,14 +22,11 @@ public:
 	Packet* peekPacket();
 	Packet* popPacket();
 
-	double getDelay();
-	int weight();
-
 	int establishLink(Node* pointA, Node* pointB);
 
 	int getRate() { return link_rate; }
-	double getDelay() { return link_delay; }
-	int getBufferSize() { return max_buffer_size; }
+	double getDelay();
+	int getBufferSize() { return max_buf_size_in_byte; }
 	int weight();
 	
 	Node* get_other_node(Node*);

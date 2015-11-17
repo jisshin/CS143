@@ -6,13 +6,15 @@
 #include "../../include/node.hpp"
 #include "../../include/common.hpp"
 
+#include <iostream>
+
 int RxAckEvent::handleEvent()
 {
 	Packet* rx_packet = rx_link->popPacket();
 	rx_node->receivePacket(rx_packet);
 
 #ifdef DEBUG
-	std::cout << "rxevent: receive src packet " << rx_packet->test\
+	std::cout << "rxevent: receive ack packet " << rx_packet->packet_seq_id \
 		<< std::endl;
 #endif//DEBUG
 

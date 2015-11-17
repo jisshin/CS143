@@ -22,7 +22,7 @@ Link* Node::lookupRouting(std::string dest){
 
 int Node::transmitPacket(Packet* tx_packet){
 
-	packet_sent += packet->packet_size;
+	packet_sent += tx_packet->packet_size;
 	Link* link = lookupRouting(tx_packet->packet_dest);
 
 	//there is no tx_link with such tx_link_id that is adjacent
@@ -36,21 +36,27 @@ int Node::transmitPacket(Packet* tx_packet){
 
 int Node::receivePacket(Packet* packet)
 {
+#ifdef ROUTING_TEST
 	packet_rcvd += packet->packet_size;
 
-	if(pkt->type == ROUT_PACKET && pkt->packet_dest == *this)
-		routePacket(pkt);
+	if(packet->packet_type == ROUT_PACKET && packet->packet_dest == *this)
+		routePacket(packt);
 
 	return 1;
+#else
+	return 0;
+#endif //ROUTIING_TEST
+
 }
 
 void routePacket(Packet* pkt)
 {
+#ifdef ROUTING_TEST
 	//get routing table of source packet--simulates packet with routing table info
 	NetworkManager* nm = NetworkManager::getInstance();
-	Node* nbr = nm.getNode(pkt->packet_src);
-	Link* link_to_nbr = nm.getLinkBtw(*nbr, *this);
-	int nbr_link_wt = link_to_nbr.weight();
+	Node* nbr = nm->getNode(pkt->packet_src);
+	Link* link_to_nbr = nm->getLinkBtwNodes(pkt->packet_src, *this);
+	int nbr_link_wt = link_to_nbr->weight();
 
 	routing_table_t nbr_route = nbr->getRoutingTable();
 	//Loop through neighbor's routing table to update this routing table
@@ -78,12 +84,13 @@ void routePacket(Packet* pkt)
 			this_routing_table.insert({{dest, route_entry}});
 		}
 	}
+#endif
 }
 
 std::vector<Node*> Node::getAdjNodes(){
 	std::vector<Node*> adj_nodes (adj_links.size());
-	for(std::vector<int>::size_type i = 0; i != v.size(); i++) {
-		adj_nodes.push_back( adj_links[i].get_other_node(this) );
+	for(std::vector<int>::size_type i = 0; i != adj_nodes.size(); i++) {
+		adj_nodes.push_back( adj_links[i]->get_other_node(this) );
 	}
 	return adj_nodes;
 }

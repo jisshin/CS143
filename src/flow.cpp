@@ -13,16 +13,10 @@ Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
   flow_src(src), \
   flow_dest(dest), \
   flow_data_amt(data_amt){
+}
 
-	//hey jennifer, "node" may or may not exist when the flow is
-	//created. is there a better way to do this? we do not want to
-	//rely on network manager on flow/link/node .cpp files because
-	//the dependency was supposed to be other way around. It is fine
-  //to call it in some function though. I just don't want it to be
-  //in constructor unless there is no other way arund.
-	NetworkManager* nm = NetworkManager::getInstance();
-	Link* src_link = nm->getNode(flow_src)->lookupRouting(flow_dest);
-	base_tx_delay = SRC_SIZE/src_link->link_rate;
+void Flow::set_tx_delay(int link_rate){
+	base_tx_delay = SRC_SIZE/link_rate;
 }
 
 void Flow::receive_ack(int id){
@@ -57,7 +51,7 @@ Packet* Flow::genNextPacketFromTx(){
 	// data to send
 	else if(next_id < flow_data_amt){
 		Packet* next_packet = new Packet(flow_id, flow_src, \
-				flow_dest, SRC_PACKET);
+				flow_dest, SRC_PACKET, next_id);
 		outstanding_count++;
 		next_id++;
 		return next_packet;
@@ -69,7 +63,7 @@ Packet* Flow::genNextPacketFromRx(){
 	if((window_full_flag)&&(outstanding_count < TCP_strategy->getWindow())){
 		window_full_flag = 0;
 		Packet* next_packet = new Packet(flow_id, flow_src, \
-				flow_dest, SRC_PACKET);
+				flow_dest, SRC_PACKET, next_id);
 		outstanding_count++;
 		next_id++;
 		return next_packet;

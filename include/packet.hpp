@@ -20,7 +20,7 @@ const int ROUT_SIZE = 40;
 /* forward declaration class */
 class Flow; 
 
-const std::unordered_map<int, int> SIZE_TABLE( {
+static std::unordered_map<int, const int> SIZE_TABLE( {
 	{ SRC_PACKET, SRC_SIZE },
 	{ ACK_PACKET, ACK_SIZE },
 	{ ROUT_PACKET, ROUT_SIZE }
@@ -30,23 +30,21 @@ const std::unordered_map<int, int> SIZE_TABLE( {
 // Assume that packet size are fix
 class Packet {
 	public:
-		Packet(std::string flow_id, std::string src, std::string dest, int type)\
+		Packet(std::string flow_id, std::string src, std::string dest, int type, int seq_id = 0)\
 		: packet_flow_id(flow_id),
 		  packet_src(src), 
 		  packet_dest(dest), 
-		  packet_type(type)
+		  packet_type(type),
+		  packet_seq_id(seq_id)
 		{
-			//packet_size = SIZE_TABLE[packet_type];
-			//hey jennifer i moved this line over here cuz this is
-			//what you probably intended to do. anyway, it still
-			//doesn't compile due to syntax error. 
+			packet_size = SIZE_TABLE[packet_type];
 		}
 
 		std::string packet_flow_id;
 		std::string packet_src;
 		std::string packet_dest;
 		int packet_type;
-
+		int packet_seq_id;
 		
 #ifndef TESTCASE0
 		int packet_size;

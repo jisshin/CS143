@@ -34,7 +34,9 @@ public:
 	Link* resetLinkIterator();
 	Link* getNextLinkIterator();
     
+#ifdef ROUTING_TEST
     Link* getLinkBtwNodes(std::string node1, std::string node2);
+#endif
 
 private:
 	NetworkManager(){}

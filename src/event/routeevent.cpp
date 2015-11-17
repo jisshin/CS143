@@ -13,7 +13,7 @@ int RouteEvent::handleEvent()
 	while (node != NULL)
 	{
 		//send routing packet to every neighbor
-		adj_nodes = node.getAdjNodes();
+		adj_nodes = node->getAdjNodes();
 		for(std::vector<Node*>::size_type i = 0; i != adj_nodes.size(); i++) {
 			Packet* route_pkt = new Packet("", *node, *adj_nodes[i], ROUT_PACKET);
 			node->transmitPacket(route_pkt); 
@@ -24,7 +24,7 @@ int RouteEvent::handleEvent()
 	if (!commonIsSimOver())
 	{
 		EventQueue* eq = EventQueue::getInstance();
-		if(!eq.empty())
+		if(!eq->empty())
 			eq->push(new RouteEvent(this->time + ROUT_INTERVAL));
 	}
 

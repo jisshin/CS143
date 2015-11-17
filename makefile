@@ -43,12 +43,17 @@ testcase0:
 	gcc -c $(CXXFLAG) ./src/flow.cpp -o ./obj/flow.o
 	gcc -c $(CXXFLAG) ./src/node.cpp -o ./obj/node.o
 	gcc -c $(CXXFLAG) ./src/link.cpp -o ./obj/link.o
-	gcc -c $(CXXFLAG) ./src/event/txevent.cpp -o ./obj/txevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxevent.cpp -o ./obj/rxevent.o
+	gcc -c $(CXXFLAG) ./src/event/rxackevent.cpp -o ./obj/rxackevent.o
+	gcc -c $(CXXFLAG) ./src/event/rxendevent.cpp -o ./obj/rxendevent.o
+	gcc -c $(CXXFLAG) ./src/event/rxeventfactory.cpp -o ./obj/rxeventfactory.o
+	gcc -c $(CXXFLAG) ./src/event/rxfwdevent.cpp -o ./obj/rxfwdevent.o
+	gcc -c $(CXXFLAG) ./src/event/txsrcevent.cpp -o ./obj/txsrcevent.o
 	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
 	gcc -c $(CXXFLAG) ./test/testcase0.cpp -o ./obj/testcase0.o
+	gcc -c $(CXXFLAG) ./src/packet.cpp -o ./obj/packet.o
 
-	gcc ./obj/eventqueue.o ./obj/link.o ./obj/event.o ./obj/flow.o ./obj/node.o ./obj/txevent.o ./obj/rxevent.o ./obj/networkmanager.o ./obj/testcase0.o -o ./bin/testcase0 -lstdc++
+	OBJECTS = ./obj/$(wildcard *.o)
+	gcc -o ./bin/testcase0 -lstdc++ $(OBJECTS)   
 
 testretrieve:
 	gcc -c ./src/event/rxevent.cpp -o ./obj/rxevent.o
