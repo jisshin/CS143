@@ -22,6 +22,7 @@ Link* Node::lookupRouting(std::string dest){
 
 int Node::transmitPacket(Packet* tx_packet){
 
+	packet_sent += packet->packet_size;
 	Link* link = lookupRouting(tx_packet->packet_dest);
 
 	//there is no tx_link with such tx_link_id that is adjacent
@@ -33,11 +34,13 @@ int Node::transmitPacket(Packet* tx_packet){
 	return result;
 }
 
-int Node::receivePacket(Packet* pkt)
+int Node::receivePacket(Packet* packet)
 {
+	packet_rcvd += packet->packet_size;
+	
 	if(pkt->type == ROUT_PACKET)
-		routePacket(pkt);
-		
+	routePacket(pkt);
+	
 	return 1;
 }
 
@@ -72,7 +75,7 @@ void routePacket(Packet* pkt)
 			//update current distance
 			std::pair<Link*, int> route_entry (link_to_nbr, wt + dist);
 			this_routing_table.erase(got);
-			this_routing_table.insert(dest, route_entry);
+			this_routing_table.insert({{dest, route_entry}});
 		}
 	}	
 }

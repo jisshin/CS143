@@ -7,6 +7,8 @@ class Link;
 class Flow;
 class Node;
 
+const int LOG_TIME = 0.02;
+
 class LogEvent : public Event
 {
   public:
@@ -22,6 +24,12 @@ class LogEvent : public Event
     int getBufOccupancy(Link*);
     int getPacketLoss(Link*);
     int getFlowRate(Link*);
+
+    int getSentRate(Node* node);
+    int getRcvdRate(Node* node);
+    int getSentRate(Flow* flow);
+    int getRcvdRate(Flow* flow);
+    int getPacketRTT(Flow* flow);
 };
 
 #endif

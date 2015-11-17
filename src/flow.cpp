@@ -14,10 +14,12 @@ Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
   flow_dest(dest), \
   flow_data_amt(data_amt){
 
-	//hey jennifer, "node" may or may not exist when the flow is 
+	//hey jennifer, "node" may or may not exist when the flow is
 	//created. is there a better way to do this? we do not want to
 	//rely on network manager on flow/link/node .cpp files because
-	//the dependency was supposed to be other way around
+	//the dependency was supposed to be other way around. It is fine
+  //to call it in some function though. I just don't want it to be
+  //in constructor unless there is no other way arund.
 	NetworkManager* nm = NetworkManager::getInstance();
 	Link* src_link = nm->getNode(flow_src)->lookupRouting(flow_dest);
 	base_tx_delay = SRC_SIZE/src_link->link_rate;

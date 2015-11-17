@@ -12,4 +12,3 @@
 #endif
 
 #endif //EVENT_H
-
