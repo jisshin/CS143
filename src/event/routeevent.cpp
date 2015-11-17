@@ -14,7 +14,7 @@ int RouteEvent::handleEvent()
 	{
 		//send routing packet to every neighbor
 		adj_nodes = node.getAdjNodes();
-		for(std::vector<Node*>::size_type i = 0; i != adj_links.size(); i++) {
+		for(std::vector<Node*>::size_type i = 0; i != adj_nodes.size(); i++) {
 			Packet* route_pkt = new Packet("", *node, *adj_nodes[i], ROUT_PACKET);
 			node->transmitPacket(route_pkt); 
 		}
