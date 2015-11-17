@@ -21,6 +21,7 @@ Link* Node::lookupRouting(std::string dest){
 
 int Node::transmitPacket(Packet* tx_packet){
 
+	packet_sent += packet->packet_size;
 	Link* link = lookupRouting(tx_packet->packet_dest);
 
 	//there is no tx_link with such tx_link_id that is adjacent
@@ -32,8 +33,9 @@ int Node::transmitPacket(Packet* tx_packet){
 	return result;
 }
 
-int Node::receivePacket(Packet*)
+int Node::receivePacket(Packet* packet)
 {
+	packet_rcvd += packet->packet_size;
 	return 1;
 }
 
@@ -43,7 +45,7 @@ void Node::updateRoute(){
 	for(std::vector<Link*>::size_type i = 0; i != adj_links.size(); i++) {
 		Node* nbr = adj_links[i]->get_other_node(this);
 		//TODO: send request routing table packet out to nbr to get nbr routing table
-		
+
 		routing_table_t nbr_routing_table;
 		//nbr_routing_table = adj_nodes[i]->getRoutingTable();
 		//hi kevin. above line doesn't compile, and didn't look like a trivial

@@ -76,7 +76,20 @@ int NetworkManager::connectLink(string link_id, string node1_id, string node2_id
 	m_links[link_id]->establishLink(m_nodes[node1_id], m_nodes[node2_id]);
 	m_nodes[node1_id]->establishLink(m_links[link_id]);
 	m_nodes[node2_id]->establishLink(m_links[link_id]);
+
+	node2link[node1_id + node2_id] = link_id;
+	node2link[node2_id + node1_id] = link_id;
 	return 1;
+}
+
+Link* NetworkManager::getLinkBtwNodes(std::string node1, std::string node2)
+{
+	std::string link_id = node2link[node1_id + node2_id];
+
+	if (m_links.count(link_id) == 0)
+		return NULL;
+		
+	return m_links[link_id];
 }
 
 Flow* NetworkManager::resetFlowIterator()
