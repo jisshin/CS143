@@ -38,8 +38,8 @@ int Node::receivePacket(Packet* packet)
 {
 	packet_rcvd += packet->packet_size;
 
-	if(pkt->type == ROUT_PACKET)
-	routePacket(pkt);
+	if(pkt->type == ROUT_PACKET && pkt->packet_dest == *this)
+		routePacket(pkt);
 
 	return 1;
 }
