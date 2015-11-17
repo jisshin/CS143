@@ -3,38 +3,38 @@
     {
       "link_id":"L0",
       "link_rate":12.5,
-      "link_delay":10,
-      "link_buffer":64
+      "link_delay":.01,
+      "link_buffer":64000
     },
     {
       "link_id":"L1",
       "link_rate":10,
-      "link_delay":10,
-      "link_buffer":64
+      "link_delay":.01,
+      "link_buffer":64000
     },
     {
       "link_id":"L2",
       "link_rate":10,
-      "link_delay":10,
-      "link_buffer":64
+      "link_delay":.01,
+      "link_buffer":64000
     },
     {
       "link_id":"L3",
       "link_rate":10,
-      "link_delay":10,
-      "link_buffer":64
+      "link_delay":.01,
+      "link_buffer":64000
     },
     {
       "link_id":"L4",
       "link_rate":10,
-      "link_delay":10,
-      "link_buffer":64
+      "link_delay":.01,
+      "link_buffer":64000
     },
     {
       "link_id":"L5",
       "link_rate":12.5,
-      "link_delay":10,
-      "link_buffer":64
+      "link_delay":.01,
+      "link_buffer":64000
     }
   ],
   "Flows":[{

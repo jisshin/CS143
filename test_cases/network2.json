@@ -3,56 +3,56 @@
     {
       "link_id":"L1",
       "link_rate":10,
-      "link_delay":10,
-      "link_buffer":128
+      "link_delay":.01,
+      "link_buffer":128000
     },
     {
       "link_id":"L2",
       "link_rate":10,
-      "link_delay":10,
-      "link_buffer":128
+      "link_delay":.01,
+      "link_buffer":128000
     },
     {
       "link_id":"L3",
       "link_rate":10,
-      "link_delay":10,
-      "link_buffer":128
+      "link_delay":.01,
+      "link_buffer":128000
     },
     {
       "link_id":"L4",
       "link_rate":12.5,
-      "link_delay":10,
-      "link_buffer":128
+      "link_delay":.01,
+      "link_buffer":128000
     },
     {
       "link_id":"L5",
       "link_rate":12.5,
-      "link_delay":10,
-      "link_buffer":128
+      "link_delay":.01,
+      "link_buffer":128000
     },
     {
       "link_id":"L6",
       "link_rate":12.5,
-      "link_delay":10,
-      "link_buffer":128
+      "link_delay":.01,
+      "link_buffer":128000
     },
     {
       "link_id":"L7",
       "link_rate":12.5,
-      "link_delay":10,
-      "link_buffer":128
+      "link_delay":.01,
+      "link_buffer":128000
     },
     {
       "link_id":"L8",
       "link_rate":12.5,
-      "link_delay":10,
-      "link_buffer":128
+      "link_delay":.01,
+      "link_buffer":128000
     },
     {
       "link_id":"L9",
       "link_rate":12.5,
-      "link_delay":10,
-      "link_buffer":128
+      "link_delay":.01,
+      "link_buffer":128000
     }
   ],
   "Flows":[{
