@@ -80,6 +80,14 @@ void routePacket(Packet* pkt)
 	}
 }
 
+std::vector<Node*> Node::getAdjNodes(){
+	std::vector<Node*> adj_nodes (adj_links.size());
+	for(std::vector<int>::size_type i = 0; i != v.size(); i++) {
+		adj_nodes.push_back( adj_links[i].get_other_node(this) );
+	}
+	return adj_nodes;
+}
+
 routing_table_t Node::getRoutingTable(){
 	return routing_table;
 }

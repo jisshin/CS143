@@ -27,9 +27,9 @@ public:
 	// if packed is dropped, return -1
 	int transmitPacket(Packet* tx_packet);
 	int receivePacket(Packet*);
-
+	
+	std::vector<Node*> getAdjNodes();
 	void updateRoute();
-
 	routing_table_t getRoutingTable();
 
 	operator std::string() { return node_id; }

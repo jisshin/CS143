@@ -3,6 +3,8 @@
 
 #include "../event.hpp"
 
+const int ROUT_INTERVAL = 100;
+
 class RouteEvent : public Event
 {
   public:

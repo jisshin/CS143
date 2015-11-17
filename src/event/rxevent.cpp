@@ -69,6 +69,15 @@ int RxEvent::handleEvent(){
 				eventq->push(next_tx);
 			}
 		}
+		
+		//Case3: Update routing table if the rx packet is a routing packet
+		else if (rx_packet->packet_type == ROUT_PACKET){
+#ifdef DEBUG
+			std::cout<<"rxevent: receive route packet " << rx_packet->id\
+					<<std::endl;
+#endif//DEBUG			
+			rx_node->receivePacket(rx_packet);
+		}
 	}
 
 	// Case3: If this is not the final destination, forward the packet
