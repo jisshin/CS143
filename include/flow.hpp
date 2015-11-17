@@ -1,11 +1,8 @@
 #ifndef FLOW_H
 #define FLOW_H
 
-#ifndef _MSC_VER
-#include "../include/TCPAlgorithm.hpp"
-#else
-#include "TCPAlgorithm.hpp"
-#endif
+#include "../include/tcpalgorithm.hpp"
+
 
 #include <string>
 
@@ -33,7 +30,6 @@ public:
 	// TODO: implement setRTT and set base tx delay when
 	// registering flow
 	void setRTTmin(int RTTmin);
-	void
 
 	//TCP dependent
 	double getTxDelay();

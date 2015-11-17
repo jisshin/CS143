@@ -1,19 +1,23 @@
-#ifndef _MSC_VER
 #include "../include/flow.hpp"
+#include "../include/link.hpp"
+#include "../include/node.hpp"
 #include "../include/packet.hpp"
-
-#else
-#include "flow.hpp"
-#include "packet.hpp"
-#endif
+#include "../include/eventqueue.hpp"
+#include "../include/networkmanager.hpp"
 
 #include <iostream>
 #include <cassert>
+
 Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
 : flow_id(id), \
   flow_src(src), \
   flow_dest(dest), \
   flow_data_amt(data_amt){
+
+	//hey jennifer, "node" may or may not exist when the flow is 
+	//created. is there a better way to do this? we do not want to
+	//rely on network manager on flow/link/node .cpp files because
+	//the dependency was supposed to be other way around
 	NetworkManager* nm = NetworkManager::getInstance();
 	Link* src_link = nm->getNode(flow_src)->lookupRouting(flow_dest);
 	base_tx_delay = SRC_SIZE/src_link->link_rate;
@@ -51,7 +55,7 @@ Packet* Flow::genNextPacketFromTx(){
 	// data to send
 	else if(next_id < flow_data_amt){
 		Packet* next_packet = new Packet(flow_id, flow_src, \
-				flow_dest, next_id, SRC_PACKET);
+				flow_dest, SRC_PACKET);
 		outstanding_count++;
 		next_id++;
 		return next_packet;
@@ -63,7 +67,7 @@ Packet* Flow::genNextPacketFromRx(){
 	if((window_full_flag)&&(outstanding_count < TCP_strategy->getWindow())){
 		window_full_flag = 0;
 		Packet* next_packet = new Packet(flow_id, flow_src, \
-				flow_dest, next_id, SRC_PACKET);
+				flow_dest, SRC_PACKET);
 		outstanding_count++;
 		next_id++;
 		return next_packet;
@@ -71,7 +75,13 @@ Packet* Flow::genNextPacketFromRx(){
 	return NULL;
 }
 
+
 //TODO: implement genAckPacket and get rid of getAckID
+Packet* Flow::genAckPacket(Packet* received_packet)
+{
+	return NULL;
+}
+
 
 int Flow::getAckID(int packet_id){
 	if(packet_id == last_ack_id){
@@ -80,8 +90,8 @@ int Flow::getAckID(int packet_id){
 	return last_ack_id;
 }
 
-
-double Flow::getTxDelay(){
+double Flow::getTxDelay()
+{
 	double delay = \
 			((last_transmit_t + base_tx_delay) > EventQueue::cur_time)?\
 					base_tx_delay:0;

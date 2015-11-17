@@ -22,7 +22,13 @@ class Logger{
 			current_line.push_back(data_str);
 		}
 
+		void prepare()
+		{
+			current_line.clear();
+		}
+
 		void flush_current_line();
+
 
 	private:
 		Logger(std::string);

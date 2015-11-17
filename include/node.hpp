@@ -3,7 +3,6 @@
 
 /* C/C++ lib */
 #include <unordered_map>
-#include <pair>
 #include <vector>
 #include <string>
 /* forward declaration */
@@ -26,19 +25,18 @@ public:
 	// transmitPacket put the Packet on the link and return the
 	// estimated time for the packet to be transmitted.
 	// if packed is dropped, return -1
-	double transmitPacket(Packet* tx_packet, uintptr_t* rx_node);
-	
+	int transmitPacket(Packet* tx_packet);
+	int receivePacket(Packet*);
+
 	void updateRoute();
-	
+
 	routing_table_t getRoutingTable();
-	
-	std::vector<Node*> getAdjNodes();
-	
+
 	operator std::string() { return node_id; }
-private:
 	// lookupRouting return the link for routing to dest
 	Link* lookupRouting(std::string dest);
 
+private:
 	std::string node_id;
 	std::vector<Link*> adj_links;
 	routing_table_t routing_table;

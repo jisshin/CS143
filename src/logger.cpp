@@ -1,8 +1,5 @@
-#ifndef _MSC_VER
 #include "../include/logger.hpp"
-#else
-#include "logger.hpp"
-#endif
+
 
 Logger* Logger::logger = NULL;
 

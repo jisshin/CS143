@@ -5,20 +5,21 @@
 
 #include <iostream>
 #include <string>
-/* Forward declaration */ 
-class Packet;
 
-class TxEvent:public Event {
+/* Forward declaration */
+
+class TxEvent :public Event {
 public:
-	TxEvent(std::string owner, Packet* packet): Event(owner),\
-	tx_packet(packet){};
-	int handleEvent();
+	TxEvent(Packet* pPkt, Node* pNode) :
+		tx_packet(pPkt), tx_node(pNode)
+	{}
 
-private:
+	int handleEvent() { return 1; }
+
+protected:
 	Packet* tx_packet;
+	Node* tx_node;
+
 };
 
 #endif //TXEVENT_H
-
-
-

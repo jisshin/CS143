@@ -9,4 +9,5 @@ public:
 	virtual void updateLoss(int id){}
 	int window_size;
 };
+
 #endif //TCPALGORITHM_H

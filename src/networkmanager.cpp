@@ -1,14 +1,7 @@
-#ifndef _MSC_VER
 #include "../include/networkmanager.hpp"
 #include "../include/flow.hpp"
 #include "../include/link.hpp"
 #include "../include/node.hpp"
-#else
-#include "networkmanager.hpp"
-#include "flow.hpp"
-#include "link.hpp"
-#include "node.hpp"
-#endif
 
 using namespace std;
 

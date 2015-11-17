@@ -3,23 +3,24 @@
 
 #include "../event.hpp"
 
-/* Forward declaration */ 
-class Packet;
-
+/* Forward declaration */
+class Link;
+class Node;
 
 class RxEvent : public Event
 {
-	public: 
-		RxEvent(std::string owner, Packet* packet) :\
-			Event(owner), \
-			rx_packet(packet) {};
+public:
+	RxEvent(Link* pLink, Node* pNode) :\
+		rx_link(pLink), \
+		rx_node(pNode)
+	{}
 
-		int handleEvent();
+	int handleEvent() { return 1; }
 
-
-	private:
-		Packet* rx_packet;
-
+protected:
+	Link* rx_link;
+	Node* rx_node;
 };
 
 #endif //RXEVENT_H
+

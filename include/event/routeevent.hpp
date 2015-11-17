@@ -6,9 +6,10 @@
 class RouteEvent : public Event
 {
   public:
-    RouteEvent() : Event(owner) {}
+    RouteEvent() : Event() {}
 
-    int handleEvent()
+	int handleEvent();
 
-}
+};
+
 #endif

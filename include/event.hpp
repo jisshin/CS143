@@ -7,14 +7,20 @@
 #include <string>
 #include <iostream>
 
+class Node;
+class Packet;
+
 class Event{
 	public:
-		Event(std::string owner) : event_owner(owner) {}
+		Event() {}
 
 		virtual int handleEvent() { return 0; }
-		
-		std::string event_owner;
+
 		double time = -1;
+
+		int commonTransmit(Node* node, Packet* pkt);
+		int commonIsSimOver();
+
 };
 
 /*
@@ -30,3 +36,4 @@ struct CompareEvent
 	}
 };
 #endif //EVENT_H
+
