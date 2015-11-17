@@ -15,8 +15,10 @@ typedef std::unordered_map<std::string, std::pair<Link*, int> > routing_table_t;
 
 class Node {
 public:
-	Node(std::string id): node_id(id)
-	{}
+	Node(std::string id): node_id(id) 
+	{
+		routing_table = routing_table_t( {{id, link_entry}} );
+	}
 
 	void establishLink(Link* link);
 
@@ -29,8 +31,6 @@ public:
 	void updateRoute();
 
 	routing_table_t getRoutingTable();
-
-	std::vector<Node*> getAdjNodes();
 
 	operator std::string() { return node_id; }
 	// lookupRouting return the link for routing to dest
@@ -46,4 +46,3 @@ private:
 };
 
 #endif //NODE_H
-

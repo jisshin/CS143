@@ -27,6 +27,11 @@ public:
 
 	int establishLink(Node* pointA, Node* pointB);
 
+	int getRate() { return link_rate; }
+	double getDelay() { return link_delay; }
+	int getBufferSize() { return max_buffer_size; }
+	int weight();
+	
 	Node* get_other_node(Node*);
 
 	operator std::string() { return link_id; }
