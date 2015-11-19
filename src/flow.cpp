@@ -42,7 +42,7 @@ Packet* Flow::genNextPacketFromTx(){
 
 	// if currently the window is full, don't generate new
 	// packet
-	if (outstanding_count >= TCP_strategy->getWindow()){
+	if (outstanding_count > TCP_strategy->getWindow()){
 			window_full_flag = 1;
 			return NULL;
 	}

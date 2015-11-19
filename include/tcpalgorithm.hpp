@@ -7,7 +7,7 @@ public:
 	virtual int getWindow(){return 0;}
 	virtual void updateAck(int id){}
 	virtual void updateLoss(int id){}
-	int window_size;
+	int window_size = 1;
 };
 
 #endif //TCPALGORITHM_H

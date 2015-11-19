@@ -13,11 +13,11 @@
 
 int main()
 {
-	Link link("L1", 10, 3, 64);
+	Link link("L1", 10*10^6, 10*10^-3, 64000);
 
 	Node node1("H1");
 	Node node2("H2");
-	Flow flow("F1", "H1", "H2", 20);
+	Flow flow("F1", "H1", "H2", 128000);
 	NetworkManager* nm = NetworkManager::getInstance();
 	TCPReno flow_alg;
 	flow.setTCPStrategy(&flow_alg);

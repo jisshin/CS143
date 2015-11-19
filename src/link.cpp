@@ -42,7 +42,7 @@ int Link::establishLink(Node* pointA, Node* pointB)
 double Link::getDelay()
 {
 	double temp = cur_buf_size_in_byte*BITS_PER_BYTE;
-	double queue_delay = temp/(link_rate*10^6);
+	double queue_delay = temp/(link_rate);
 	return queue_delay + link_delay;
 }
 
