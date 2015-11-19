@@ -21,27 +21,27 @@ public:
 	Node(std::string id): node_id(id)
 	{}
 
-	void establishLink(Link* link);
 
 	int transmitPacket(Packet* tx_packet);
 	int receivePacket(Packet*);
 	
-	std::vector<Node*> getAdjNodes();
-	std::vector<Link*> getAdjLinks(){return adj_links;};
-	void updateRoute();
+	double packet_sent = 0;
+	double packet_rcvd = 0;
 
 
-	operator std::string() { return node_id; }
 	// lookupRouting return the link for routing to dest
 	Link* lookupRouting(std::string dest);
-
 	void routePacket(Node*, Link*);
+	void resetRouting();
 
-    double packet_sent = 0;
-    double packet_rcvd = 0;
-    
 	routing_table_t routing_table;
 	routing_table_helper_t routing_helper_table;
+
+
+	std::vector<Node*> getAdjNodes();
+	std::vector<Link*> getAdjLinks() { return adj_links; };
+	operator std::string() { return node_id; }
+	void establishLink(Link* link);
 
 private:
 	std::string node_id;

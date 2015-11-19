@@ -6,17 +6,12 @@
 #include <iostream>
 
 Link* Node::lookupRouting(std::string dest){
-	//if the size of the adj_links is one, the node acts like
-	//a host. it does not do "dynamic routing".
 
-	//should not happen
-	if (adj_links.size() < 1)
+	if (routing_table.count(dest) == 0)
 		return NULL;
 
-	if (adj_links.size() == 1)
-		return adj_links[0];
-
 	return routing_table[dest];
+
 }
 
 int Node::transmitPacket(Packet* tx_packet){
@@ -40,6 +35,20 @@ int Node::receivePacket(Packet* packet)
 	return 1;
 }
 
+void Node::resetRouting()
+{
+	routing_table.clear();
+	routing_helper_table.clear();
+
+	for (int i = 0; i < adj_links.size(); i++)
+	{
+		std::string nbr = *(adj_links[i]->get_other_node(this));
+		routing_table[nbr] = adj_links[i];
+		routing_helper_table[nbr] = adj_links[i]->weight();
+	}
+
+}
+
 void Node::routePacket(Node* nbr, Link* link_to_nbr)
 {
 	int nbr_link_wt = link_to_nbr->weight();
@@ -52,6 +61,7 @@ void Node::routePacket(Node* nbr, Link* link_to_nbr)
 		std::string dest = it->first;
 		int nbr_to_dest = nbr_helper_route[dest];
 
+		if (dest == node_id) continue; //if destination is itself, ignore it
 
 		if( routing_table.count(dest) == 0 ||		
 			//destination is not found
@@ -67,8 +77,8 @@ void Node::routePacket(Node* nbr, Link* link_to_nbr)
 }
 
 std::vector<Node*> Node::getAdjNodes(){
-	std::vector<Node*> adj_nodes (adj_links.size());
-	for(std::vector<int>::size_type i = 0; i != adj_nodes.size(); i++) {
+	std::vector<Node*> adj_nodes;
+	for(int i = 0; i < adj_links.size(); i++) {
 		adj_nodes.push_back( adj_links[i]->get_other_node(this) );
 	}
 	return adj_nodes;
@@ -77,5 +87,8 @@ std::vector<Node*> Node::getAdjNodes(){
 
 void Node::establishLink(Link* link)
 {
+	std::string nbr = *(link->get_other_node(this));
+	routing_table[nbr] = link;
+	routing_helper_table[nbr] = link->weight();
 	adj_links.push_back(link);
 }

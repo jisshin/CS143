@@ -1,5 +1,6 @@
 #include "../include/eventqueue.hpp"
 #include "../include/event/logevent.hpp"
+#include "../include/event/routeevent.hpp"
 
 double EventQueue::cur_time = 0;
 EventQueue* EventQueue::eventqueue = NULL;
@@ -36,7 +37,11 @@ Event* EventQueue::pop()
 
 int EventQueue::run()
 {
+	int route_event_counter = 0;
+
 	LogEvent logEvent;
+	RouteEvent routeEvent;
+
 	while (registered_events.size() > 0)
 	{
 		Event* e = registered_events.top();
@@ -44,8 +49,15 @@ int EventQueue::run()
 		cur_time = e->time;
 		e->handleEvent();
 		delete e;
+
 		logEvent.time = cur_time;
 		logEvent.handleEvent();
+
+		if (cur_time / ROUT_INTERVAL == route_event_counter)
+		{
+			routeEvent.handleEvent();
+			route_event_counter++;
+		}
 	}
 
 	return 1;

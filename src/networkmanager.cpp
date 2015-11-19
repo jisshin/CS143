@@ -98,6 +98,8 @@ Link* NetworkManager::getLinkBtwNodes(std::string node1, std::string node2)
 
 Flow* NetworkManager::resetFlowIterator()
 {
+	if (m_flows.size() == 0)
+		return NULL;
 	m_flow_iter = m_flows.begin();
 	return m_flow_iter->second;
 }
@@ -113,6 +115,8 @@ Flow* NetworkManager::getNextFlowIterator()
 
 Node* NetworkManager::resetNodeIterator()
 {
+	if (m_nodes.size() == 0)
+		return NULL;
 	m_node_iter = m_nodes.begin();
 	return m_node_iter->second;
 }
@@ -128,6 +132,8 @@ Node* NetworkManager::getNextNodeIterator()
 
 Link* NetworkManager::resetLinkIterator()
 {
+	if (m_links.size() == 0)
+		return NULL;
 	m_link_iter = m_links.begin();
 	return m_link_iter->second;
 }
