@@ -16,6 +16,7 @@ Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
 }
 
 void Flow::setTxDelay(double link_rate){
+	std::cout << "link rate" << link_rate<<std::endl;
 	base_tx_delay = SRC_SIZE/link_rate;
 	std::cout<<"tx delay"<< base_tx_delay << std::endl;
 }
@@ -32,7 +33,6 @@ void Flow::receive_ack(int id){
 	}
 	else{
 		last_rx_ack_id = id;
-		next_id = last_rx_ack_id;
 		dup_count = 0;
 		outstanding_count--;
 		TCP_strategy->updateAck(id);
@@ -77,6 +77,7 @@ Packet* Flow::comGenSrcPacket(){
 					flow_dest, SRC_PACKET, next_id);
 			outstanding_count++;
 			flow_data_amt -= next_packet->packet_size;
+			next_id++;
 			return next_packet;
 	}
 	std::cout<<"data amount"<< flow_data_amt << std::endl;
