@@ -7,7 +7,7 @@ class Link;
 class Flow;
 class Node;
 
-const int LOG_TIME = 0.02;
+const double LOG_TIME = 0.02;
 
 class LogEvent : public Event
 {
