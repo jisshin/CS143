@@ -22,7 +22,7 @@ void Flow::setTxDelay(double link_rate){
 }
 
 void Flow::receive_ack(int id){
-	if ((last_rx_ack_id == id)&&(last_rx_ack_id == -1)){
+	if (last_rx_ack_id == id){
 		dup_count++;
 		if(dup_count == 3){
 			// report a packet lost to TCP
@@ -37,7 +37,7 @@ void Flow::receive_ack(int id){
 		outstanding_count--;
 		TCP_strategy->updateAck(id);
 #ifdef DEBUG
-		std::cout<<"lost packet "<< id<<std::endl;
+		std::cout<<"receive src success "<< id<<std::endl;
 #endif
 	}
 }
@@ -47,8 +47,9 @@ Packet* Flow::genNextPacketFromTx(){
 
 	// if currently the window is full, don't generate new
 	// packet
-	if (outstanding_count > TCP_strategy->getWindow()){
+	if (outstanding_count >= TCP_strategy->getWindow()){
 			window_full_flag = 1;
+			std::cout<<"window full" << std::endl;
 			return NULL;
 	}
 
