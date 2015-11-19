@@ -44,6 +44,7 @@ int EventQueue::run()
 		cur_time = e->time;
 		e->handleEvent();
 		delete e;
+		logEvent.time = cur_time;
 		logEvent.handleEvent();
 	}
 
