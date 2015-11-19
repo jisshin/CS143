@@ -28,6 +28,7 @@ private:
 	std::vector<string> flow_dests;
 	std::vector<double> data_amts;
 	std::vector<double> flow_starts;
+	std::vector<int> flow_alg;
 
 	std::vector<string> all_nodes;
 

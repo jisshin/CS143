@@ -1,13 +1,17 @@
 #ifndef TCPALGORITHM_H
 #define TCPALGORITHM_H
 
+enum TCPType{
+	TCP_RENO_t
+};
+
 class TCPAlgorithm {
 public:
 	TCPAlgorithm() {}
-	virtual int getWindow(){return 0;}
+	virtual double getWindow(){return 0;}
 	virtual void updateAck(int id){}
 	virtual void updateLoss(int id){}
-	int window_size = 1;
+	double window_size = 1;
 };
 
 #endif //TCPALGORITHM_H

@@ -6,7 +6,7 @@
 class TCPReno:public TCPAlgorithm{
 public:
 	TCPReno():TCPAlgorithm(){};
-	int getWindow() override;
+	double getWindow() override;
 	int lost_id = -1;
 	void updateAck(int id) override;
 	void updateLoss(int id) override;

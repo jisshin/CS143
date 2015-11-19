@@ -10,6 +10,8 @@
 #include "../include/link.hpp"
 #include "../include/packet.hpp"
 #include "../include/node.hpp"
+#include "../include/tcpalgorithm/tcpreno.hpp"
+#include "../include/tcpalgorithm.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -58,6 +60,7 @@ int RetrieveNetworkInfo::setNetworkInfo(string file_name)
     flow_dests.push_back(flows[i]["flow_dest"].asString());
     data_amts.push_back(flows[i]["data_amt"].asDouble());
     flow_starts.push_back(flows[i]["flow_start"].asDouble()); // CHeck if exists
+    flow_alg.push_back(flows[i]["flow_alg"].asInt());
   }
 
   for (int i = 0; i < connection_no; i++){
@@ -99,9 +102,18 @@ int RetrieveNetworkInfo::createNetwork()
   EventQueue* eq = EventQueue::getInstance();
   // register flows
   for (int i = 0; i < flow_no; i++){
-    Flow flow(flow_ids[i], flow_srcs[i], flow_dests[i], data_amts[i]);
-    
-    int result = manager->registerFlow(flow);
+    Flow* flow = new Flow(flow_ids[i], flow_srcs[i], flow_dests[i], data_amts[i]);
+    TCPAlgorithm* flow_alg = NULL;
+    if(flow_alg[i] == TCP_RENO_t){
+    	flow_alg = new TCPReno();
+    }
+    else{
+    	std::cout << "undefined algorithm type no." << std::endl;
+    	flow_alg = new TCPReno();
+    	// set to some default
+    }
+    flow->setTCPStrategy(flow_alg);
+    int result = manager->registerFlow(*flow);
     if (result == -1) 
         return -1;
 
