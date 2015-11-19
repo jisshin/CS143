@@ -1,4 +1,4 @@
-#ifndef RXAROUTEEVENT_H
+#ifndef RXROUTEEVENT_H
 #define RXROUTEEVENT_H
 
 #include "rxevent.hpp"
