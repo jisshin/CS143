@@ -3,7 +3,7 @@
 #include "../include/packet.hpp"
 
 int Link::pushPacket(Packet* packet){
-	if(max_buf_size_in_byte > cur_buf_size_in_byte){
+	if(max_buf_size_in_byte > cur_buf_size_in_byte + packet->packet_size){
 		cur_buf_size_in_byte += packet->packet_size;
 		link_buffer.push(packet);
 		return 1;
