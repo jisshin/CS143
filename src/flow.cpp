@@ -22,7 +22,7 @@ void Flow::setTxDelay(double link_rate){
 }
 
 void Flow::receive_ack(int id){
-	if (last_rx_ack_id == id){
+	if ((last_rx_ack_id == id)&&(last_rx_ack_id == -1)){
 		dup_count++;
 		if(dup_count == 3){
 			// report a packet lost to TCP
