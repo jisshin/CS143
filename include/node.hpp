@@ -15,13 +15,14 @@ typedef std::unordered_map<std::string, std::pair<Link*, int> > routing_table_t;
 
 class Node {
 public:
+#ifdef ROUTING_TEST
 	Node(std::string id, std::pair<Link*,int >link_entry): node_id(id)
 	{
-#ifdef ROUTING_TEST
-		routing_table = routing_table_t( {id, {link_entry}} );
-#endif //ROUTING_TEST
 
+		routing_table = routing_table_t( {id, {link_entry}} );
 	}
+#endif //ROUTING_TEST
+	Node(std::string id):node_id(id){}
 
 	void establishLink(Link* link);
 
@@ -32,6 +33,7 @@ public:
 	int receivePacket(Packet*);
 	
 	std::vector<Node*> getAdjNodes();
+	std::vector<Link*> getAdjLinks(){return adj_links;};
 	void updateRoute();
 	routing_table_t getRoutingTable();
 

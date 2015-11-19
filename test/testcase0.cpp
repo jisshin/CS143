@@ -7,6 +7,7 @@
 #include "../include/packet.hpp"
 #include "../include/event/txsrcevent.hpp"
 #include "../include/common.hpp"
+#include "../include/tcpalgorithm/tcpreno.hpp"
 
 #include <cstdlib>
 
@@ -16,17 +17,20 @@ int main()
 
 	Node node1("H1");
 	Node node2("H2");
-
+	Flow flow("F1", "H1", "H2", 20);
 	NetworkManager* nm = NetworkManager::getInstance();
-
+	TCPReno flow_alg;
+	flow.setTCPStrategy(&flow_alg);
 	nm->registerLink(link);
 	nm->registerNode(node1);
 	nm->registerNode(node2);
 
 	nm->connectLink("L1", "H1", "H2");
 	//temporarily moved here. 
-	Flow flow("F1", "H1", "H2", 20);
+	// registerFLow need to be called after all
+	// initialization
 	nm->registerFlow(flow);
+
 
 #ifndef TESTCASE0
 	Packet* init_tx_packet = flow.genNextPacketFromTx();

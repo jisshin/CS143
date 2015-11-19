@@ -2,6 +2,7 @@
 #include "../../include/event/rxackevent.hpp"
 #include "../../include/event/rxendevent.hpp"
 #include "../../include/event/rxfwdevent.hpp"
+#include "../../include/event/rxrouteevent.hpp"
 #include "../../include/packet.hpp"
 #include "../../include/link.hpp"
 #include "../../include/node.hpp"

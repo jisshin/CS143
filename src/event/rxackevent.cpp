@@ -12,16 +12,18 @@ int RxAckEvent::handleEvent()
 {
 	Packet* rx_packet = rx_link->popPacket();
 	rx_node->receivePacket(rx_packet);
+	// Jisoo, I thought receivePacket do nothing
+	// but handle the routing. Do we need this for
+	// RxAck?
 
 #ifdef DEBUG
-	std::cout << "rxevent: receive ack packet " << rx_packet->packet_seq_id \
+	std::cout << "rxackevent: " << rx_packet->packet_seq_id \
 		<< std::endl;
 #endif//DEBUG
 
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
 
-	// convert to ack packet
 
 #ifndef TESTCASE0
 	Packet* ack_packet = rx_flow->genAckPacket(rx_packet);

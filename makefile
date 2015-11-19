@@ -2,6 +2,7 @@
 
 CXXFLAG=-g -std=c++11
 
+
 test:
 	make testeq
 	make testnm
@@ -36,6 +37,11 @@ testnl:
 
 	gcc ./obj/link.o ./obj/node.o ./obj/testnl.o -o ./bin/testnl -lstdc++
 
+	
+OBJECTS := ./obj/event.o ./obj/eventqueue.o ./obj/flow.o ./obj/node.o ./obj/link.o
+OBJECTS += ./obj/rxackevent.o ./obj/rxendevent.o ./obj/rxeventfactory.o
+OBJECTS += ./obj/rxfwdevent.o ./obj/rxrouteevent.o ./obj/txsrcevent.o
+OBJECTS += ./obj/networkmanager.o ./obj/testcase0.o ./obj/tcpreno.o
 
 testcase0:
 	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
@@ -47,12 +53,11 @@ testcase0:
 	gcc -c $(CXXFLAG) ./src/event/rxendevent.cpp -o ./obj/rxendevent.o
 	gcc -c $(CXXFLAG) ./src/event/rxeventfactory.cpp -o ./obj/rxeventfactory.o
 	gcc -c $(CXXFLAG) ./src/event/rxfwdevent.cpp -o ./obj/rxfwdevent.o
+	gcc -c $(CXXFLAG) ./src/event/rxrouteevent.cpp -o ./obj/rxrouteevent.o
 	gcc -c $(CXXFLAG) ./src/event/txsrcevent.cpp -o ./obj/txsrcevent.o
 	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
 	gcc -c $(CXXFLAG) ./test/testcase0.cpp -o ./obj/testcase0.o
-	gcc -c $(CXXFLAG) ./src/packet.cpp -o ./obj/packet.o
-
-	OBJECTS = ./obj/$(wildcard *.o)
+	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpreno.cpp -o ./obj/tcpreno.o
 	gcc -o ./bin/testcase0 -lstdc++ $(OBJECTS)   
 
 testretrieve:

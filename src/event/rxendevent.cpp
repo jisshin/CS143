@@ -14,7 +14,7 @@ int RxEndEvent::handleEvent()
 	rx_node->receivePacket(rx_packet);
 
 #ifdef DEBUG
-	std::cout << "rxevent: receive ack packet " << rx_packet->packet_seq_id\
+	std::cout << "rxendevent: receive ack packet " << rx_packet->packet_seq_id\
 		<< std::endl;
 #endif//DEBUG
 
@@ -30,6 +30,7 @@ int RxEndEvent::handleEvent()
 	// Check if suppose to send out new src packet
 	new_src_packet = rx_flow->genNextPacketFromRx();
 #endif
+
 	if (new_src_packet != NULL) {
 		TxSrcEvent* next_tx = new TxSrcEvent(new_src_packet);
 		next_tx->time = time + rx_flow->getTxDelay();

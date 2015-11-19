@@ -17,7 +17,7 @@ int TxSrcEvent::handleEvent()
 {
 #ifdef DEBUG
 	std::cout << "txevent: " << (std::string) *tx_node << \
-		" " << tx_packet->test << std::endl;
+		" " << tx_packet->packet_seq_id << std::endl;
 #endif
 
 	commonTransmit(tx_node, tx_packet);
