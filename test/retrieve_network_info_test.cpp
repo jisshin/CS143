@@ -13,5 +13,4 @@ int main() {
   retrieve.setNetworkInfo("network0.json");
   retrieve.createNetwork();
 
-
 }
