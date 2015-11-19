@@ -36,8 +36,8 @@ int Node::transmitPacket(Packet* tx_packet){
 
 int Node::receivePacket(Packet* packet)
 {
-#ifdef ROUTING_TEST
 	packet_rcvd += packet->packet_size;
+#ifdef ROUTING_TEST
 
 	if(packet->packet_type == ROUT_PACKET && packet->packet_dest == *this)
 		routePacket(packt);
