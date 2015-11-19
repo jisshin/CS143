@@ -14,7 +14,15 @@ void TCPReno::updateAck(int id){
 }
 
 void TCPReno::updateLoss(int id){
-	window_size = window_size/2;
+	if(lost_id == -1){
+		lost_id = id;
+	}
+	if(id!= lost_id){
+		window_size = window_size/2;
+	}else{
+		//fast recovery
+		window_size++;
+	}
 #ifdef DEBUG
 	std::cout<<"Lost packet, window size = "<< window_size<<std::endl;
 #endif

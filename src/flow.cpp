@@ -24,7 +24,7 @@ void Flow::setTxDelay(double link_rate){
 void Flow::receive_ack(int id){
 	if (last_rx_ack_id == id){
 		dup_count++;
-		if(dup_count == 3){
+		if(dup_count >= 3){
 			// report a packet lost to TCP
 			// and set to retransmit
 			next_id = last_rx_ack_id;
