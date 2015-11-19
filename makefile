@@ -60,6 +60,7 @@ testcase0:
 	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpreno.cpp -o ./obj/tcpreno.o
 	gcc -c $(CXXFLAG) ./src/event/logevent.cpp -o ./obj/logevent.o
 	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
+
 	gcc -o ./bin/testcase0 -lstdc++ $(OBJECTS)   
 
 testretrieve:
