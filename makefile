@@ -39,7 +39,7 @@ testnl:
 
 	
 OBJECTS := ./obj/event.o ./obj/eventqueue.o ./obj/flow.o ./obj/node.o ./obj/link.o
-OBJECTS += ./obj/rxackevent.o ./obj/rxendevent.o ./obj/rxeventfactory.o
+OBJECTS += ./obj/rxackevent.o ./obj/rxendevent.o ./obj/rxeventfactory.o ./obj/logger.o
 OBJECTS += ./obj/rxfwdevent.o ./obj/rxrouteevent.o ./obj/txsrcevent.o ./obj/logevent.o
 OBJECTS += ./obj/networkmanager.o ./obj/testcase0.o ./obj/tcpreno.o
 
@@ -59,6 +59,7 @@ testcase0:
 	gcc -c $(CXXFLAG) ./test/testcase0.cpp -o ./obj/testcase0.o
 	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpreno.cpp -o ./obj/tcpreno.o
 	gcc -c $(CXXFLAG) ./src/event/logevent.cpp -o ./obj/logevent.o
+	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
 	gcc -o ./bin/testcase0 -lstdc++ $(OBJECTS)   
 
 testretrieve:
