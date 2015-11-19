@@ -84,7 +84,7 @@ int NetworkManager::connectLink(string link_id, string node1_id, string node2_id
 	return 1;
 }
 
-#ifdef ROUTING_TEST
+
 Link* NetworkManager::getLinkBtwNodes(std::string node1, std::string node2)
 {
 	std::string link_id = node2link[node1 + node2];
@@ -94,7 +94,7 @@ Link* NetworkManager::getLinkBtwNodes(std::string node1, std::string node2)
 		
 	return m_links[link_id];
 }
-#endif
+
 
 Flow* NetworkManager::resetFlowIterator()
 {

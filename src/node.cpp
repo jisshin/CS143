@@ -1,7 +1,6 @@
 #include "../include/node.hpp"
 #include "../include/link.hpp"
 #include "../include/packet.hpp"
-#include "../include/networkmanager.hpp"
 
 #include <stdint.h>
 #include <iostream>
@@ -17,7 +16,7 @@ Link* Node::lookupRouting(std::string dest){
 	if (adj_links.size() == 1)
 		return adj_links[0];
 
-	return routing_table[dest].first;
+	return routing_table[dest];
 }
 
 int Node::transmitPacket(Packet* tx_packet){
@@ -37,53 +36,34 @@ int Node::transmitPacket(Packet* tx_packet){
 int Node::receivePacket(Packet* packet)
 {
 	packet_rcvd += packet->packet_size;
-#ifdef ROUTING_TEST
 
-	if(packet->packet_type == ROUT_PACKET && packet->packet_dest == *this)
-		routePacket(packt);
-
-
-#else
 	return 1;
-#endif //ROUTIING_TEST
 }
 
-void routePacket(Packet* pkt)
+void Node::routePacket(Node* nbr, Link* link_to_nbr)
 {
-#ifdef ROUTING_TEST
-	//get routing table of source packet--simulates packet with routing table info
-	NetworkManager* nm = NetworkManager::getInstance();
-	Node* nbr = nm->getNode(pkt->packet_src);
-	Link* link_to_nbr = nm->getLinkBtwNodes(pkt->packet_src, *this);
 	int nbr_link_wt = link_to_nbr->weight();
+	routing_table_t nbr_route = nbr->routing_table;
+	routing_table_helper_t nbr_helper_route = nbr->routing_helper_table;
 
-	routing_table_t nbr_route = nbr->getRoutingTable();
 	//Loop through neighbor's routing table to update this routing table
 	for(routing_table_t::iterator it = nbr_route.begin(); it != nbr_route.end(); ++it)
 	{
 		std::string dest = it->first;
-		int nbr_to_dest = it->second.second;
-		//look for the destination id in this routing table
-		std::unordered_map<std::string, std::pair<Link*, int> >::const_iterator got = this_routing_table.find(dest);
+		int nbr_to_dest = nbr_helper_route[dest];
 
-		//destination is not found
-		if( got == this_routing_table.end() )
+
+		if( routing_table.count(dest) == 0 ||		
+			//destination is not found
+			routing_helper_table[dest] > nbr_link_wt + nbr_to_dest)
+			//destination is found but the new path is better
 		{
 			//current distance is distance to nbr + distance in nbr's routing table
-			std::pair<Link*, int> route_entry (link_to_nbr, nbr_link_wt + nbr_to_dest);
-			this_routing_table.insert({{dest, route_entry}});
+			routing_table[dest] = link_to_nbr; 
+			routing_helper_table[dest] = nbr_link_wt + nbr_to_dest;
 		}
 
-		//destination is found but the new path is better
-		else if( got->second.second > wt + dist )
-		{
-			//update current distance
-			std::pair<Link*, int> route_entry (link_to_nbr, wt + dist);
-			this_routing_table.erase(got);
-			this_routing_table.insert({{dest, route_entry}});
-		}
 	}
-#endif
 }
 
 std::vector<Node*> Node::getAdjNodes(){
@@ -94,9 +74,6 @@ std::vector<Node*> Node::getAdjNodes(){
 	return adj_nodes;
 }
 
-routing_table_t Node::getRoutingTable(){
-	return routing_table;
-}
 
 void Node::establishLink(Link* link)
 {
