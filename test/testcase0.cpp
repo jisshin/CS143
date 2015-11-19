@@ -27,7 +27,7 @@ int main()
 	nm->registerNode(node2);
 
 	nm->connectLink("L1", "H1", "H2");
-	//temporarily moved here. 
+	//temporarily moved here.
 	// registerFLow need to be called after all
 	// initialization
 	nm->registerFlow(flow);
@@ -39,14 +39,14 @@ int main()
 	Packet* init_tx_packet = new Packet(flow, flow.getSrc(), \
 		flow.getDest(), 0);
 #endif
-	//LogEvent log;
-	//log.time = 0;
+	LogEvent log;
+	log.time = 0;
 	TxSrcEvent init_tx(init_tx_packet);
 	init_tx.time = 0;
 	EventQueue* eq = EventQueue::getInstance();
 
 	eq->push(&init_tx);
-	//eq->push(&log);
+	eq->push(&log);
 	eq->run();
 
 	printf("# packet dropped: %d\n", link.num_packet_drop);
