@@ -29,8 +29,8 @@ public:
 
 	// TODO: implement setRTT and set base tx delay when
 	// registering flow
-	void setRTTmin(int RTTmin);
-	void setTxDelay(int link_rate);
+	void setRTTmin(double RTTmin);
+	void setTxDelay(double link_rate);
 
 	//TCP dependent
 	double getTxDelay();

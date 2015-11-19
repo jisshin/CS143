@@ -15,9 +15,9 @@ Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
   flow_data_amt(data_amt){
 }
 
-void Flow::setTxDelay(int link_rate){
+void Flow::setTxDelay(double link_rate){
 	base_tx_delay = SRC_SIZE/link_rate;
-	std::cout<<"tx delay"<<std::endl;
+	std::cout<<"tx delay"<< base_tx_delay << std::endl;
 }
 
 void Flow::receive_ack(int id){
@@ -57,6 +57,7 @@ Packet* Flow::genNextPacketFromTx(){
 #ifdef DEBUG
 	std::cout<<"gen src packet from TX: "<< next_id << std::endl;
 #endif
+	window_full_flag = 0;
 	return comGenSrcPacket();
 }
 
@@ -64,6 +65,7 @@ Packet* Flow::genNextPacketFromRx(){
 	// if there's a newly open space in window
 	if((window_full_flag)&&(outstanding_count < TCP_strategy->getWindow())){
 		window_full_flag = 0;
+		std::cout<<"gen src packet from RX "<< next_id<<std::endl;
 		return comGenSrcPacket();
 	}
 	return NULL;
