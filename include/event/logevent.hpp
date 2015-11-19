@@ -21,7 +21,7 @@ class LogEvent : public Event
     void logData(Flow*);
     void logData(Node*);
 
-    int getBufOccupancy(Link*);
+    double getBufOccupancy(Link*);
     int getPacketLoss(Link*);
     int getFlowRate(Link*);
 
@@ -29,7 +29,7 @@ class LogEvent : public Event
     int getRcvdRate(Node* node);
     int getSentRate(Flow* flow);
     int getRcvdRate(Flow* flow);
-    int getPacketRTT(Flow* flow);
+    double getPacketRTT(Flow* flow);
 };
 
 #endif

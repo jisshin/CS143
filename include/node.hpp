@@ -41,8 +41,8 @@ public:
 	// lookupRouting return the link for routing to dest
 	Link* lookupRouting(std::string dest);
 
-    int packet_sent = 0;
-    int packet_rcvd = 0;
+    double packet_sent = 0;
+    double packet_rcvd = 0;
     
 private:
 	std::string node_id;

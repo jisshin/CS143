@@ -74,56 +74,56 @@ void LogEvent::logData(Node* node)
 	logger->log_num(getRcvdRate(node));
 }
 
-int LogEvent::getBufOccupancy(Link* link)
+double LogEvent::getBufOccupancy(Link* link)
 {
 	return (link->cur_buf_size_in_byte) / (link->max_buf_size_in_byte);
 }
 
 int LogEvent::getPacketLoss(Link* link)
 {
-	int ret = link->num_packet_drop;
+	double ret = link->num_packet_drop;
 	link->num_packet_drop = 0;
-	return ret;
+	return (int)ret;
 }
 
 int LogEvent::getFlowRate(Link* link)
 {
-	int ret = link->packet_thru;
+	double ret = link->packet_thru;
 	link->packet_thru = 0;
-	return ret;
+	return (int)ret;
 }
 
 int LogEvent::getSentRate(Node* node)
 {
-	int ret = node->packet_sent;
+	double ret = node->packet_sent;
 	node->packet_sent = 0;
-	return ret;
+	return (int)ret;
 }
 
 int LogEvent::getRcvdRate(Node* node)
 {
-	int ret = node->packet_rcvd;
+	double ret = node->packet_rcvd;
 	node->packet_rcvd = 0;
-	return ret;
+	return (int)ret;
 }
 
 int LogEvent::getSentRate(Flow* flow)
 {
-	//int ret = flow->packet_sent;
+	//double ret = flow->packet_sent;
 	//flow->packet_sent = 0;
-	//return ret;
+	//return (int)ret;
 	return 0;
 }
 
 int LogEvent::getRcvdRate(Flow* flow)
 {
-	//int ret = flow->packet_rcvd;
+	//double ret = flow->packet_rcvd;
 	//flow->packet_rcvd = 0;
-	//return ret;
+	//return (int)ret;
 	return 0;
 }
 
-int LogEvent::getPacketRTT(Flow* flow)
+double LogEvent::getPacketRTT(Flow* flow)
 {
 	return 0;
 }

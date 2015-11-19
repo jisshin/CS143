@@ -34,13 +34,13 @@ public:
 
 	operator std::string() { return link_id; }
 
-	const double link_rate; // in Mbps
-	const double link_delay;
+	const double link_rate; // in bytes per seconds
+	const double link_delay; // in seconds
 	const int max_buf_size_in_byte;
 
-	int cur_buf_size_in_byte = 0;
-	int num_packet_drop = 0;
-	int packet_thru = 0;
+	double cur_buf_size_in_byte = 0;
+	double num_packet_drop = 0;
+	double packet_thru = 0;
 
 private:
 	const std::string link_id;
