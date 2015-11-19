@@ -17,6 +17,7 @@ Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
 
 void Flow::setTxDelay(int link_rate){
 	base_tx_delay = SRC_SIZE/link_rate;
+	std::cout<<"tx delay"<<std::endl;
 }
 
 void Flow::receive_ack(int id){
@@ -31,9 +32,13 @@ void Flow::receive_ack(int id){
 	}
 	else{
 		last_rx_ack_id = id;
+		next_id = last_rx_ack_id;
 		dup_count = 0;
 		outstanding_count--;
 		TCP_strategy->updateAck(id);
+#ifdef DEBUG
+		std::cout<<"lost packet "<< id<<std::endl;
+#endif
 	}
 }
 
@@ -49,6 +54,9 @@ Packet* Flow::genNextPacketFromTx(){
 
 	// send next packet, if window is not full, and have more
 	// data to send
+#ifdef DEBUG
+	std::cout<<"gen src packet from TX: "<< next_id << std::endl;
+#endif
 	return comGenSrcPacket();
 }
 
@@ -66,10 +74,10 @@ Packet* Flow::comGenSrcPacket(){
 			Packet* next_packet = new Packet(flow_id, flow_src, \
 					flow_dest, SRC_PACKET, next_id);
 			outstanding_count++;
-			next_id++;
 			flow_data_amt -= next_packet->packet_size;
 			return next_packet;
 	}
+	std::cout<<"data amount"<< flow_data_amt << std::endl;
 	return NULL;
 }
 
@@ -78,6 +86,9 @@ Packet* Flow::comGenSrcPacket(){
 //TODO: implement genAckPacket and get rid of getAckID
 Packet* Flow::genAckPacket(Packet* received_packet)
 {
+	if (last_tx_ack_id == -1){
+		last_tx_ack_id = received_packet->packet_seq_id;
+	}
 	if (received_packet->packet_seq_id == last_tx_ack_id){
 		last_tx_ack_id++;
 	}
