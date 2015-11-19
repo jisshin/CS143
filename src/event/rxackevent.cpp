@@ -15,6 +15,7 @@ int RxAckEvent::handleEvent()
 	// Jisoo, I thought receivePacket do nothing
 	// but handle the routing. Do we need this for
 	// RxAck?
+	// hey kevin, this is just used for "logging" purpose.
 
 #ifdef DEBUG
 	std::cout << "rxackevent: " << rx_packet->packet_seq_id \
@@ -33,5 +34,7 @@ int RxAckEvent::handleEvent()
 	ack_packet->test = rx_packet->test;
 #endif
 	// And transmit back to sender
+
+	delete rx_packet;
 	return commonTransmit(rx_node, ack_packet);
 }

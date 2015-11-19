@@ -42,11 +42,10 @@ int Node::receivePacket(Packet* packet)
 	if(packet->packet_type == ROUT_PACKET && packet->packet_dest == *this)
 		routePacket(packt);
 
-	return 1;
-#else
-	return 0;
-#endif //ROUTIING_TEST
 
+#else
+	return 1;
+#endif //ROUTIING_TEST
 }
 
 void routePacket(Packet* pkt)

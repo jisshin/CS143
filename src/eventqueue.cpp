@@ -1,4 +1,5 @@
 #include "../include/eventqueue.hpp"
+#include "../include/event/logevent.hpp"
 
 double EventQueue::cur_time = 0;
 EventQueue* EventQueue::eventqueue = NULL;
@@ -35,12 +36,15 @@ Event* EventQueue::pop()
 
 int EventQueue::run()
 {
+	LogEvent logEvent;
 	while (registered_events.size() > 0)
 	{
 		Event* e = registered_events.top();
 		registered_events.pop();
 		cur_time = e->time;
 		e->handleEvent();
+		delete e;
+		logEvent.handleEvent();
 	}
 
 	return 1;

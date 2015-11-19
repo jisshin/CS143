@@ -45,13 +45,6 @@ int LogEvent::handleEvent()
 
 	logger->flush_current_line();
 
-	if (!commonIsSimOver())
-	{
-		LogEvent* logevent = new LogEvent();
-		logevent->time = time + LOG_TIME;
-		eq->push(logevent);
-	}
-
 	return 1;
 }
 

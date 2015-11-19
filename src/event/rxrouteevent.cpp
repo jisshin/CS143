@@ -7,5 +7,7 @@ int RxRouteEvent::handleEvent()
 {
 	Packet* rx_packet = rx_link->popPacket();
 	rx_node->receivePacket(rx_packet);
+
+	delete rx_packet;
 	return 1;
 }

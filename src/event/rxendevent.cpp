@@ -38,5 +38,6 @@ int RxEndEvent::handleEvent()
 		eventq->push(next_tx);
 	}
 
+	delete rx_packet;
 	return 1;
 }
