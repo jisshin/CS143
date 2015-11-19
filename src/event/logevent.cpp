@@ -8,74 +8,77 @@
 
 int LogEvent::handleEvent()
 {
-  NetworkManager* nm = NetworkManager::getInstance();
-  EventQueue* eq = EventQueue::getInstance();
-  Logger* log = Logger::getInstance();
+	NetworkManager* nm = NetworkManager::getInstance();
+	EventQueue* eq = EventQueue::getInstance();
+	Logger* logger = Logger::getInstance();
 
-  Link* link = nm->resetLinkIterator();
-  Flow* flow = nm->resetFlowIterator();
-  Node* node = nm->resetNodeIterator();
+	Link* link = nm->resetLinkIterator();
+	Flow* flow = nm->resetFlowIterator();
+	Node* node = nm->resetNodeIterator();
 
-  log->prepare();
-  log->log_num(time);
+	logger->prepare();
+	logger->log_num(time);
 
-  while(link != NULL)
-  {
-    logData(link);
-    link = nm->getNextLinkIterator();
-  }
+	while (link != NULL)
+	{
+		logData(link);
+		link = nm->getNextLinkIterator();
+	}
 
-  while(flow != NULL)
-  {
-    logData(flow);
-    flow = nm->getNextFlowIterator();
-  }
+	while (flow != NULL)
+	{
+		logData(flow);
+		flow = nm->getNextFlowIterator();
+	}
 
-  while(node != NULL)
-  {
-    if (node->getAdjNodes().size() == 1)
-    {
-      //there is only one node connected to this node
-      //thus this is host. we are interested in logging
-      //data for only host.
-      logData(node);
-    }
-    node = nm->getNextNodeIterator();
-  }
+	while (node != NULL)
+	{
+		if (node->getAdjLinks().size() == 1)
+		{
+			//there is only one node connected to this node
+			//thus this is host. we are interested in logging
+			//data for only host.
+			logData(node);
+		}
+		node = nm->getNextNodeIterator();
+	}
 
-  logger->flush_current_line();
+	logger->flush_current_line();
 
-  if (!commonIsSimOver())
-  {
-    LogEvent* logevent = new LogEvent();
-    logevent->time = time + LOG_TIME;
-    eq->push(logevent);
-  }
+	if (!commonIsSimOver())
+	{
+		LogEvent* logevent = new LogEvent();
+		logevent->time = time + LOG_TIME;
+		eq->push(logevent);
+	}
 
-  return 1;
+	return 1;
 }
 
 void LogEvent::logData(Link* link)
 {
-  logger->log_str((std::string) *link);
-  logger->log_num(getBufOccupancy(link));
-  logger->log_num(getPacketLoss(link));
-  logger->log_num(getFlowRate(link));
+	Logger* logger = Logger::getInstance();
+	logger->log_str((std::string) *link);
+	logger->log_num(getBufOccupancy(link));
+	logger->log_num(getPacketLoss(link));
+	logger->log_num(getFlowRate(link));
 }
 
 void LogEvent::logData(Flow* flow)
 {
-  logger->log_str((std::string) *flow);
-  logger->log_num(getSentRate(flow));
-  logger->log_num(getRcvdRate(flow));
-  logger->log_num(getPacketRTT(flow));
+	Logger* logger = Logger::getInstance();
+	logger->log_str((std::string) *flow);
+	logger->log_num(getSentRate(flow));
+	logger->log_num(getRcvdRate(flow));
+	logger->log_num(getPacketRTT(flow));
 }
 
 void LogEvent::logData(Node* node)
 {
-  logger->log_str((std::string) *node);
-  logger->log_num(getSentRate(node));
-  logger->log_num(getRcvdRate(node));
+	Logger* logger = Logger::getInstance();
+	logger->log_str((std::string) *node);
+	logger->log_num(getSentRate(node));
+	logger->log_num(getRcvdRate(node));
 }
 
 int LogEvent::getBufOccupancy(Link* link)
@@ -85,49 +88,49 @@ int LogEvent::getBufOccupancy(Link* link)
 
 int LogEvent::getPacketLoss(Link* link)
 {
-  int ret = link->num_packet_drop;
-  link->num_packet_drop = 0;
-  return ret;
+	int ret = link->num_packet_drop;
+	link->num_packet_drop = 0;
+	return ret;
 }
 
 int LogEvent::getFlowRate(Link* link)
 {
-  int ret = link->packet_thru;
-  link->packet_thru = 0;
-  return ret;
+	int ret = link->packet_thru;
+	link->packet_thru = 0;
+	return ret;
 }
 
 int LogEvent::getSentRate(Node* node)
 {
-  int ret = node->packet_sent;
-  node->packet_sent = 0;
-  return ret;
+	int ret = node->packet_sent;
+	node->packet_sent = 0;
+	return ret;
 }
 
 int LogEvent::getRcvdRate(Node* node)
 {
-  int ret = node->packet_rcvd;
-  node->packet_rcvd = 0;
-  return ret;
+	int ret = node->packet_rcvd;
+	node->packet_rcvd = 0;
+	return ret;
 }
 
 int LogEvent::getSentRate(Flow* flow)
 {
-  //int ret = flow->packet_sent;
-  //flow->packet_sent = 0;
-  //return ret;
-  return 0;
+	//int ret = flow->packet_sent;
+	//flow->packet_sent = 0;
+	//return ret;
+	return 0;
 }
 
 int LogEvent::getRcvdRate(Flow* flow)
 {
-  //int ret = flow->packet_rcvd;
-  //flow->packet_rcvd = 0;
-  //return ret;
-  return 0;
+	//int ret = flow->packet_rcvd;
+	//flow->packet_rcvd = 0;
+	//return ret;
+	return 0;
 }
 
 int LogEvent::getPacketRTT(Flow* flow)
 {
-  return 0;
+	return 0;
 }

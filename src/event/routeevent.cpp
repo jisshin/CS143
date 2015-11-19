@@ -1,6 +1,7 @@
 #include "../../include/event/routeevent.hpp"
 #include "../../include/networkmanager.hpp"
 #include "../../include/eventqueue.hpp"
+#include "../../include/packet.hpp"
 #include "../../include/node.hpp"
 
 int RouteEvent::handleEvent()
@@ -24,8 +25,12 @@ int RouteEvent::handleEvent()
 	if (!commonIsSimOver())
 	{
 		EventQueue* eq = EventQueue::getInstance();
-		if(!eq->empty())
-			eq->push(new RouteEvent(this->time + ROUT_INTERVAL));
+		if (!eq->empty())
+		{
+			RouteEvent* route = new RouteEvent();
+			route->time = this->time + ROUT_INTERVAL;
+			eq->push(route);
+		}
 	}
 
 	return 1;
