@@ -97,7 +97,7 @@ Packet* Flow::genAckPacket(Packet* received_packet)
 		last_tx_ack_id++;
 	}
 	Packet* ack_packet = new Packet(flow_id, flow_dest,\
-			flow_dest, ACK_PACKET, last_tx_ack_id);
+			flow_src, ACK_PACKET, last_tx_ack_id);
 	return ack_packet;
 }
 
