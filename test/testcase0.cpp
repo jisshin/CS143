@@ -1,6 +1,7 @@
 
 #include "../include/networkmanager.hpp"
 #include "../include/eventqueue.hpp"
+#include "../include/logger.hpp"
 #include "../include/flow.hpp"
 #include "../include/link.hpp"
 #include "../include/node.hpp"
@@ -48,6 +49,8 @@ int main()
 
 	eq->run();
 
+	Logger * logger = Logger::getInstance();
+	delete logger;
 	printf("# packet dropped: %d\n", link.num_packet_drop);
 	return EXIT_SUCCESS;
 }

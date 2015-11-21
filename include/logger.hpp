@@ -29,10 +29,11 @@ class Logger{
 
 		void flush_current_line();
 
-
+		~Logger();
+    
 	private:
 		Logger(std::string);
-		~Logger();
+
 		static Logger* logger;
 
 		std::ofstream file;
