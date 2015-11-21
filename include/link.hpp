@@ -28,7 +28,6 @@ public:
 	double getRate() { return link_rate; }
 	double getDelay();
 	int getBufferSize() { return max_buf_size_in_byte; }
-	int weight();
 	
 	Node* get_other_node(Node*);
 

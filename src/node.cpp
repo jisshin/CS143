@@ -44,14 +44,14 @@ void Node::resetRouting()
 	{
 		std::string nbr = *(adj_links[i]->get_other_node(this));
 		routing_table[nbr] = adj_links[i];
-		routing_helper_table[nbr] = adj_links[i]->weight();
+		routing_helper_table[nbr] = adj_links[i]->getDelay();
 	}
 
 }
 
 void Node::routePacket(Node* nbr, Link* link_to_nbr)
 {
-	int nbr_link_wt = link_to_nbr->weight();
+	int nbr_link_wt = link_to_nbr->getDelay();
 	routing_table_t nbr_route = nbr->routing_table;
 	routing_table_helper_t nbr_helper_route = nbr->routing_helper_table;
 
