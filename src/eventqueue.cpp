@@ -55,6 +55,7 @@ int EventQueue::run()
 
 		if (cur_time / ROUT_INTERVAL == route_event_counter)
 		{
+			routeEvent.time = cur_time;
 			routeEvent.handleEvent();
 			route_event_counter++;
 		}
