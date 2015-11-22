@@ -19,7 +19,7 @@ int main()
 
 	Node node1("H1");
 	Node node2("H2");
-	Flow flow("F1", "H1", "H2", 128000);
+	Flow flow("F1", "H1", "H2", 2000000);
 	NetworkManager* nm = NetworkManager::getInstance();
 	TCPReno flow_alg;
 	flow.setTCPStrategy(&flow_alg);

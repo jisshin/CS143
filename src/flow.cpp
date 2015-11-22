@@ -39,8 +39,8 @@ void Flow::receive_ack(int id){
 		std::cout<<"receive src success "<< id - 1<<std::endl;
 #endif
 	}
-	// Resest timeout flag for both case
-	rx_timeout_flag = 0;
+	// Clear all timeout flags for both cases
+	clearTimeout();
 }
 
 Packet* Flow::genNextPacketFromTx(){
@@ -80,7 +80,6 @@ Packet* Flow::comGenSrcPacket(){
 					flow_dest, SRC_PACKET, next_id);
 			flow_data_amt -= next_packet->packet_size;
 			next_id++;
-			rx_timeout_flag = 1;
 			return next_packet;
 	}
 	std::cout<<"data amount"<< flow_data_amt << std::endl;
@@ -129,3 +128,17 @@ double Flow::getAvgRTT(){
 	}
 }
 
+void Flow::pushTimeout(int id){
+	timeout_flags.push(id);
+}
+
+int Flow::checkTimeout(int id){
+	int timeout = (timeout_flags.front() == id)?1:0;
+	return timeout;
+}
+
+void Flow::clearTimeout(){
+	while (!timeout_flags.empty()){
+		timeout_flags.pop();
+	}
+}

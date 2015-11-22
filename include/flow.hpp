@@ -5,7 +5,7 @@
 
 
 #include <string>
-
+#include <queue>
 //TODO move status constant to a ENUM
 //const int PACKET_DROPPED = 0;
 const int PACKET_RECEIVED = 1;
@@ -41,7 +41,9 @@ public:
 	double getAvgRTT();
 	double getMinRTT(){return min_RTT;};
 	TCPAlgorithm* getTCPStrategy(){return TCP_strategy;};
-	int rx_timeout_flag = 1;
+	void pushTimeout(int id);
+	int checkTimeout(int id);
+
 
 private:
 	std::string flow_id;
@@ -63,6 +65,8 @@ private:
 	int next_id = 0;
 	int window_full_flag = 0;
 	Packet* comGenSrcPacket();
+	void clearTimeout();
+	std::queue<int> timeout_flags;
 };
 
 

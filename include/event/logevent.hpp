@@ -29,6 +29,7 @@ class LogEvent : public Event
     int getRcvdRate(Node* node);
     int getSentRate(Flow* flow);
     int getRcvdRate(Flow* flow);
+    int getWindowSize(Flow* flow);
     double getPacketRTT(Flow* flow);
 };
 

@@ -64,6 +64,7 @@ void LogEvent::logData(Flow* flow)
 	logger->log_num(getSentRate(flow));
 	logger->log_num(getRcvdRate(flow));
 	logger->log_num(getPacketRTT(flow));
+	logger->log_num(getWindowSize(flow));
 }
 
 void LogEvent::logData(Node* node)
@@ -92,6 +93,7 @@ int LogEvent::getFlowRate(Link* link)
 	link->packet_thru = 0;
 	return (int)ret;
 }
+
 
 int LogEvent::getSentRate(Node* node)
 {
@@ -123,7 +125,12 @@ int LogEvent::getRcvdRate(Flow* flow)
 	return 0;
 }
 
+int LogEvent::getWindowSize(Flow* flow){
+	return flow->getTCPStrategy()->getWindow();
+}
+
+
 double LogEvent::getPacketRTT(Flow* flow)
 {
-	return 0;
+	return flow->getAvgRTT();
 }

@@ -31,9 +31,12 @@ int TxSrcEvent::handleEvent()
 	EventQueue* eventq = EventQueue::getInstance();
 
 	// generate timeout event for the current packet
-	TCPTimeOutEvent* TimeOutEvent = new TCPTimeOutEvent(tx_flow);
+	TCPTimeOutEvent* TimeOutEvent = new TCPTimeOutEvent(tx_flow, tx_packet->packet_seq_id);
+	tx_flow->pushTimeout(tx_packet->packet_seq_id);
 	TimeOutEvent->time = time +  3*tx_flow->getAvgRTT();
+#ifdef DEBUG
 	std::cout << "current RTT = " << tx_flow->getAvgRTT() << std::endl;
+#endif // DEBUG
 	eventq->push(TimeOutEvent);
 
 #ifndef TESTCASE0
