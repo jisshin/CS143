@@ -7,7 +7,14 @@ double TCPReno::getWindow(){
 }
 
 void TCPReno::updateAck(int id){
-	window_size += 1/window_size;
+	if (window_size<threshold){
+		window_size++;
+	}
+	else{
+		window_size += 1/window_size;
+	}
+	threshold = max_window/2;
+    max_window = (window_size > max_window) ? window_size: max_window;
 #ifdef DEBUG
 	std::cout<<"Receive packet, window size = "<< window_size <<std::endl;
 #endif
@@ -23,5 +30,12 @@ void TCPReno::updateLoss(int id){
 	}
 #ifdef DEBUG
 	std::cout<<"Lost packet, window size = "<< window_size<<std::endl;
+#endif
+}
+
+void TCPReno::rx_timeout(){
+	window_size = 1;
+#ifdef DEBUG
+	std::cout << "timeout!" << std::endl;
 #endif
 }

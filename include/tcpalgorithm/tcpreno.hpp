@@ -10,6 +10,11 @@ public:
 	int lost_id = -1;
 	void updateAck(int id) override;
 	void updateLoss(int id) override;
+	void rx_timeout() override;
+private:
+	int slow_start = 1;
+	int threshold = INFINITY_32;
+	int max_window = 0;
 };
 
 #endif // TCPALGORITHM_TCPRENO_H

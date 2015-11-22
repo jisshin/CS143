@@ -25,7 +25,7 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 		EventQueue* eventq = EventQueue::getInstance();
 		eventq->push(next_rx);
 	}
-
+  pkt->start_t = time;
   return result;
 }
 

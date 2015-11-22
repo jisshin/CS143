@@ -15,7 +15,7 @@
 
 int main()
 {
-	Link link("L1", 10000000, 0.01, 6400);
+	Link link("L1", 10000000, 0.01, 64000);
 
 	Node node1("H1");
 	Node node2("H2");

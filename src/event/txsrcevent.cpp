@@ -1,4 +1,5 @@
 #include "../../include/event/txsrcevent.hpp"
+#include "../../include/event/tcptimeoutevent.hpp"
 #include "../../include/networkmanager.hpp"
 #include "../../include/eventqueue.hpp"
 #include "../../include/packet.hpp"
@@ -27,6 +28,13 @@ int TxSrcEvent::handleEvent()
 	// transmit;
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
+	EventQueue* eventq = EventQueue::getInstance();
+
+	// generate timeout event for the current packet
+	TCPTimeOutEvent* TimeOutEvent = new TCPTimeOutEvent(tx_flow);
+	TimeOutEvent->time = time +  3*tx_flow->getAvgRTT();
+	std::cout << "current RTT = " << tx_flow->getAvgRTT() << std::endl;
+	eventq->push(TimeOutEvent);
 
 #ifndef TESTCASE0
 	Packet* nxt_tx_pkt = tx_flow->genNextPacketFromTx();
@@ -51,7 +59,6 @@ int TxSrcEvent::handleEvent()
 #else
 		next_tx->time = time + 1;
 #endif
-		EventQueue* eventq = EventQueue::getInstance();
 		eventq->push(next_tx);
 	}
 

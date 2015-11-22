@@ -15,7 +15,7 @@ int RxEndEvent::handleEvent()
 
 #ifdef DEBUG
 	std::cout << "rxendevent: receive ack packet " << rx_packet->packet_seq_id\
-		<< std::endl;
+		<< ": " << time << std::endl;
 #endif//DEBUG
 
 
@@ -27,6 +27,7 @@ int RxEndEvent::handleEvent()
 
 #ifndef TESTCASE0
 	rx_flow->receive_ack(rx_packet->packet_seq_id);
+	rx_flow->recordRTT(time - rx_packet->start_t);
 	// Check if suppose to send out new src packet
 	new_src_packet = rx_flow->genNextPacketFromRx();
 #endif

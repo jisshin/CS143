@@ -37,7 +37,11 @@ public:
 	Packet* genNextPacketFromRx();
 	Packet* genNextPacketFromTx();
 	Packet* genAckPacket(Packet* received_packet);
-
+	void recordRTT(double RTT);
+	double getAvgRTT();
+	double getMinRTT(){return min_RTT;};
+	TCPAlgorithm* getTCPStrategy(){return TCP_strategy;};
+	int rx_timeout_flag = 1;
 
 private:
 	std::string flow_id;
@@ -49,11 +53,13 @@ private:
 	int last_rx_ack_id = -1;
 	int last_tx_ack_id = -1;
 	int dup_count = 0;
-	int outstanding_count = 0;
+	//int outstanding_count = 0;
 	double base_tx_delay;
 	double last_transmit_t;
 
-	//next_id is just temporary packet id counter to test txevent
+	double sum_RTT=0;
+	double min_RTT=INFINITY_32;
+	int RTT_count = 0;
 	int next_id = 0;
 	int window_full_flag = 0;
 	Packet* comGenSrcPacket();

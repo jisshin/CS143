@@ -89,6 +89,6 @@ void Node::establishLink(Link* link)
 {
 	std::string nbr = *(link->get_other_node(this));
 	routing_table[nbr] = link;
-	routing_helper_table[nbr] = link->weight();
+	routing_helper_table[nbr] = link->getDelay();
 	adj_links.push_back(link);
 }

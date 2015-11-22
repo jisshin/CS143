@@ -34,22 +34,24 @@ void Flow::receive_ack(int id){
 	else{
 		last_rx_ack_id = id;
 		dup_count = 0;
-		outstanding_count--;
 		TCP_strategy->updateAck(id);
 #ifdef DEBUG
-		std::cout<<"receive src success "<< id<<std::endl;
+		std::cout<<"receive src success "<< id - 1<<std::endl;
 #endif
 	}
+	// Resest timeout flag for both case
+	rx_timeout_flag = 0;
 }
 
 Packet* Flow::genNextPacketFromTx(){
-	//TODO: Assume fast recovery by default, may change in the future
 
 	// if currently the window is full, don't generate new
 	// packet
-	if (outstanding_count >= TCP_strategy->getWindow()){
+	if (next_id > TCP_strategy->getWindow() + last_rx_ack_id){
+			std::cout<<"window size " << TCP_strategy->getWindow() << std::endl;
 			window_full_flag = 1;
 			std::cout<<"window full" << std::endl;
+
 			return NULL;
 	}
 
@@ -64,7 +66,7 @@ Packet* Flow::genNextPacketFromTx(){
 
 Packet* Flow::genNextPacketFromRx(){
 	// if there's a newly open space in window
-	if((window_full_flag)&&(outstanding_count < TCP_strategy->getWindow())){
+	if((window_full_flag)&&(next_id <=  last_rx_ack_id + TCP_strategy->getWindow())){
 		window_full_flag = 0;
 		std::cout<<"gen src packet from RX "<< next_id<<std::endl;
 		return comGenSrcPacket();
@@ -76,9 +78,9 @@ Packet* Flow::comGenSrcPacket(){
 	if(flow_data_amt > 0){
 			Packet* next_packet = new Packet(flow_id, flow_src, \
 					flow_dest, SRC_PACKET, next_id);
-			outstanding_count++;
 			flow_data_amt -= next_packet->packet_size;
 			next_id++;
+			rx_timeout_flag = 1;
 			return next_packet;
 	}
 	std::cout<<"data amount"<< flow_data_amt << std::endl;
@@ -98,6 +100,7 @@ Packet* Flow::genAckPacket(Packet* received_packet)
 	}
 	Packet* ack_packet = new Packet(flow_id, flow_dest,\
 			flow_src, ACK_PACKET, last_tx_ack_id);
+	std::cout<<"generate AckPacket with ID " << last_tx_ack_id << std::endl;
 	return ack_packet;
 }
 
@@ -109,3 +112,20 @@ double Flow::getTxDelay()
 	last_transmit_t = EventQueue::cur_time + delay;
 	return delay;
 }
+
+void Flow::recordRTT(double RTT){
+	sum_RTT += RTT;
+	RTT_count++;
+	if (RTT < min_RTT){
+		min_RTT = RTT;
+	}
+}
+
+double Flow::getAvgRTT(){
+	if (RTT_count == 0){
+		return 0;
+	}else{
+		return sum_RTT/RTT_count;
+	}
+}
+
