@@ -2,19 +2,23 @@
 #include "../../include/common.hpp"
 #include <iostream>
 
-double TCPReno::getWindow(){
+int TCPReno::getWindow(){
 	return window_size;
 }
 
 void TCPReno::updateAck(int id){
+	// End of fr/ft phase = receive a non duplicate ACK
+	if ((fr_flag)&&(id == lost_id + 1)){
+		window_size = fr_window;
+	}
+
+	// Normal operation
 	if (window_size<threshold){
 		window_size++;
 	}
 	else{
 		window_size += 1/window_size;
 	}
-	threshold = max_window/2;
-    max_window = (window_size > max_window) ? window_size: max_window;
 #ifdef DEBUG
 	std::cout<<"Receive packet, window size = "<< window_size <<std::endl;
 #endif
@@ -22,10 +26,14 @@ void TCPReno::updateAck(int id){
 
 void TCPReno::updateLoss(int id){
 	if(id!= lost_id){
-		window_size = window_size/2;
+		threshold = window_size/2;
+		fr_window = window_size/2;
+		window_size = window_size/2 + 3;
 		lost_id = id;
+		fr_flag = 1;
 	}else{
 		//fast recovery
+		// if receive another duplicate ID
 		window_size++;
 	}
 #ifdef DEBUG

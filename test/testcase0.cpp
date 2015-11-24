@@ -15,11 +15,11 @@
 
 int main()
 {
-	Link link("L1", 10000000, 0.01, 64000);
+	Link link("L1", 10000000, 0.01, 6400);
 
 	Node node1("H1");
 	Node node2("H2");
-	Flow flow("F1", "H1", "H2", 2000000);
+	Flow flow("F1", "H1", "H2", 600000);
 	NetworkManager* nm = NetworkManager::getInstance();
 	TCPReno flow_alg;
 	flow.setTCPStrategy(&flow_alg);

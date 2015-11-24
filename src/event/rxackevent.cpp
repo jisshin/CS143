@@ -18,7 +18,7 @@ int RxAckEvent::handleEvent()
 	// hey kevin, this is just used for "logging" purpose.
 
 #ifdef DEBUG
-	std::cout << "rxackevent: " << rx_packet->packet_seq_id \
+	std::cout << "receive src event: " << rx_packet->packet_seq_id \
 		<< std::endl;
 #endif//DEBUG
 

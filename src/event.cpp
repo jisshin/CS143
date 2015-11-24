@@ -38,11 +38,14 @@ int Event::commonIsSimOver()
 		if (flow->getDataAmt() > 0)
 		{
 			//still some data left to send
+
 			return 0;
 		}
 		flow = nm->getNextFlowIterator();
 	}
 
 	//all data is sent. simulation is over
+
+	std::cout << "data sim done " << std::endl;
 	return 1;
 }

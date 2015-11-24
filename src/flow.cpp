@@ -24,12 +24,15 @@ void Flow::setTxDelay(double link_rate){
 void Flow::receive_ack(int id){
 	if (last_rx_ack_id == id){
 		dup_count++;
-		if(dup_count >= 3){
+		if(dup_count == 3){
 			// report a packet lost to TCP
-			// and set to retransmit
+			// and reset to retransmit
 			next_id = last_rx_ack_id;
 			TCP_strategy->updateLoss(id);
+		}else if(dup_count > 3){
+			TCP_strategy->updateLoss(id);
 		}
+
 	}
 	else{
 		last_rx_ack_id = id;
@@ -47,11 +50,13 @@ Packet* Flow::genNextPacketFromTx(){
 
 	// if currently the window is full, don't generate new
 	// packet
+#ifdef DEBUG
+	std::cout << "getting  src packet from TX " << std::endl;
+#endif
 	if (next_id > TCP_strategy->getWindow() + last_rx_ack_id){
 			std::cout<<"window size " << TCP_strategy->getWindow() << std::endl;
 			window_full_flag = 1;
 			std::cout<<"window full" << std::endl;
-
 			return NULL;
 	}
 
@@ -91,11 +96,8 @@ Packet* Flow::comGenSrcPacket(){
 //TODO: implement genAckPacket and get rid of getAckID
 Packet* Flow::genAckPacket(Packet* received_packet)
 {
-	if (last_tx_ack_id == -1){
-		last_tx_ack_id = received_packet->packet_seq_id;
-	}
 	if (received_packet->packet_seq_id == last_tx_ack_id){
-		last_tx_ack_id++;
+		last_tx_ack_id = received_packet->packet_seq_id + 1;
 	}
 	Packet* ack_packet = new Packet(flow_id, flow_dest,\
 			flow_src, ACK_PACKET, last_tx_ack_id);
@@ -108,7 +110,7 @@ double Flow::getTxDelay()
 	double delay = \
 			((last_transmit_t + base_tx_delay) > EventQueue::cur_time)?\
 					base_tx_delay:0;
-	last_transmit_t = EventQueue::cur_time + delay;
+	last_transmit_t = EventQueue::cur_time;
 	return delay;
 }
 
@@ -134,6 +136,10 @@ void Flow::pushTimeout(int id){
 
 int Flow::checkTimeout(int id){
 	int timeout = (timeout_flags.front() == id)?1:0;
+	if(timeout == 1){
+		clearTimeout();
+		next_id = id;
+	}
 	return timeout;
 }
 

@@ -53,7 +53,7 @@ private:
 	TCPAlgorithm* TCP_strategy;
 
 	int last_rx_ack_id = -1;
-	int last_tx_ack_id = -1;
+	int last_tx_ack_id = 0;
 	int dup_count = 0;
 	//int outstanding_count = 0;
 	double base_tx_delay;
