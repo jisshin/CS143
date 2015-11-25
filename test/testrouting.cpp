@@ -38,12 +38,7 @@ int main()
 	nm->connectLink("L4", "H4", "H5");
 	nm->connectLink("L5", "H5", "H1");
 
-	RouteEvent *route = new RouteEvent();
-	route->time = 0;
 	EventQueue* eq = EventQueue::getInstance();
-
-	eq->push(route);
-
 	eq->run();
 
 	return EXIT_SUCCESS;

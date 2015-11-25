@@ -18,6 +18,8 @@ class EventQueue{
 		Event* pop();
 
 		int size();
+		int num_non_core;
+
 		int empty();
 
 		int run();
@@ -26,6 +28,8 @@ class EventQueue{
 	private:
 		EventQueue(){};
 		static EventQueue* eventqueue;
+
+		void initialize();
 
 		std::priority_queue<Event*, std::vector<Event*>, \
 			CompareEvent > registered_events;

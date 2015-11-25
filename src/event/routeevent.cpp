@@ -4,28 +4,12 @@
 #include "../../include/packet.hpp"
 #include "../../include/node.hpp"
 
-int RouteEvent::counter = 0;
 
-int RouteEvent::handleEvent()
-{
-	if (counter % (ROUT_RESET_INTERVAL / ROUT_INTERVAL) == 0)
-	{
-		resetEvent();
-		routeEvent();
-	}
-	else
-	{
-		routeEvent();
-	}
-
-	counter++;
-
-	return 1;
-}
-
-void RouteEvent::resetEvent()
+int ResetEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
+	EventQueue *eq = EventQueue::getInstance();
+	eq->num_non_core--;
 
 	Node* node = nm->resetNodeIterator();
 	std::vector<Node*> adj_nodes;
@@ -35,12 +19,22 @@ void RouteEvent::resetEvent()
 		node->resetRouting();
 		node = nm->getNextNodeIterator();
 	}
+
+	if (eq->size() - eq->num_non_core > 0)
+	{
+		ResetEvent *e = new ResetEvent(time + REST_INTERVAL);
+		eq->push(e);
+		eq->num_non_core++;
+	}
+
+	return 1;
 }
 
-void RouteEvent::routeEvent()
+int RouteEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
-
+	EventQueue* eq = EventQueue::getInstance();
+	eq->num_non_core--;
 	Node* node = nm->resetNodeIterator();
 	std::vector<Node*> adj_nodes;
 	
@@ -52,7 +46,17 @@ void RouteEvent::routeEvent()
 		{
 			Packet* route_pkt = new Packet("", *node, *adj_nodes[i], ROUT_PACKET);
 			commonTransmit(node, route_pkt);
+			eq->num_non_core++;
 		}
 		node = nm->getNextNodeIterator();
 	}
+
+	if (eq->size() - eq->num_non_core > 0)
+	{
+		RouteEvent *e = new RouteEvent(time + ROUT_INTERVAL);
+		eq->push(e);
+		eq->num_non_core++;
+	}
+
+	return 1;
 }

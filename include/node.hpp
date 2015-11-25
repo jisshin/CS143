@@ -12,7 +12,7 @@ class Link;
 
 //host destination address -> link to use
 typedef std::map<std::string, Link*> routing_table_t;
-typedef std::map<std::string, int> routing_table_helper_t;
+typedef std::map<std::string, double> routing_table_helper_t;
 
 class Node {
 

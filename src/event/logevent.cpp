@@ -10,6 +10,7 @@ int LogEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
 	EventQueue* eq = EventQueue::getInstance();
+	eq->num_non_core--;
 	Logger* logger = Logger::getInstance();
 
 	Link* link = nm->resetLinkIterator();
@@ -44,6 +45,13 @@ int LogEvent::handleEvent()
 	}
 
 	logger->flush_current_line();
+
+	if (eq->size() - eq->num_non_core > 0)
+	{
+		LogEvent *e = new LogEvent(time + LOG_INTERVAL);
+		eq->push(e);
+		eq->num_non_core++;
+	}
 
 	return 1;
 }

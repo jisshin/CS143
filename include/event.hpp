@@ -13,6 +13,7 @@ class Packet;
 class Event{
 	public:
 		Event() {}
+		Event(double t) : time(t) {}
 
 		virtual int handleEvent() { return 0; }
 

@@ -3,11 +3,15 @@
 #include "../../include/packet.hpp"
 #include "../../include/node.hpp"
 #include "../../include/networkmanager.hpp"
+#include "../../include/eventqueue.hpp"
 
 int RxRouteEvent::handleEvent()
 {
 	Packet* rx_packet = rx_link->popPacket();
 	rx_node->receivePacket(rx_packet);
+
+	EventQueue* eq = EventQueue::getInstance();
+	eq->num_non_core--;
 
 	//get routing table of source packet--simulates packet with routing table info
 	NetworkManager* nm = NetworkManager::getInstance();

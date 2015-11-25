@@ -7,12 +7,12 @@ class Link;
 class Flow;
 class Node;
 
-const double LOG_TIME = 0.01;
+const double LOG_INTERVAL = 0.01;
 
 class LogEvent : public Event
 {
   public:
-    LogEvent() : Event() {}
+    LogEvent(double t) : Event(t) {}
 
     int handleEvent();
 

@@ -37,10 +37,7 @@ Event* EventQueue::pop()
 
 int EventQueue::run()
 {
-	int route_event_counter = 0;
-
-	LogEvent logEvent;
-	RouteEvent routeEvent;
+	initialize();
 
 	while (registered_events.size() > 0)
 	{
@@ -49,19 +46,18 @@ int EventQueue::run()
 		cur_time = e->time;
 		e->handleEvent();
 		delete e;
-
-		logEvent.time = cur_time;
-		logEvent.handleEvent();
-
-		if (cur_time / ROUT_INTERVAL == route_event_counter)
-		{
-			routeEvent.time = cur_time;
-			routeEvent.handleEvent();
-			route_event_counter++;
-		}
 	}
 
 	return 1;
+}
+
+void EventQueue::initialize()
+{
+	LogEvent* logEvent = new LogEvent(0);
+	RouteEvent* routeEvent = new RouteEvent(0);
+	push(logEvent);
+	push(routeEvent);
+	num_non_core += 2;
 }
 
 int EventQueue::size(){

@@ -8,6 +8,9 @@
 
 Link* Node::lookupRouting(std::string dest){
 
+	if (adj_links.size() == 1)
+		return adj_links[0];
+
 	if (routing_table.count(dest) == 0)
 		return NULL;
 
@@ -40,16 +43,22 @@ void Node::resetRouting()
 {
 	routing_table_helper_t::iterator iter;
 
-	for (iter = routing_helper_table.begin(); i != routing_helper_table.end(); i++)
+	for (iter = routing_helper_table.begin(); iter != routing_helper_table.end(); iter++)
 	{
 		iter->second = std::numeric_limits<double>::max();
+	}
+	for (int i = 0; i < adj_links.size(); i++)
+	{
+		std::string nbr = *(adj_links[i]->get_other_node(this));
+		routing_table[nbr] = adj_links[i];
+		routing_helper_table[nbr] = adj_links[i]->getDelay();
 	}
 
 }
 
 void Node::routePacket(Node* nbr, Link* link_to_nbr)
 {
-	int nbr_link_wt = link_to_nbr->getDelay();
+	double nbr_link_wt = link_to_nbr->getDelay();
 	routing_table_t nbr_route = nbr->routing_table;
 	routing_table_helper_t nbr_helper_route = nbr->routing_helper_table;
 
@@ -57,7 +66,7 @@ void Node::routePacket(Node* nbr, Link* link_to_nbr)
 	for(routing_table_t::iterator it = nbr_route.begin(); it != nbr_route.end(); ++it)
 	{
 		std::string dest = it->first;
-		int nbr_to_dest = nbr_helper_route[dest];
+		double nbr_to_dest = nbr_helper_route[dest];
 
 		if (dest == node_id) continue; //if destination is itself, ignore it
 
