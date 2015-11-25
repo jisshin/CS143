@@ -4,6 +4,7 @@
 
 #include <stdint.h>
 #include <iostream>
+#include <limits>
 
 Link* Node::lookupRouting(std::string dest){
 
@@ -37,14 +38,11 @@ int Node::receivePacket(Packet* packet)
 
 void Node::resetRouting()
 {
-	routing_table.clear();
-	routing_helper_table.clear();
+	routing_table_helper_t::iterator iter;
 
-	for (int i = 0; i < adj_links.size(); i++)
+	for (iter = routing_helper_table.begin(); i != routing_helper_table.end(); i++)
 	{
-		std::string nbr = *(adj_links[i]->get_other_node(this));
-		routing_table[nbr] = adj_links[i];
-		routing_helper_table[nbr] = adj_links[i]->getDelay();
+		iter->second = std::numeric_limits<double>::max();
 	}
 
 }
@@ -63,13 +61,13 @@ void Node::routePacket(Node* nbr, Link* link_to_nbr)
 
 		if (dest == node_id) continue; //if destination is itself, ignore it
 
-		if( routing_table.count(dest) == 0 ||		
+		if( routing_table.count(dest) == 0 ||
 			//destination is not found
 			routing_helper_table[dest] > nbr_link_wt + nbr_to_dest)
 			//destination is found but the new path is better
 		{
 			//current distance is distance to nbr + distance in nbr's routing table
-			routing_table[dest] = link_to_nbr; 
+			routing_table[dest] = link_to_nbr;
 			routing_helper_table[dest] = nbr_link_wt + nbr_to_dest;
 		}
 

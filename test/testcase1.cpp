@@ -12,35 +12,45 @@
 #include "../include/tcpalgorithm/tcpreno.hpp"
 
 #include <cstdlib>
+#include <vector>
 
 int main()
 {
-	Link link("L1", 10000000, 0.01, 6400);
+	std::vector<Link> links;
+	std::vector<Node> nodes;
 
-	Node node1("H1");
-	Node node2("H2");
-	Flow flow("F1", "H1", "H2", 600000);
+	std::vector<std::string> link_names = {"L0", "L1", "L2", "L3", "L4", "L5"};
+	std::vector<std::string> node_names = {"H1", "H2", "R1", "R2", "R3", "R4" };
+
+	links.push_back(Link(link_names[0], 12500000, 0.01, 64000));
+	for (int i = 1; i < 5; i++)
+	{
+		links.push_back(Link(link_names[i], 10000000, 0.01, 64000));
+		nodes.push_back(Node(node_names[i]));
+	}
+	links.push_back(Link(link_names[5], 12500000, 0.01, 64000));
+
 	NetworkManager* nm = NetworkManager::getInstance();
+
+	for (int i = 0; i < 6; i++)
+	{
+		nm->registerLink(links[i]);
+		nm->registerNode(nodes[i]);
+	}
+
+	nm->connectLink("L0", "H1", "R1");
+	nm->connectLink("L1", "R1", "R2");
+	nm->connectLink("L2", "R1", "R3");
+	nm->connectLink("L3", "R2", "R4");
+	nm->connectLink("L4", "R3", "R4");
+	nm->connectLink("L5", "R4", "H2");
+
+	Flow flow("F1", "H1", "H2", 600000);
 	TCPReno flow_alg;
 	flow.setTCPStrategy(&flow_alg);
-	nm->registerLink(link);
-	nm->registerNode(node1);
-	nm->registerNode(node2);
-
-	nm->connectLink("L1", "H1", "H2");
-	//temporarily moved here.
-	// registerFLow need to be called after all
-	// initialization
 	nm->registerFlow(flow);
-
-
-#ifndef TESTCASE0
-	Packet* init_tx_packet = flow.genNextPacketFromTx();
-#else
 	Packet* init_tx_packet = new Packet(flow, flow.getSrc(), \
 		flow.getDest(), 0);
-#endif
-
 	TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
 	init_tx->time = 0;
 	EventQueue* eq = EventQueue::getInstance();
@@ -51,6 +61,6 @@ int main()
 
 	Logger * logger = Logger::getInstance();
 	delete logger;
-	printf("# packet dropped: %f\n", link.num_packet_drop);
+
 	return EXIT_SUCCESS;
 }
