@@ -54,9 +54,12 @@ Packet* Flow::genNextPacketFromTx(){
 	std::cout << "getting  src packet from TX " << std::endl;
 #endif
 	if (next_id > TCP_strategy->getWindow() + last_rx_ack_id){
+
+#ifdef DEBUG
 			std::cout<<"window size " << TCP_strategy->getWindow() << std::endl;
+			std::cout << "window full" << std::endl;
+#endif
 			window_full_flag = 1;
-			std::cout<<"window full" << std::endl;
 			return NULL;
 	}
 
@@ -73,7 +76,9 @@ Packet* Flow::genNextPacketFromRx(){
 	// if there's a newly open space in window
 	if((window_full_flag)&&(next_id <=  last_rx_ack_id + TCP_strategy->getWindow())){
 		window_full_flag = 0;
+#ifdef DEBUG
 		std::cout<<"gen src packet from RX "<< next_id<<std::endl;
+#endif
 		return comGenSrcPacket();
 	}
 	return NULL;
@@ -101,7 +106,10 @@ Packet* Flow::genAckPacket(Packet* received_packet)
 	}
 	Packet* ack_packet = new Packet(flow_id, flow_dest,\
 			flow_src, ACK_PACKET, last_tx_ack_id);
+
+#ifdef DEBUG
 	std::cout<<"generate AckPacket with ID " << last_tx_ack_id << std::endl;
+#endif
 	return ack_packet;
 }
 
@@ -135,6 +143,10 @@ void Flow::pushTimeout(int id){
 }
 
 int Flow::checkTimeout(int id){
+	if (timeout_flags.size() == 0)
+		//check this jennifer, in this specific case, is this what you want?
+		return 0;
+
 	int timeout = (timeout_flags.front() == id)?1:0;
 	if(timeout == 1){
 		clearTimeout();

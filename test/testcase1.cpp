@@ -26,9 +26,12 @@ int main()
 	for (int i = 1; i < 5; i++)
 	{
 		links.push_back(Link(link_names[i], 10000000, 0.01, 64000));
-		nodes.push_back(Node(node_names[i]));
 	}
 	links.push_back(Link(link_names[5], 12500000, 0.01, 64000));
+	for (int i = 0; i < 6; i++)
+	{
+		nodes.push_back(Node(node_names[i]));
+	}
 
 	NetworkManager* nm = NetworkManager::getInstance();
 
@@ -45,14 +48,14 @@ int main()
 	nm->connectLink("L4", "R3", "R4");
 	nm->connectLink("L5", "R4", "H2");
 
-	Flow flow("F1", "H1", "H2", 600000);
+	Flow flow("F1", "H1", "H2", 20000000);
 	TCPReno flow_alg;
 	flow.setTCPStrategy(&flow_alg);
 	nm->registerFlow(flow);
 	Packet* init_tx_packet = new Packet(flow, flow.getSrc(), \
 		flow.getDest(), 0);
 	TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
-	init_tx->time = 0;
+	init_tx->time = 0.5;
 	EventQueue* eq = EventQueue::getInstance();
 
 	eq->push(init_tx);

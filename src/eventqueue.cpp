@@ -55,9 +55,11 @@ void EventQueue::initialize()
 {
 	LogEvent* logEvent = new LogEvent(0);
 	RouteEvent* routeEvent = new RouteEvent(0);
+	ResetEvent* resetEvent = new ResetEvent(0);
 	push(logEvent);
 	push(routeEvent);
-	num_non_core += 2;
+	push(resetEvent);
+	num_non_core += 3;
 }
 
 int EventQueue::size(){
