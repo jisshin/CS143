@@ -40,7 +40,7 @@ void Node::resetRouting()
 {
 	routing_table_helper_t::iterator iter;
 
-	for (iter = routing_helper_table.begin(); i != routing_helper_table.end(); i++)
+	for (iter = routing_helper_table.begin(); iter != routing_helper_table.end(); iter++)
 	{
 		iter->second = std::numeric_limits<double>::max();
 	}
