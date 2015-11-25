@@ -1,7 +1,7 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-//#define DEBUG
+#define DEBUG
 
 //#define TESTCASE0
 

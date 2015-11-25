@@ -34,7 +34,8 @@ void TCPReno::updateLoss(int id){
 	}else{
 		//fast recovery
 		// if receive another duplicate ID
-		window_size++;
+		window_size = (window_size+1 < 1.5*fr_window -1) ?
+				window_size + 1:1.5*fr_window - 1;
 	}
 #ifdef DEBUG
 	std::cout<<"Lost packet, window size = "<< window_size<<std::endl;

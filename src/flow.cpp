@@ -27,12 +27,11 @@ void Flow::receive_ack(int id){
 		if(dup_count == 3){
 			// report a packet lost to TCP
 			// and reset to retransmit
-			next_id = last_rx_ack_id;
+			next_id = id;
 			TCP_strategy->updateLoss(id);
 		}else if(dup_count > 3){
 			TCP_strategy->updateLoss(id);
 		}
-
 	}
 	else{
 		last_rx_ack_id = id;
@@ -150,7 +149,7 @@ int Flow::checkTimeout(int id){
 	int timeout = (timeout_flags.front() == id)?1:0;
 	if(timeout == 1){
 		clearTimeout();
-		next_id = id;
+		//next_id = id;
 	}
 	return timeout;
 }

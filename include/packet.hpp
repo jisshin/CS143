@@ -15,7 +15,7 @@ const int SRC_SIZE = 1500;
 
 //TODO: need to update these size
 const int ACK_SIZE = 40;
-const int ROUT_SIZE = 40;
+const int ROUT_SIZE = 0;
 
 /* forward declaration class */
 class Flow; 

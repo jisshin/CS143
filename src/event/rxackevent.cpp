@@ -20,6 +20,9 @@ int RxAckEvent::handleEvent()
 #ifdef DEBUG
 	std::cout << "receive src event: " << rx_packet->packet_seq_id \
 		<< std::endl;
+	if (rx_packet->packet_seq_id == 1044){
+		std::cout << "receive 1044 " << std::endl;
+	}
 #endif//DEBUG
 
 	NetworkManager* nm = NetworkManager::getInstance();
