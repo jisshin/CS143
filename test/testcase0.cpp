@@ -42,7 +42,7 @@ int main()
 #endif
 
 	TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
-	init_tx->time = 0;
+	init_tx->time = 1;
 	EventQueue* eq = EventQueue::getInstance();
 
 	eq->push(init_tx);
