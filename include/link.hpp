@@ -19,9 +19,7 @@ public:
 	{std::cout << "link rate" << rate << std::endl;}
 
 	int pushPacket(Packet*);
-	Packet* lastPacket();
-	Packet* peekPacket();
-	Packet* popPacket();
+	void popPacket(Packet*);
 
 	int establishLink(Node* pointA, Node* pointB);
 
@@ -43,8 +41,6 @@ public:
 
 private:
 	const std::string link_id;
-
-	std::queue<Packet*> link_buffer;
 
 	Node* A;
 	Node* B;

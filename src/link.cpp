@@ -5,7 +5,6 @@
 int Link::pushPacket(Packet* packet){
 	if(max_buf_size_in_byte > cur_buf_size_in_byte + packet->packet_size){
 		cur_buf_size_in_byte += packet->packet_size;
-		link_buffer.push(packet);
 		return 1;
 	}
 	else{
@@ -14,22 +13,9 @@ int Link::pushPacket(Packet* packet){
 	}
 }
 
-Packet* Link::peekPacket()
-{
-	return link_buffer.front();
-}
-
-Packet* Link::lastPacket()
-{
-	return link_buffer.back();
-}
-
-Packet* Link::popPacket(){
-	Packet* packet = link_buffer.front();
-	link_buffer.pop();
+void Link::popPacket(Packet* packet){
 	packet_thru += packet->packet_size;
 	cur_buf_size_in_byte -= packet->packet_size;
-	return packet;
 }
 
 int Link::establishLink(Node* pointA, Node* pointB)

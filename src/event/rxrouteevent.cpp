@@ -7,7 +7,7 @@
 
 int RxRouteEvent::handleEvent()
 {
-	Packet* rx_packet = rx_link->popPacket();
+	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
 
 	EventQueue* eq = EventQueue::getInstance();

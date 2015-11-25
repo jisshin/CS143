@@ -7,7 +7,7 @@
 
 int RxFwdEvent::handleEvent()
 {
-	Packet* rx_packet = rx_link->popPacket();
+	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
 	commonTransmit(rx_node, rx_packet);
 

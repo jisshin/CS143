@@ -18,7 +18,7 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 		Node* other_node = mid_link->get_other_node(node);
 
 		RxEventFactory rx_fac;
-		RxEvent* next_rx = rx_fac.makeRxEvent(mid_link, other_node);
+		RxEvent* next_rx = rx_fac.makeRxEvent(mid_link, other_node, pkt);
 
 		next_rx->time = time + mid_link->getDelay();
 		

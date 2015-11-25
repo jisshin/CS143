@@ -10,7 +10,7 @@
 
 int RxAckEvent::handleEvent()
 {
-	Packet* rx_packet = rx_link->popPacket();
+	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
 	// Jisoo, I thought receivePacket do nothing
 	// but handle the routing. Do we need this for

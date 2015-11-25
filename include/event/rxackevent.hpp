@@ -6,9 +6,15 @@
 class RxAckEvent : public RxEvent
 {
 public:
-	RxAckEvent(Link* pLink, Node* pNode) : RxEvent(pLink, pNode) {}
+	RxAckEvent(Link* pLink, Node* pNode, Packet *pPkt)
+		: RxEvent(pLink, pNode), rx_packet(pPkt)
+	{}
+
 
 	int handleEvent();
+
+private:
+	Packet* rx_packet;
 };
 
 #endif

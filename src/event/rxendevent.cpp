@@ -10,7 +10,7 @@
 
 int RxEndEvent::handleEvent()
 {
-	Packet* rx_packet = rx_link->popPacket();
+	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
 
 #ifdef DEBUG
