@@ -16,7 +16,7 @@ public:
 	  link_delay(delay), \
 	  max_buf_size_in_byte(buffer_size),\
 	  link_id(id)
-	{std::cout << "link rate" << rate << std::endl;}
+	{}
 
 	int pushPacket(Packet*);
 	void popPacket(Packet*);
