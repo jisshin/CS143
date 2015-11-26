@@ -32,29 +32,13 @@ int TxSrcEvent::handleEvent()
 	TimeOutEvent->time = time +  3*tx_flow->getAvgRTT();
 	eventq->push(TimeOutEvent);
 
-#ifndef TESTCASE0
 	Packet* nxt_tx_pkt = tx_flow->genNextPacketFromTx();
-#else
-	Packet* nxt_tx_pkt;
-	if (testcase0_counter < MAX_LOOP)
+
+	if (nxt_tx_pkt != NULL) 
 	{
-		nxt_tx_pkt = new Packet(*tx_flow, tx_flow->getSrc(), \
-			tx_flow->getDest(), SRC_PACKET);
-		nxt_tx_pkt->test = ++testcase0_counter;
-	}
-	else
-	{
-		return 1;
-	}
-#endif
-	if (nxt_tx_pkt != NULL) {
 		TxEvent* next_tx = new TxSrcEvent(nxt_tx_pkt);
 
-#ifndef TESTCASE0
 		next_tx->time = time + tx_flow->getTxDelay();
-#else
-		next_tx->time = time + 1;
-#endif
 		eventq->push(next_tx);
 	}
 

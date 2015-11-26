@@ -25,12 +25,10 @@ int RxEndEvent::handleEvent()
 
 	Packet* new_src_packet = NULL;
 
-#ifndef TESTCASE0
 	rx_flow->receive_ack(rx_packet->packet_seq_id);
 	rx_flow->recordRTT(time - rx_packet->start_t);
 	// Check if suppose to send out new src packet
 	new_src_packet = rx_flow->genNextPacketFromRx();
-#endif
 
 	if (new_src_packet != NULL) {
 		TxSrcEvent* next_tx = new TxSrcEvent(new_src_packet);

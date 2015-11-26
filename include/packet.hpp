@@ -47,13 +47,7 @@ class Packet {
 		int packet_seq_id;
 		double start_t;
 
-		
-#ifndef TESTCASE0
 		int packet_size;
-#else
-		int test = 0;
-		int packet_size = PACKET_SIZE;
-#endif
 };
 
 

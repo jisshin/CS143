@@ -55,8 +55,8 @@ void TCPReno::packetLoss(int id){
 	}else{
 		// In fast recovery phase
 		// if receive another duplicate ID
-		window_size = (window_size+1 < 3*fr_window/2 -1) ?
-				window_size + 1:3*fr_window/2 - 1;
+		window_size = (window_size+1 < 3*((double)fr_window)/2 -1) ?
+				window_size + 1:3*((double)fr_window)/2 - 1;
 		if (window_size < 1){
 			window_size = 1;
 		}

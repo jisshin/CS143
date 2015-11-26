@@ -33,13 +33,8 @@ int main()
 	// initialization
 	nm->registerFlow(flow);
 
-
-#ifndef TESTCASE0
 	Packet* init_tx_packet = flow.genNextPacketFromTx();
-#else
-	Packet* init_tx_packet = new Packet(flow, flow.getSrc(), \
-		flow.getDest(), 0);
-#endif
+
 
 	TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
 	init_tx->time = 1;

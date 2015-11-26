@@ -21,15 +21,9 @@ int RxAckEvent::handleEvent()
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
 
-
-#ifndef TESTCASE0
 	Packet* ack_packet = rx_flow->genAckPacket(rx_packet);
 	ack_packet->start_t = rx_packet->start_t;
-#else
-	Packet* ack_packet = new Packet(*rx_flow, rx_packet->packet_dest,\
-		rx_packet->packet_src, ACK_PACKET);
-	ack_packet->test = rx_packet->test;
-#endif
+
 	// And transmit back to sender
 
 	delete rx_packet;
