@@ -12,17 +12,10 @@ int RxAckEvent::handleEvent()
 {
 	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
-	// Jisoo, I thought receivePacket do nothing
-	// but handle the routing. Do we need this for
-	// RxAck?
-	// hey kevin, this is just used for "logging" purpose.
 
-#ifdef DEBUG
+#ifdef CHECK_DROP
 	std::cout << "receive src event: " << rx_packet->packet_seq_id \
 		<< std::endl;
-	if (rx_packet->packet_seq_id == 1044){
-		std::cout << "receive 1044 " << std::endl;
-	}
 #endif//DEBUG
 
 	NetworkManager* nm = NetworkManager::getInstance();

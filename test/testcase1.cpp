@@ -52,8 +52,7 @@ int main()
 	TCPReno flow_alg;
 	flow.setTCPStrategy(&flow_alg);
 	nm->registerFlow(flow);
-	Packet* init_tx_packet = new Packet(flow, flow.getSrc(), \
-		flow.getDest(), 0);
+	Packet* init_tx_packet = flow.genNextPacketFromTx();
 	TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
 	init_tx->time = 0.5;
 	EventQueue* eq = EventQueue::getInstance();

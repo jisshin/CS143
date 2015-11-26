@@ -2,49 +2,61 @@
 #include "../../include/common.hpp"
 #include <iostream>
 
-int TCPReno::getWindow(){
-	return window_size;
-}
+
 
 void TCPReno::updateAck(int id){
-	// End of fr/ft phase = receive a non duplicate ACK
-	if ((fr_flag)&&(id == lost_id + 1)){
-		window_size = fr_window;
+	// Receive duplicate ACK
+	if (last_rx_ack_id == id){
+		dup_count++;
+		if(dup_count >= 3){
+			packetLoss(id);
+			std::cout << "packet lost" << std::endl;
+		}
 	}
-
-	// Normal operation
-	if (window_size<threshold){
-		window_size++;
-	}
+	// Receive non duplicate ACK
 	else{
-		window_size += 1/window_size;
+		// end of fr phase
+		if ((fr_flag)&&(id == last_rx_ack_id + 1)){
+			window_size = fr_window;
+			fr_flag = 0;
+		}
+		// Normal operation of increase window size
+		if (window_size<threshold){
+			window_size++;
+		}
+		else{
+			window_size += 1/window_size;
+		}
+		last_rx_ack_id = id;
+		dup_count = 1;
 	}
-#ifdef DEBUG
-	std::cout<<"Receive packet, window size = "<< window_size <<std::endl;
-#endif
 }
 
-void TCPReno::updateLoss(int id){
-	if(id!= lost_id){
-		threshold = window_size/2;
-		fr_window = window_size/2;
-		window_size = window_size/2 + 3;
-		lost_id = id;
-		fr_flag = 1;
-	}else{
-		//fast recovery
-		// if receive another duplicate ID
-		window_size = (window_size+1 < 1.5*fr_window -1) ?
-				window_size + 1:1.5*fr_window - 1;
-	}
-#ifdef DEBUG
-	std::cout<<"Lost packet, window size = "<< window_size<<std::endl;
-#endif
-}
-
-void TCPReno::rx_timeout(){
+void TCPReno::rx_timeout(int id){
 	window_size = 1;
-#ifdef DEBUG
+	next_id = last_rx_ack_id;
+#ifdef CHECK_DROP
 	std::cout << "timeout!" << std::endl;
 #endif
+}
+
+void TCPReno::packetLoss(int id){
+	// Normal operation of increase window size
+	fr_flag = 1;
+	if(dup_count == 3){
+		// Reset window size and enter fr phase
+		// and reset to retransmit
+		next_id = id;
+		threshold = (window_size/2 > 2)? window_size/2 : 2;
+		fr_window = (window_size/2 > 1)? window_size/2 : 1;
+		window_size = window_size/2 + 3;
+	}else{
+		// In fast recovery phase
+		// if receive another duplicate ID
+		window_size = (window_size+1 < 3*fr_window/2 -1) ?
+				window_size + 1:3*fr_window/2 - 1;
+		if (window_size < 1){
+			window_size = 1;
+		}
+	}
 }

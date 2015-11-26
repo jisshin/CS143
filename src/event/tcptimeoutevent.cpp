@@ -3,7 +3,7 @@
 
 int TCPTimeOutEvent::handleEvent(){
 	if (src_flow->checkTimeout(tx_packet_id)){
-		src_flow->getTCPStrategy()->rx_timeout();
+		src_flow->getTCPStrategy()->rx_timeout(tx_packet_id);
 	}
 	return 1;
 }

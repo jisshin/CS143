@@ -42,7 +42,7 @@ OBJECTS := ./obj/event.o ./obj/eventqueue.o ./obj/flow.o ./obj/node.o ./obj/link
 OBJECTS += ./obj/rxackevent.o ./obj/rxendevent.o ./obj/rxeventfactory.o ./obj/logger.o
 OBJECTS += ./obj/rxfwdevent.o ./obj/rxrouteevent.o ./obj/txsrcevent.o ./obj/logevent.o
 OBJECTS += ./obj/networkmanager.o ./obj/tcpreno.o ./obj/routeevent.o
-OBJECTS += ./obj/tcptimeoutevent.o
+OBJECTS += ./obj/tcptimeoutevent.o ./obj/tcpalgorithm.o
 
 testcase0:
 	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
@@ -63,6 +63,7 @@ testcase0:
 	gcc -c $(CXXFLAG) ./src/event/routeevent.cpp -o ./obj/routeevent.o
 	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
 	gcc -c $(CXXFLAG) ./src/event/tcptimeoutevent.cpp -o ./obj/tcptimeoutevent.o
+	gcc -c $(CXXFLAG) ./src/tcpalgorithm.cpp -o ./obj/tcpalgorithm.o
 
 	gcc -o ./bin/testcase0 -lstdc++ ./obj/testcase0.o $(OBJECTS)   
 
@@ -85,7 +86,7 @@ testcase1:
 	gcc -c $(CXXFLAG) ./src/event/routeevent.cpp -o ./obj/routeevent.o
 	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
 	gcc -c $(CXXFLAG) ./src/event/tcptimeoutevent.cpp -o ./obj/tcptimeoutevent.o
-
+	gcc -c $(CXXFLAG) ./src/tcpalgorithm.cpp -o ./obj/tcpalgorithm.o
 	gcc -o ./bin/testcase1 -lstdc++ ./obj/testcase1.o $(OBJECTS)   
 
 testretrieve:
