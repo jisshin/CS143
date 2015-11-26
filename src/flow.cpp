@@ -24,7 +24,7 @@ void Flow::setTxDelay(double link_rate){
 
 void Flow::receive_ack(int id){
 	TCP_strategy->updateAck(id);
-	clearTimeout();
+	//clearTimeout();
 }
 
 Packet* Flow::genNextPacketFromTx(){
@@ -126,20 +126,13 @@ void Flow::pushTimeout(int id){
 }
 
 int Flow::checkTimeout(int id){
-	if (timeout_flags.size() == 0)
-		//check this jennifer, in this specific case, is this what you want?
-		return 0;
-
-	int timeout = (timeout_flags.front() == id)?1:0;
-	if(timeout == 1){
-		clearTimeout();
-		//next_id = id;
-	}
-	return timeout;
+	TCP_strategy->rx_timeout(id);
+	return 0;
 }
 
+/*
 void Flow::clearTimeout(){
 	while (!timeout_flags.empty()){
 		timeout_flags.pop();
 	}
-}
+}*/
