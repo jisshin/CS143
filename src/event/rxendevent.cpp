@@ -13,13 +13,9 @@ int RxEndEvent::handleEvent()
 	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
 
-#ifdef DEBUG
-	std::cout << "rxendevent: receive ack packet " << rx_packet->packet_seq_id\
-		<< ": " << time << std::endl;
-
-	if (rx_packet->packet_seq_id == 1080){
-		std::cout<<"debug label"<<std::endl;
-	}
+#ifdef CHECK_DROP
+	std::cout << "receive ack " << rx_packet->packet_seq_id\
+		<<std::endl;
 #endif//DEBUG
 
 

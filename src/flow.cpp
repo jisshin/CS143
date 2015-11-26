@@ -21,27 +21,9 @@ void Flow::setTxDelay(double link_rate){
 	std::cout<<"tx delay"<< base_tx_delay << std::endl;
 }
 
+
 void Flow::receive_ack(int id){
-	if (last_rx_ack_id == id){
-		dup_count++;
-		if(dup_count == 3){
-			// report a packet lost to TCP
-			// and reset to retransmit
-			next_id = id;
-			TCP_strategy->updateLoss(id);
-		}else if(dup_count > 3){
-			TCP_strategy->updateLoss(id);
-		}
-	}
-	else{
-		last_rx_ack_id = id;
-		dup_count = 0;
-		TCP_strategy->updateAck(id);
-#ifdef DEBUG
-		std::cout<<"receive src success "<< id - 1<<std::endl;
-#endif
-	}
-	// Clear all timeout flags for both cases
+	TCP_strategy->updateAck(id);
 	clearTimeout();
 }
 
@@ -52,8 +34,7 @@ Packet* Flow::genNextPacketFromTx(){
 #ifdef DEBUG
 	std::cout << "getting  src packet from TX " << std::endl;
 #endif
-	if (next_id > TCP_strategy->getWindow() + last_rx_ack_id){
-
+	if (TCP_strategy->windowFull()){
 #ifdef DEBUG
 			std::cout<<"window size " << TCP_strategy->getWindow() << std::endl;
 			std::cout << "window full" << std::endl;
@@ -65,7 +46,7 @@ Packet* Flow::genNextPacketFromTx(){
 	// send next packet, if window is not full, and have more
 	// data to send
 #ifdef DEBUG
-	std::cout<<"gen src packet from TX: "<< next_id << std::endl;
+	std::cout<<"gen src packet from TX: "<< TCP_strategy->getNextID()<< std::endl;
 #endif
 	window_full_flag = 0;
 	return comGenSrcPacket();
@@ -73,10 +54,10 @@ Packet* Flow::genNextPacketFromTx(){
 
 Packet* Flow::genNextPacketFromRx(){
 	// if there's a newly open space in window
-	if((window_full_flag)&&(next_id <=  last_rx_ack_id + TCP_strategy->getWindow())){
+	if((window_full_flag)&&(!TCP_strategy->windowFull())){
 		window_full_flag = 0;
 #ifdef DEBUG
-		std::cout<<"gen src packet from RX "<< next_id<<std::endl;
+	std::cout<<"gen src packet from RX: "<< TCP_strategy->getNextID()<< std::endl;
 #endif
 		return comGenSrcPacket();
 	}
@@ -86,9 +67,9 @@ Packet* Flow::genNextPacketFromRx(){
 Packet* Flow::comGenSrcPacket(){
 	if(flow_data_amt > 0){
 			Packet* next_packet = new Packet(flow_id, flow_src, \
-					flow_dest, SRC_PACKET, next_id);
+					flow_dest, SRC_PACKET, TCP_strategy->getNextID());
 			flow_data_amt -= next_packet->packet_size;
-			next_id++;
+			TCP_strategy->updateTransmit();
 			return next_packet;
 	}
 	std::cout<<"data amount"<< flow_data_amt << std::endl;
@@ -100,8 +81,11 @@ Packet* Flow::comGenSrcPacket(){
 //TODO: implement genAckPacket and get rid of getAckID
 Packet* Flow::genAckPacket(Packet* received_packet)
 {
+	if(received_packet->packet_seq_id == 289){
+		std::cout<<"debug label"<<std::endl;
+	}
 	if (received_packet->packet_seq_id == last_tx_ack_id){
-		last_tx_ack_id = received_packet->packet_seq_id + 1;
+		last_tx_ack_id++;
 	}
 	Packet* ack_packet = new Packet(flow_id, flow_dest,\
 			flow_src, ACK_PACKET, last_tx_ack_id);
@@ -131,7 +115,7 @@ void Flow::recordRTT(double RTT){
 
 double Flow::getAvgRTT(){
 	if (RTT_count == 0){
-		return 0;
+		return 0.1;
 	}else{
 		return sum_RTT/RTT_count;
 	}

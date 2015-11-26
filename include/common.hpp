@@ -2,7 +2,7 @@
 #define COMMON_H
 
 #define DEBUG
-
+#define CHECK_DROP
 //#define TESTCASE0
 
 //#ifdef TESTCASE
