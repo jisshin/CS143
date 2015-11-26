@@ -10,7 +10,9 @@ void TCPReno::updateAck(int id){
 		dup_count++;
 		if(dup_count >= 3){
 			packetLoss(id);
+#ifdef CHECK_DROP
 			std::cout << "packet lost" << std::endl;
+#endif
 		}
 	}
 	// Receive non duplicate ACK
