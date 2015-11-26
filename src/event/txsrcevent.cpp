@@ -20,23 +20,16 @@ int TxSrcEvent::handleEvent()
 	std::cout << "txevent: " << (std::string) *tx_node << \
 		" " << tx_packet->packet_seq_id << std::endl;
 #endif
-
 	commonTransmit(tx_node, tx_packet);
-
-	// if this is the first tx event from source,
-	// check if next packet is available from flow, generate next_tx event regardless the status of
-	// transmit;
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 	EventQueue* eventq = EventQueue::getInstance();
 
 	// generate timeout event for the current packet
+	tx_packet->start_t = time;
 	TCPTimeOutEvent* TimeOutEvent = new TCPTimeOutEvent(tx_flow, tx_packet->packet_seq_id);
 	tx_flow->pushTimeout(tx_packet->packet_seq_id);
 	TimeOutEvent->time = time +  3*tx_flow->getAvgRTT();
-#ifdef DEBUG
-	std::cout << "current RTT = " << tx_flow->getAvgRTT() << std::endl;
-#endif // DEBUG
 	eventq->push(TimeOutEvent);
 
 #ifndef TESTCASE0
