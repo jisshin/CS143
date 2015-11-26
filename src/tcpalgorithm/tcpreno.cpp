@@ -33,7 +33,7 @@ void TCPReno::updateAck(int id){
 }
 
 void TCPReno::rx_timeout(int id){
-	if(id < last_rx_ack_id){
+	if(id > last_rx_ack_id){
 		window_size = 1;
 		next_id = last_rx_ack_id;
 #ifdef CHECK_DROP

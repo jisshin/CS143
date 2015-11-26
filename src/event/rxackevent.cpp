@@ -24,6 +24,7 @@ int RxAckEvent::handleEvent()
 
 #ifndef TESTCASE0
 	Packet* ack_packet = rx_flow->genAckPacket(rx_packet);
+	ack_packet->start_t = rx_packet->start_t;
 #else
 	Packet* ack_packet = new Packet(*rx_flow, rx_packet->packet_dest,\
 		rx_packet->packet_src, ACK_PACKET);
