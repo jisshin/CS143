@@ -12,12 +12,8 @@ int RxAckEvent::handleEvent()
 {
 	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
-	// Jisoo, I thought receivePacket do nothing
-	// but handle the routing. Do we need this for
-	// RxAck?
-	// hey kevin, this is just used for "logging" purpose.
 
-#ifdef DEBUG
+#ifdef CHECK_DROP
 	std::cout << "receive src event: " << rx_packet->packet_seq_id \
 		<< std::endl;
 #endif//DEBUG
@@ -25,14 +21,9 @@ int RxAckEvent::handleEvent()
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
 
-
-#ifndef TESTCASE0
 	Packet* ack_packet = rx_flow->genAckPacket(rx_packet);
-#else
-	Packet* ack_packet = new Packet(*rx_flow, rx_packet->packet_dest,\
-		rx_packet->packet_src, ACK_PACKET);
-	ack_packet->test = rx_packet->test;
-#endif
+	ack_packet->start_t = rx_packet->start_t;
+
 	// And transmit back to sender
 
 	delete rx_packet;

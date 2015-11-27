@@ -52,9 +52,9 @@ private:
 	int flow_data_amt;
 	TCPAlgorithm* TCP_strategy;
 
-	int last_rx_ack_id = -1;
+	//int last_rx_ack_id = -1;
 	int last_tx_ack_id = 0;
-	int dup_count = 0;
+	//int dup_count = 0;
 	//int outstanding_count = 0;
 	double base_tx_delay;
 	double last_transmit_t;
@@ -62,10 +62,10 @@ private:
 	double sum_RTT=0;
 	double min_RTT=INFINITY_32;
 	int RTT_count = 0;
-	int next_id = 0;
+	//int next_id = 0;
 	int window_full_flag = 0;
 	Packet* comGenSrcPacket();
-	void clearTimeout();
+	//void clearTimeout();
 	std::queue<int> timeout_flags;
 };
 

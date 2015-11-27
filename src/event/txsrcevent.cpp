@@ -20,48 +20,25 @@ int TxSrcEvent::handleEvent()
 	std::cout << "txevent: " << (std::string) *tx_node << \
 		" " << tx_packet->packet_seq_id << std::endl;
 #endif
-
 	commonTransmit(tx_node, tx_packet);
-
-	// if this is the first tx event from source,
-	// check if next packet is available from flow, generate next_tx event regardless the status of
-	// transmit;
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 	EventQueue* eventq = EventQueue::getInstance();
 
 	// generate timeout event for the current packet
+	tx_packet->start_t = time;
 	TCPTimeOutEvent* TimeOutEvent = new TCPTimeOutEvent(tx_flow, tx_packet->packet_seq_id);
 	tx_flow->pushTimeout(tx_packet->packet_seq_id);
 	TimeOutEvent->time = time +  3*tx_flow->getAvgRTT();
-#ifdef DEBUG
-	std::cout << "current RTT = " << tx_flow->getAvgRTT() << std::endl;
-#endif // DEBUG
 	eventq->push(TimeOutEvent);
 
-#ifndef TESTCASE0
 	Packet* nxt_tx_pkt = tx_flow->genNextPacketFromTx();
-#else
-	Packet* nxt_tx_pkt;
-	if (testcase0_counter < MAX_LOOP)
+
+	if (nxt_tx_pkt != NULL) 
 	{
-		nxt_tx_pkt = new Packet(*tx_flow, tx_flow->getSrc(), \
-			tx_flow->getDest(), SRC_PACKET);
-		nxt_tx_pkt->test = ++testcase0_counter;
-	}
-	else
-	{
-		return 1;
-	}
-#endif
-	if (nxt_tx_pkt != NULL) {
 		TxEvent* next_tx = new TxSrcEvent(nxt_tx_pkt);
 
-#ifndef TESTCASE0
 		next_tx->time = time + tx_flow->getTxDelay();
-#else
-		next_tx->time = time + 1;
-#endif
 		eventq->push(next_tx);
 	}
 

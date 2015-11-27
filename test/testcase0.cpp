@@ -15,11 +15,11 @@
 
 int main()
 {
-	Link link("L1", 10000000, 0.01, 6400);
+	Link link("L1", 10000000, 0.01, 64000);
 
 	Node node1("H1");
 	Node node2("H2");
-	Flow flow("F1", "H1", "H2", 600000);
+	Flow flow("F1", "H1", "H2", 20000000);
 	NetworkManager* nm = NetworkManager::getInstance();
 	TCPReno flow_alg;
 	flow.setTCPStrategy(&flow_alg);
@@ -33,13 +33,8 @@ int main()
 	// initialization
 	nm->registerFlow(flow);
 
-
-#ifndef TESTCASE0
 	Packet* init_tx_packet = flow.genNextPacketFromTx();
-#else
-	Packet* init_tx_packet = new Packet(flow, flow.getSrc(), \
-		flow.getDest(), 0);
-#endif
+
 
 	TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
 	init_tx->time = 1;

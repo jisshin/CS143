@@ -11,11 +11,11 @@ const int BITS_PER_BYTE = 8;
 const int SRC_PACKET = 0;
 const int ACK_PACKET = 1;
 const int ROUT_PACKET = 2;
-const int SRC_SIZE = 1500;
 
 //TODO: need to update these size
-const int ACK_SIZE = 40;
-const int ROUT_SIZE = 40;
+const int SRC_SIZE = 1024;
+const int ACK_SIZE = 64;
+const int ROUT_SIZE = 256;
 
 /* forward declaration class */
 class Flow; 
@@ -47,13 +47,7 @@ class Packet {
 		int packet_seq_id;
 		double start_t;
 
-		
-#ifndef TESTCASE0
 		int packet_size;
-#else
-		int test = 0;
-		int packet_size = PACKET_SIZE;
-#endif
 };
 
 
