@@ -10,6 +10,13 @@
 
 int RxAckEvent::handleEvent()
 {
+#ifdef JISOO
+	int i = 0;
+	if (rx_packet->packet_seq_id == 227)
+	{
+		int i = 1;
+	}
+#endif
 	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
 

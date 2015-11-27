@@ -20,7 +20,6 @@ class Event{
 		double time = -1;
 
 		int commonTransmit(Node* node, Packet* pkt);
-		int commonIsSimOver();
 
 };
 

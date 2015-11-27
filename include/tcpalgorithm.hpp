@@ -16,7 +16,7 @@ public:
 	virtual void rx_timeout(int id){}
 	int getNextID(){return next_id;};
 	int windowFull();
-	int getWindow(){return window_size;};
+	int getWindow(){return (int)window_size;};
 
 protected:
 	int last_rx_ack_id = -1;

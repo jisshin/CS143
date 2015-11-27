@@ -3,6 +3,9 @@
 
 #include "../tcpalgorithm.hpp"
 
+#include <limits>
+
+
 class TCPReno:public TCPAlgorithm{
 public:
 	TCPReno():TCPAlgorithm(){};
@@ -13,7 +16,7 @@ public:
 
 private:
 	int slow_start = 1;
-	int threshold = INFINITY_32;
+	int threshold = std::numeric_limits<int>::max();
 	int max_window = 0;
 	int fr_flag = 0;
 	int fr_window = 0;

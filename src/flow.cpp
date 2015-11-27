@@ -4,6 +4,7 @@
 #include "../include/packet.hpp"
 #include "../include/eventqueue.hpp"
 #include "../include/networkmanager.hpp"
+#include "../include/common.hpp"
 
 #include <iostream>
 #include <cassert>
@@ -85,8 +86,9 @@ Packet* Flow::genAckPacket(Packet* received_packet)
 		std::cout<<"debug label"<<std::endl;
 	}
 	if (received_packet->packet_seq_id == last_tx_ack_id){
-		last_tx_ack_id++;
+			last_tx_ack_id++;
 	}
+
 	Packet* ack_packet = new Packet(flow_id, flow_dest,\
 			flow_src, ACK_PACKET, last_tx_ack_id);
 
@@ -121,18 +123,7 @@ double Flow::getAvgRTT(){
 	}
 }
 
-void Flow::pushTimeout(int id){
-	timeout_flags.push(id);
-}
-
 int Flow::checkTimeout(int id){
 	TCP_strategy->rx_timeout(id);
 	return 0;
 }
-
-/*
-void Flow::clearTimeout(){
-	while (!timeout_flags.empty()){
-		timeout_flags.pop();
-	}
-}*/

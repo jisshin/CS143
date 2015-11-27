@@ -46,6 +46,6 @@ int main()
 
 	Logger * logger = Logger::getInstance();
 	delete logger;
-	printf("# packet dropped: %f\n", link.num_packet_drop);
+
 	return EXIT_SUCCESS;
 }

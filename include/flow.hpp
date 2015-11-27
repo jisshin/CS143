@@ -4,6 +4,7 @@
 #include "../include/tcpalgorithm.hpp"
 
 
+#include <limits>
 #include <string>
 #include <queue>
 //TODO move status constant to a ENUM
@@ -41,7 +42,6 @@ public:
 	double getAvgRTT();
 	double getMinRTT(){return min_RTT;};
 	TCPAlgorithm* getTCPStrategy(){return TCP_strategy;};
-	void pushTimeout(int id);
 	int checkTimeout(int id);
 
 
@@ -60,13 +60,12 @@ private:
 	double last_transmit_t;
 
 	double sum_RTT=0;
-	double min_RTT=INFINITY_32;
+	double min_RTT=std::numeric_limits<double>::max();
 	int RTT_count = 0;
 	//int next_id = 0;
 	int window_full_flag = 0;
 	Packet* comGenSrcPacket();
-	//void clearTimeout();
-	std::queue<int> timeout_flags;
+
 };
 
 

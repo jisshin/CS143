@@ -6,11 +6,24 @@
 #include "../include/flow.hpp"
 #include "../include/networkmanager.hpp"
 #include "../include/eventqueue.hpp"
+#include "../include/common.hpp"
 
 int Event::commonTransmit(Node* node, Packet* pkt)
 {
 	int result = node->transmitPacket(pkt);
 
+#ifdef JISOO
+	int i = 0;
+	if (pkt->packet_seq_id == 227)
+	{
+		int i = 1;
+	}
+
+	if (pkt->packet_seq_id == 226)
+	{
+		int i = 2;
+	}
+#endif
 	// Create receive event if not dropped;
 	if (result > 0){
 
@@ -25,26 +38,11 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 		EventQueue* eventq = EventQueue::getInstance();
 		eventq->push(next_rx);
 	}
-  return result;
-}
-
-int Event::commonIsSimOver()
-{
-	NetworkManager* nm = NetworkManager::getInstance();
-	Flow* flow = nm->resetFlowIterator();
-	while (flow != NULL)
+#ifdef JISOO
+	else
 	{
-		if (flow->getDataAmt() > 0)
-		{
-			//still some data left to send
-
-			return 0;
-		}
-		flow = nm->getNextFlowIterator();
+		std::cout << (std::string)*node << " : " << pkt->packet_type << "-" << pkt->packet_seq_id << " dropped" << std::endl;
 	}
-
-	//all data is sent. simulation is over
-
-	std::cout << "data sim done " << std::endl;
-	return 1;
+#endif
+  return result;
 }

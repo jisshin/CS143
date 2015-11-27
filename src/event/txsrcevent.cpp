@@ -25,10 +25,16 @@ int TxSrcEvent::handleEvent()
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 	EventQueue* eventq = EventQueue::getInstance();
 
+#ifdef JISOO
+	if (tx_packet->packet_seq_id == 158)
+	{
+		std::cout << "debug" << std::endl;
+	}
+#endif
 	// generate timeout event for the current packet
 	tx_packet->start_t = time;
 	TCPTimeOutEvent* TimeOutEvent = new TCPTimeOutEvent(tx_flow, tx_packet->packet_seq_id);
-	tx_flow->pushTimeout(tx_packet->packet_seq_id);
+
 	TimeOutEvent->time = time +  3*tx_flow->getAvgRTT();
 	eventq->push(TimeOutEvent);
 

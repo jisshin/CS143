@@ -1,13 +1,31 @@
 #ifndef LINK_H
 #define LINK_H
 
-#include <queue>
+#include "common.hpp"
+#include <vector>
 #include <string>
 #include <stdint.h>
 #include <iostream>
 
 class Node;
 class Packet;
+
+class LinkBuffer {
+public:
+	LinkBuffer(int s, double stime, double etime):
+		size(s), \
+		start_time(stime), \
+		end_time(etime)
+	{}
+
+	int size;
+	double start_time;
+#ifdef JISOO
+	double entry_time;
+	double end_time;
+	Packet* packet;
+#endif
+};
 
 class Link {
 public:
@@ -40,6 +58,7 @@ public:
 	double packet_thru = 0;
 
 private:
+	std::vector<LinkBuffer> link_buffers;
 	const std::string link_id;
 
 	Node* A;
