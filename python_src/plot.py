@@ -1,12 +1,22 @@
-import matplotlib.pyplot as plt
+#!/usr/bin/env python
+from matplotlib import pyplot as plt
+from matplotlib import style
 import numpy as np
+import pandas as pd
 
-import matplotlib.cbook as cbook
 
-fname = cbook.get_sample_data('example.csv', asfileobj = False)
+
+info = pd.read_csv("output.csv")
 
 ### start plotting  assume i can just plot using header namespace
 
-plt.plotfile(fname, ('time', 'flowstuff', 'adj_close'))
+print info
 
-### http://matplotlib.org/examples/pylab_examples/plotfile_demo.html#pylab-examples-example-code-plotfile-demo-py
+x,y = np.loadtxt('output.csv',
+                 unpack=True,
+                 delimiter = ',', usecols=(0, 2))
+
+
+
+plt.plot(x,y)
+plt.show()
