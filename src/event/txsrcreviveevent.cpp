@@ -1,5 +1,5 @@
-#include "../../include/event/txsrcevent.hpp"
 #include "../../include/event/txsrcreviveevent.hpp"
+#include "../../include/event/txsrcevent.hpp"
 #include "../../include/event/tcptimeoutevent.hpp"
 #include "../../include/networkmanager.hpp"
 #include "../../include/eventqueue.hpp"
@@ -9,26 +9,18 @@
 #include "../../include/common.hpp"
 
 
-TxSrcEvent::TxSrcEvent(Packet* pPkt) : TxEvent(pPkt, NULL)
+TxSrcReviveEvent::TxSrcReviveEvent(Packet* pPkt) : TxEvent(pPkt, NULL)
 {
 	NetworkManager* nm = NetworkManager::getInstance();
 	tx_node = nm->getNode(pPkt->packet_src);
 }
 
-int TxSrcEvent::handleEvent()
+int TxSrcReviveEvent::handleEvent()
 {
-	commonTransmit(tx_node, tx_packet);
 	NetworkManager* nm = NetworkManager::getInstance();
 	EventQueue* eventq = EventQueue::getInstance();
 
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
-
-	// generate timeout event for the current packet
-	tx_packet->start_t = time;
-	TCPTimeOutEvent* TimeOutEvent = new TCPTimeOutEvent(tx_flow, tx_packet->packet_seq_id);
-
-	TimeOutEvent->time = time + 3 * tx_flow->getAvgRTT();
-	eventq->push(TimeOutEvent);
 
 	Packet* nxt_tx_pkt = tx_flow->genNextPacketFromTx();
 
@@ -53,3 +45,4 @@ int TxSrcEvent::handleEvent()
 	}
 	return 1;
 }
+

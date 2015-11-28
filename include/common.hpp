@@ -5,6 +5,8 @@
 //#define CHECK_DROP
 #define JISOO
 
+#include <cassert>
+
 #endif //COMMON_H
 
 

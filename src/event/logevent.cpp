@@ -9,7 +9,7 @@
 int LogEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
-	EventQueue* eq = EventQueue::getInstance();
+	EventQueue *eq = EventQueue::getInstance();
 	eq->num_non_core--;
 	Logger* logger = Logger::getInstance();
 
@@ -50,7 +50,6 @@ int LogEvent::handleEvent()
 	{
 		LogEvent *e = new LogEvent(time + LOG_INTERVAL);
 		eq->push(e);
-		eq->num_non_core++;
 	}
 
 	return 1;

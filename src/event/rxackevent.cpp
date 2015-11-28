@@ -12,7 +12,7 @@ int RxAckEvent::handleEvent()
 {
 #ifdef JISOO
 	int i = 0;
-	if (rx_packet->packet_seq_id == 227)
+	if (rx_packet->packet_seq_id == 535)
 	{
 		int i = 1;
 	}

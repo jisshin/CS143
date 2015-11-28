@@ -22,10 +22,14 @@ int ResetEvent::handleEvent()
 
 	if (eq->size() - eq->num_non_core > 0)
 	{
+		RouteEvent *re1 = new RouteEvent(time + ROUT_INTERVAL);
+		RouteEvent *re2 = new RouteEvent(time + ROUT_INTERVAL);
 		ResetEvent *e = new ResetEvent(time + REST_INTERVAL);
+		eq->push(re1);
+		eq->push(re2);
 		eq->push(e);
-		eq->num_non_core++;
 	}
+
 
 	return 1;
 }
@@ -46,16 +50,8 @@ int RouteEvent::handleEvent()
 		{
 			Packet* route_pkt = new Packet("", *node, *adj_nodes[i], ROUT_PACKET);
 			commonTransmit(node, route_pkt);
-			eq->num_non_core++;
 		}
 		node = nm->getNextNodeIterator();
-	}
-
-	if (eq->size() - eq->num_non_core > 0)
-	{
-		RouteEvent *e = new RouteEvent(time + ROUT_INTERVAL);
-		eq->push(e);
-		eq->num_non_core++;
 	}
 
 	return 1;

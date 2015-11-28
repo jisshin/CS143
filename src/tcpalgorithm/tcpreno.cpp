@@ -3,83 +3,137 @@
 #include <iostream>
 
 
+void TCPReno::updateAck(int id) {
 
-void TCPReno::updateAck(int id){
-#ifdef JISOO
-	int i = 0;
-	if (id == 227)
+	if (last_rx_ack_id == id)
 	{
-		i = 1;
-	}
-#endif
-	// Receive duplicate ACK
-	if (last_rx_ack_id == id){
-		dup_count++;
-		if(dup_count >= 3){
-			packetLoss(id);
-			
-#ifdef CHECK_DROP
-			std::cout << "packet lost" << std::endl;
-#endif
+		if (++dup_count >= 3)
+		{
+			handleDupAck(id);
 		}
 	}
-	// Receive non duplicate ACK
-	else{
-		// end of fr phase
-		if ((fr_flag)&&(id == last_rx_ack_id + 1)){
-			window_size = fr_window;
-			fr_flag = 0;
-		}
-		// Normal operation of increase window size
-		if (window_size<threshold){
-			window_size++;
-		}
-		else{
-			window_size += 1/window_size;
-		}
+	else
+	{
+		//the system guarantees this id is biggger
+		//than previous acknowledgement. 
+		handleNewAck(id);
 		last_rx_ack_id = id;
 		dup_count = 1;
 	}
 }
 
-void TCPReno::rx_timeout(int id){
+void TCPReno::handleDupAck(int id)
+{
+	switch (state) {
+	case SLOW_START: //it doesn't care about duplicated acknowledgements.
+		break;
 
-	//we will be sending this id again in the future
-	//invalid timeout
-	if (id >= next_id) return;
+	case CONG_AVOID: //move to FRFR state
+		state = FRFR;
+		resetNextID();
+		threshold = (window_size / 2 > 2) ? window_size / 2 : 2;
+		fr_window = (window_size / 2 > 1) ? window_size / 2 : 1;
+		window_size = window_size / 2 + 3;
+		break;
 
-	if(id > last_rx_ack_id){
-		//window_size = 1;
-		//next_id = last_rx_ack_id;
-#ifdef CHECK_DROP
-	std::cout << "timeout!" << std::endl;
-#endif
+	case TIMEOUT: //wait until you get non dulpicated acknowlegement
+		break;
+
+	case FRFR: //perform Fast Recovery
+		window_size = (window_size + 1 < 3 * ((double)fr_window) / 2 - 1) ?
+			window_size + 1 : 3 * ((double)fr_window) / 2 - 1;
+		if (window_size < 1) {
+			window_size = 1;
+		}
+		break;
 	}
 }
 
-void TCPReno::packetLoss(int id){
-	// Normal operation of increase window size
+void TCPReno::handleNewAck(int id)
+{
+	switch (state) {
+	case SLOW_START: //we move to congestion avoidance if necessary
+		if (window_size >= threshold)
+			state = CONG_AVOID;
+		break;
 
-	if(dup_count == 3){
-		// Reset window size and enter fr phase
-		// and reset to retransmit
-		fr_flag = 1;
-		next_id = id;
-		threshold = (window_size/2 > 2)? window_size/2 : 2;
-		fr_window = (window_size/2 > 1)? window_size/2 : 1;
-		window_size = window_size/2 + 3;
+	case CONG_AVOID: //this is the center state. 
+		break;
 
-#ifdef JISOO
-		//std::cout << id << ":" << threshold << std::endl;
-#endif
+	case TIMEOUT: //timeout is over. go to slow start
+		state = SLOW_START;
+		break;
 
-	}else{
-		// In fast recovery phase
-		// if receive another duplicate ID
-		window_size = (window_size+1 < 3*((double)fr_window)/2 -1) ?
-				window_size + 1:3*((double)fr_window)/2 - 1;
-		if (window_size < 1){
-			window_size = 1;
-		}
+	case FRFR: //FRFR is over. go to congestion avoidance.
+		window_size = fr_window;
+		state = CONG_AVOID;
+		break;
 	}
+
+	switch (state) {
+	case SLOW_START:
+		window_size++;
+		break;
+
+	case CONG_AVOID:
+		window_size += 1 / window_size;
+		break;
+
+	default:
+		//shouldn't happen
+		std::cout << "State Machine Error Type 1" << std::endl;
+		break;
+	}
+}
+
+
+void TCPReno::rx_timeout(int id){
+
+	if (cancel_timeout[id] > 0)
+	{
+		cancel_timeout[id]--;
+		return;
+	}
+
+	if (id < last_rx_ack_id)
+	{
+		//timeout check OK. 
+		return;
+	}
+
+	//timeout should happen.
+	switch (state) {
+
+	case SLOW_START:
+	case CONG_AVOID:
+		state = TIMEOUT;
+		threshold = (window_size / 2 > 2) ? window_size / 2 : 2;
+		window_size = 1;
+		resetNextID();
+		break;
+
+	case TIMEOUT:
+		//in this case, we shouldn't set threshold. since at "timeout" state,
+		//window size is already 1.
+		window_size = 1;
+		resetNextID();
+		break;
+
+	case FRFR:
+		//shouldn't happen
+		std::cout << "State Machine Error Type 3" << std::endl;
+		break;
+	}
+}
+
+void TCPReno::resetNextID()
+{
+#ifdef JISOO
+	//std::cout << "NEXT ID RESET TO " << last_rx_ack_id << " FROM " << next_id << std::endl;
+#endif
+	for (int i = last_rx_ack_id; i < next_id; i++)
+	{
+		cancel_timeout[i]++;
+	}
+	next_id = last_rx_ack_id;
 }

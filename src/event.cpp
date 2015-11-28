@@ -14,15 +14,10 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 
 #ifdef JISOO
 	int i = 0;
-	if (pkt->packet_seq_id == 227)
-	{
-		int i = 1;
-	}
-
-	if (pkt->packet_seq_id == 226)
-	{
-		int i = 2;
-	}
+	if (pkt->packet_type == 0 && pkt->packet_seq_id == 839) 
+		i = 1;
+	if (pkt->packet_type == 0 && pkt->packet_seq_id == 527)
+		i = 1;
 #endif
 	// Create receive event if not dropped;
 	if (result > 0){
@@ -41,7 +36,7 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 #ifdef JISOO
 	else
 	{
-		std::cout << (std::string)*node << " : " << pkt->packet_type << "-" << pkt->packet_seq_id << " dropped" << std::endl;
+		//std::cout << (std::string)*node << " : " << pkt->packet_type << "-" << pkt->packet_seq_id << " dropped" << std::endl;
 	}
 #endif
   return result;

@@ -9,9 +9,8 @@
 int Link::pushPacket(Packet* packet){
 #ifdef JISOO
 	int i = 0;
-	if ((std::string)*this == "L5")
-		if(packet->packet_seq_id == 15)
-			i = 1;
+	if(packet->packet_seq_id == 3230)
+		i = 1;
 #endif
 	if(max_buf_size_in_byte > cur_buf_size_in_byte + packet->packet_size){
 		double stime, etime;
@@ -57,7 +56,7 @@ void Link::popPacket(Packet* packet){
 
 #ifdef JISOO
 	LinkBuffer linkbuffer = link_buffers.front();
-	assert(linkbuffer.packet == packet);
+	assert(linkbuffer.packet == packet); //DO NOT ERASE THIS LINE.
 #endif
 	link_buffers.erase(link_buffers.begin());
 }

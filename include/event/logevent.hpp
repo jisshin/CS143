@@ -2,6 +2,7 @@
 #define LOGEVENT_H
 
 #include "../event.hpp"
+#include "../eventqueue.hpp"
 
 class Link;
 class Flow;
@@ -12,7 +13,10 @@ const double LOG_INTERVAL = 0.01;
 class LogEvent : public Event
 {
   public:
-    LogEvent(double t) : Event(t) {}
+    LogEvent(double t) : Event(t) 
+	{
+		EventQueue::getInstance()->num_non_core++;
+	}
 
     int handleEvent();
 

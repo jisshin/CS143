@@ -10,16 +10,21 @@
 RxEvent* RxEventFactory::makeRxEvent(Link *pLink, Node *pNode, Packet *pPkt)
 {
 
-  if (pPkt->packet_type == SRC_PACKET)
-    if (pPkt->packet_dest == (std::string)*pNode)
-      return new RxAckEvent(pLink, pNode, pPkt);
-
-  if (pPkt->packet_type == ACK_PACKET)
-      return new RxEndEvent(pLink, pNode, pPkt);
-
-  if (pPkt->packet_type == ROUT_PACKET)
 	if (pPkt->packet_dest == (std::string)*pNode)
-	  return new RxRouteEvent(pLink, pNode, pPkt);
-	  
-  return new RxFwdEvent(pLink, pNode, pPkt);
+	{
+		if (pPkt->packet_type == SRC_PACKET)
+			return new RxAckEvent(pLink, pNode, pPkt);
+
+		//what is going on with this packet?
+		if (pPkt->packet_type == ACK_PACKET)
+			return new RxEndEvent(pLink, pNode, pPkt);
+
+		if (pPkt->packet_type == ROUT_PACKET)
+			return new RxRouteEvent(pLink, pNode, pPkt);
+	}
+	else
+	{
+		return new RxFwdEvent(pLink, pNode, pPkt);
+	}
+
 }

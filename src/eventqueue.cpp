@@ -1,6 +1,7 @@
 #include "../include/eventqueue.hpp"
 #include "../include/event/logevent.hpp"
 #include "../include/event/routeevent.hpp"
+#include "../include/common.hpp"
 
 double EventQueue::cur_time = 0;
 EventQueue* EventQueue::eventqueue = NULL;
@@ -41,6 +42,13 @@ int EventQueue::run()
 
 	while (registered_events.size() > 0)
 	{
+#ifdef JISOO
+		int i;
+		if (registered_events.size() < 10)
+		{
+			i = 1;
+		}
+#endif
 		Event* e = registered_events.top();
 		registered_events.pop();
 		cur_time = e->time;
@@ -54,12 +62,9 @@ int EventQueue::run()
 void EventQueue::initialize()
 {
 	LogEvent* logEvent = new LogEvent(0);
-	RouteEvent* routeEvent = new RouteEvent(0);
 	ResetEvent* resetEvent = new ResetEvent(0);
 	push(logEvent);
-	push(routeEvent);
 	push(resetEvent);
-	num_non_core += 3;
 }
 
 int EventQueue::size(){

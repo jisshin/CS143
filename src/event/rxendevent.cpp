@@ -1,4 +1,5 @@
 #include "../../include/event/rxendevent.hpp"
+#include "../../include/event/txsrcreviveevent.hpp"
 #include "../../include/event/txsrcevent.hpp"
 #include "../../include/networkmanager.hpp"
 #include "../../include/eventqueue.hpp"
@@ -7,6 +8,7 @@
 #include "../../include/packet.hpp"
 #include "../../include/node.hpp"
 #include "../../include/common.hpp"
+
 
 int RxEndEvent::handleEvent()
 {
@@ -30,13 +32,25 @@ int RxEndEvent::handleEvent()
 	// Check if suppose to send out new src packet
 	new_src_packet = rx_flow->genNextPacketFromRx();
 
+	EventQueue* eventq = EventQueue::getInstance();
 	if (new_src_packet != NULL) {
 		TxSrcEvent* next_tx = new TxSrcEvent(new_src_packet);
 		next_tx->time = time + rx_flow->getTxDelay();
-		EventQueue* eventq = EventQueue::getInstance();
+
 		eventq->push(next_tx);
 	}
+	else
+	{
+		if (rx_flow->getDataAmt() < 0) return -1;
 
+		if (eventq->size() - eventq->num_non_core == 0)
+		{
+			TxSrcReviveEvent *e = new TxSrcReviveEvent(rx_packet);
+			e->time = time + rx_flow->getBaseTxDelay();
+			eventq->push(e);
+			return 0;
+		}
+	}
 	delete rx_packet;
 	return 1;
 }

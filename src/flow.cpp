@@ -7,7 +7,6 @@
 #include "../include/common.hpp"
 
 #include <iostream>
-#include <cassert>
 
 Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
 : flow_id(id), \
@@ -65,26 +64,20 @@ Packet* Flow::genNextPacketFromRx(){
 	return NULL;
 }
 
-Packet* Flow::comGenSrcPacket(){
-	if(flow_data_amt > 0){
-			Packet* next_packet = new Packet(flow_id, flow_src, \
-					flow_dest, SRC_PACKET, TCP_strategy->getNextID());
-			flow_data_amt -= next_packet->packet_size;
-			TCP_strategy->updateTransmit();
-			return next_packet;
+Packet* Flow::comGenSrcPacket() {
+	if (flow_data_amt > 0) {
+		Packet* next_packet = new Packet(flow_id, flow_src, \
+			flow_dest, SRC_PACKET, TCP_strategy->getNextID());
+		flow_data_amt -= next_packet->packet_size;
+		TCP_strategy->updateTransmit();
+		return next_packet;
 	}
-	std::cout<<"data amount"<< flow_data_amt << std::endl;
+	std::cout << "data amount" << flow_data_amt << std::endl;
 	return NULL;
 }
-
-
-
 //TODO: implement genAckPacket and get rid of getAckID
 Packet* Flow::genAckPacket(Packet* received_packet)
 {
-	if(received_packet->packet_seq_id == 289){
-		std::cout<<"debug label"<<std::endl;
-	}
 	if (received_packet->packet_seq_id == last_tx_ack_id){
 			last_tx_ack_id++;
 	}

@@ -7,11 +7,9 @@
 
 int RxRouteEvent::handleEvent()
 {
+	EventQueue::getInstance()->num_non_core--;
 	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
-
-	EventQueue* eq = EventQueue::getInstance();
-	eq->num_non_core--;
 
 	//get routing table of source packet--simulates packet with routing table info
 	NetworkManager* nm = NetworkManager::getInstance();
