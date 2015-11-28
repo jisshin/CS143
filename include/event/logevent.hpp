@@ -35,6 +35,8 @@ class LogEvent : public Event
     int getRcvdRate(Flow* flow);
     int getWindowSize(Flow* flow);
     double getPacketRTT(Flow* flow);
+
+	double byteToMbps(double);
 };
 
 #endif

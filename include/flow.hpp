@@ -44,7 +44,8 @@ public:
 	TCPAlgorithm* getTCPStrategy(){return TCP_strategy;};
 	int checkTimeout(int id);
 
-
+	double packet_sent = 0;
+	double packet_rcvd = 0;
 private:
 	std::string flow_id;
 	std::string flow_src;

@@ -78,11 +78,6 @@ void TCPReno::handleNewAck(int id)
 	case CONG_AVOID:
 		window_size += 1 / window_size;
 		break;
-
-	default:
-		//shouldn't happen
-		std::cout << "State Machine Error Type 1" << std::endl;
-		break;
 	}
 }
 

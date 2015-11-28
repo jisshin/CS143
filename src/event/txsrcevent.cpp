@@ -17,11 +17,13 @@ TxSrcEvent::TxSrcEvent(Packet* pPkt) : TxEvent(pPkt, NULL)
 
 int TxSrcEvent::handleEvent()
 {
-	commonTransmit(tx_node, tx_packet);
 	NetworkManager* nm = NetworkManager::getInstance();
 	EventQueue* eventq = EventQueue::getInstance();
 
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
+	tx_flow->packet_sent += tx_packet->packet_size;
+	commonTransmit(tx_node, tx_packet);
+		
 
 	// generate timeout event for the current packet
 	tx_packet->start_t = time;

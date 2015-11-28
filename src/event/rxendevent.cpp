@@ -24,7 +24,7 @@ int RxEndEvent::handleEvent()
 	NetworkManager* nm = NetworkManager::getInstance();
 
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
-
+	rx_flow->packet_rcvd += rx_packet->packet_size;
 	Packet* new_src_packet = NULL;
 
 	rx_flow->receive_ack(rx_packet->packet_seq_id);

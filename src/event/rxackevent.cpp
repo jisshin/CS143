@@ -17,6 +17,10 @@ int RxAckEvent::handleEvent()
 		int i = 1;
 	}
 #endif
+	NetworkManager* nm = NetworkManager::getInstance();
+	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
+	rx_flow->packet_rcvd += rx_packet->packet_size;
+
 	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
 
@@ -25,10 +29,10 @@ int RxAckEvent::handleEvent()
 		<< std::endl;
 #endif//DEBUG
 
-	NetworkManager* nm = NetworkManager::getInstance();
-	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
+
 
 	Packet* ack_packet = rx_flow->genAckPacket(rx_packet);
+	rx_flow->packet_sent += ack_packet->packet_size;
 	ack_packet->start_t = rx_packet->start_t;
 
 	// And transmit back to sender

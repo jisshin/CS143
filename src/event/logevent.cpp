@@ -84,21 +84,23 @@ void LogEvent::logData(Node* node)
 
 double LogEvent::getBufOccupancy(Link* link)
 {
-	return (link->cur_buf_size_in_byte) / (link->max_buf_size_in_byte);
+	//returns in KB
+	return (link->cur_buf_size_in_byte) / 1000;
 }
 
 int LogEvent::getPacketLoss(Link* link)
 {
 	double ret = link->num_packet_drop;
 	link->num_packet_drop = 0;
-	return (int)ret;
+	//returns in KB
+	return ret / 1000;
 }
 
 int LogEvent::getFlowRate(Link* link)
 {
 	double ret = link->packet_thru;
 	link->packet_thru = 0;
-	return (int)ret;
+	return byteToMbps(ret);
 }
 
 
@@ -106,38 +108,40 @@ int LogEvent::getSentRate(Node* node)
 {
 	double ret = node->packet_sent;
 	node->packet_sent = 0;
-	return (int)ret;
+	return byteToMbps(ret);
 }
 
 int LogEvent::getRcvdRate(Node* node)
 {
 	double ret = node->packet_rcvd;
 	node->packet_rcvd = 0;
-	return (int)ret;
+	return byteToMbps(ret);
 }
 
 int LogEvent::getSentRate(Flow* flow)
 {
-	//double ret = flow->packet_sent;
-	//flow->packet_sent = 0;
-	//return (int)ret;
-	return 0;
+	double ret = flow->packet_sent;
+	flow->packet_sent = 0;
+	return byteToMbps(ret);
 }
 
 int LogEvent::getRcvdRate(Flow* flow)
 {
-	//double ret = flow->packet_rcvd;
-	//flow->packet_rcvd = 0;
-	//return (int)ret;
-	return 0;
+	double ret = flow->packet_rcvd;
+	flow->packet_rcvd = 0;
+	return byteToMbps(ret);
 }
 
 int LogEvent::getWindowSize(Flow* flow){
 	return flow->getTCPStrategy()->getWindow();
 }
 
-
 double LogEvent::getPacketRTT(Flow* flow)
 {
 	return flow->getAvgRTT();
+}
+
+double LogEvent::byteToMbps(double byte)
+{
+	return (byte * 8) / 1000000 / LOG_INTERVAL;
 }
