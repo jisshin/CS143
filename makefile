@@ -41,8 +41,8 @@ testnl:
 OBJECTS := ./obj/event.o ./obj/eventqueue.o ./obj/flow.o ./obj/node.o ./obj/link.o
 OBJECTS += ./obj/rxackevent.o ./obj/rxendevent.o ./obj/rxeventfactory.o ./obj/logger.o
 OBJECTS += ./obj/rxfwdevent.o ./obj/rxrouteevent.o ./obj/txsrcevent.o ./obj/logevent.o
-OBJECTS += ./obj/networkmanager.o ./obj/tcpreno.o ./obj/routeevent.o
-OBJECTS += ./obj/tcptimeoutevent.o ./obj/tcpalgorithm.o
+OBJECTS += ./obj/networkmanager.o ./obj/tcpreno.o ./obj/routeevent.o 
+OBJECTS += ./obj/tcptimeoutevent.o ./obj/tcpalgorithm.o 
 
 testcase0:
 	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o

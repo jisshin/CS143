@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 from matplotlib import pyplot as plt
-from matplotlib import style
 import numpy as np
-import pandas as pd
 
 
 color = ['b', 'g', 'r', 'c', 'm', 'y', 'k']

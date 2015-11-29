@@ -1,5 +1,4 @@
 #include "../../include/event/rxendevent.hpp"
-#include "../../include/event/txsrcreviveevent.hpp"
 #include "../../include/event/txsrcevent.hpp"
 #include "../../include/networkmanager.hpp"
 #include "../../include/eventqueue.hpp"
