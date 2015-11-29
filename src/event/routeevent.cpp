@@ -30,7 +30,9 @@ int ResetEvent::handleEvent()
 		eq->push(e);
 	}
 
-
+#ifdef JISOO
+	std::cout << "Routing Reset" << std::endl;
+#endif
 	return 1;
 }
 

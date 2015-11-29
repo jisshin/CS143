@@ -7,11 +7,6 @@
 #include <algorithm>
 
 int Link::pushPacket(Packet* packet){
-#ifdef JISOO
-	int i = 0;
-	if(packet->packet_seq_id == 3230)
-		i = 1;
-#endif
 	if(max_buf_size_in_byte > cur_buf_size_in_byte + packet->packet_size){
 		double stime, etime;
 		if (link_buffers.size() == 0)
@@ -29,7 +24,6 @@ int Link::pushPacket(Packet* packet){
 
 #ifdef JISOO
 		buffer.packet = packet;
-		buffer.entry_time = EventQueue::cur_time;
 		for (int i = 0; i < link_buffers.size(); i++)
 		{
 			assert(buffer.start_time >= link_buffers[i].end_time);
@@ -46,11 +40,7 @@ int Link::pushPacket(Packet* packet){
 }
 
 void Link::popPacket(Packet* packet){
-#ifdef JISOO
-	int i = 0;
-	if ((std::string)*this == "L5")
-		i = 1;
-#endif
+
 	packet_thru += packet->packet_size;
 	cur_buf_size_in_byte -= packet->packet_size;
 
@@ -71,12 +61,6 @@ int Link::establishLink(Node* pointA, Node* pointB)
 
 double Link::getDelay()
 {
-#ifdef JISOO
-	int i = 0;
-	if ((std::string)*this == "L5")
-		i = 1;
-#endif
-
 	if (link_buffers.size() == 0)
 	{
 		return link_delay;

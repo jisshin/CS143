@@ -20,9 +20,8 @@ public:
 
 	int size;
 	double start_time;
-#ifdef JISOO
-	double entry_time;
 	double end_time;
+#ifdef JISOO
 	Packet* packet;
 #endif
 };

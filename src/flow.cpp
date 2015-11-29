@@ -78,16 +78,26 @@ Packet* Flow::comGenSrcPacket() {
 //TODO: implement genAckPacket and get rid of getAckID
 Packet* Flow::genAckPacket(Packet* received_packet)
 {
-	if (received_packet->packet_seq_id == last_tx_ack_id){
-			last_tx_ack_id++;
+#ifdef JISOO
+	if (last_tx_ack_id == 16502)
+		int i = 1;
+#endif
+	Packet* ack_packet = NULL;
+
+	if (received_packet->packet_seq_id >= last_tx_ack_id)
+	{
+		ack_packet = new Packet(flow_id, flow_dest, \
+			flow_src, ACK_PACKET, last_tx_ack_id);
+	}
+#ifdef JISOO
+	if (received_packet->packet_seq_id > last_tx_ack_id)
+		std::cout << flow_id << " : " << received_packet->packet_seq_id << " " << last_tx_ack_id << std::endl;
+#endif
+	if (received_packet->packet_seq_id == last_tx_ack_id)
+	{
+		last_tx_ack_id++;
 	}
 
-	Packet* ack_packet = new Packet(flow_id, flow_dest,\
-			flow_src, ACK_PACKET, last_tx_ack_id);
-
-#ifdef DEBUG
-	std::cout<<"generate AckPacket with ID " << last_tx_ack_id << std::endl;
-#endif
 	return ack_packet;
 }
 

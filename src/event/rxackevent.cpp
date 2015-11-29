@@ -10,13 +10,6 @@
 
 int RxAckEvent::handleEvent()
 {
-#ifdef JISOO
-	int i = 0;
-	if (rx_packet->packet_seq_id == 535)
-	{
-		int i = 1;
-	}
-#endif
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
 	rx_flow->packet_rcvd += rx_packet->packet_size;
@@ -32,11 +25,15 @@ int RxAckEvent::handleEvent()
 
 
 	Packet* ack_packet = rx_flow->genAckPacket(rx_packet);
-	rx_flow->packet_sent += ack_packet->packet_size;
-	ack_packet->start_t = rx_packet->start_t;
 
-	// And transmit back to sender
-
-	delete rx_packet;
-	return commonTransmit(rx_node, ack_packet);
+	if (ack_packet)
+	{
+		rx_flow->packet_sent += ack_packet->packet_size;
+		ack_packet->start_t = rx_packet->start_t;
+		delete rx_packet;
+		// And transmit back to sender
+		return commonTransmit(rx_node, ack_packet);
+	}
+	
+	return -1;
 }

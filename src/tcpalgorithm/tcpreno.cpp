@@ -30,10 +30,13 @@ void TCPReno::handleDupAck(int id)
 
 	case CONG_AVOID: //move to FRFR state
 		state = FRFR;
-		resetNextID();
+#ifdef JISOO
+		std::cout << "CASE 1:";
+#endif
 		threshold = (window_size / 2 > 2) ? window_size / 2 : 2;
 		fr_window = (window_size / 2 > 1) ? window_size / 2 : 1;
 		window_size = window_size / 2 + 3;
+		resetNextID();
 		break;
 
 	case TIMEOUT: //wait until you get non dulpicated acknowlegement
@@ -84,7 +87,7 @@ void TCPReno::handleNewAck(int id)
 
 void TCPReno::rx_timeout(int id){
 
-	if (cancel_timeout[id] > 0)
+	if (cancel_timeout.count(id) > 0)
 	{
 		cancel_timeout[id]--;
 		return;
@@ -104,6 +107,9 @@ void TCPReno::rx_timeout(int id){
 		state = TIMEOUT;
 		threshold = (window_size / 2 > 2) ? window_size / 2 : 2;
 		window_size = 1;
+#ifdef JISOO
+		std::cout << "CASE 2:";
+#endif
 		resetNextID();
 		break;
 
@@ -111,6 +117,9 @@ void TCPReno::rx_timeout(int id){
 		//in this case, we shouldn't set threshold. since at "timeout" state,
 		//window size is already 1.
 		window_size = 1;
+#ifdef JISOO
+		std::cout << "CASE 3:";
+#endif
 		resetNextID();
 		break;
 
@@ -124,7 +133,7 @@ void TCPReno::rx_timeout(int id){
 void TCPReno::resetNextID()
 {
 #ifdef JISOO
-	//std::cout << "NEXT ID RESET TO " << last_rx_ack_id << " FROM " << next_id << std::endl;
+	std::cout << "NEXT ID RESET TO " << last_rx_ack_id << " FROM " << next_id << " THRESHOLD " << threshold << std::endl;
 #endif
 	for (int i = last_rx_ack_id; i < next_id; i++)
 	{

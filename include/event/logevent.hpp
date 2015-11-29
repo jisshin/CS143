@@ -13,10 +13,8 @@ const double LOG_INTERVAL = 0.01;
 class LogEvent : public Event
 {
   public:
-    LogEvent(double t) : Event(t) 
-	{
-		EventQueue::getInstance()->num_non_core++;
-	}
+	LogEvent(double t) : Event(t)
+	{}
 
     int handleEvent();
 
@@ -27,12 +25,12 @@ class LogEvent : public Event
 
     double getBufOccupancy(Link*);
     int getPacketLoss(Link*);
-    int getFlowRate(Link*);
+    double getFlowRate(Link*);
 
-    int getSentRate(Node* node);
-    int getRcvdRate(Node* node);
-    int getSentRate(Flow* flow);
-    int getRcvdRate(Flow* flow);
+    double getSentRate(Node* node);
+    double getRcvdRate(Node* node);
+    double getSentRate(Flow* flow);
+    double getRcvdRate(Flow* flow);
     int getWindowSize(Flow* flow);
     double getPacketRTT(Flow* flow);
 

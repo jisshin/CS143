@@ -42,18 +42,14 @@ int EventQueue::run()
 
 	while (registered_events.size() > 0)
 	{
-#ifdef JISOO
-		int i;
-		if (registered_events.size() < 10)
-		{
-			i = 1;
-		}
-#endif
 		Event* e = registered_events.top();
 		registered_events.pop();
 		cur_time = e->time;
 		e->handleEvent();
 		delete e;
+
+		LogEvent logEvent = LogEvent(cur_time);
+		logEvent.handleEvent();
 	}
 
 	return 1;
