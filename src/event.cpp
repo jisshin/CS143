@@ -11,11 +11,7 @@
 int Event::commonTransmit(Node* node, Packet* pkt)
 {
 	int result = node->transmitPacket(pkt);
-#ifdef JISOO
-	int i;
-	if (pkt->packet_seq_id == 18718)
-		i = 1;
-#endif
+
 	// Create receive event if not dropped;
 	if (result > 0){
 

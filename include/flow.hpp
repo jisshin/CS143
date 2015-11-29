@@ -24,7 +24,6 @@ public:
 	std::string getSrc() { return flow_src; }
 	std::string getDest() { return flow_dest; }
 	int getDataAmt() { return flow_data_amt; }
-	double getBaseTxDelay() { return base_tx_delay; }
 	operator std::string() { return flow_id; }
 	int getAckID(int packet_id);
 

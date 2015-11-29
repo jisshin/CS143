@@ -39,18 +39,7 @@ int RxEndEvent::handleEvent()
 
 		eventq->push(next_tx);
 	}
-	else
-	{
-		if (rx_flow->getDataAmt() < 0) return -1;
 
-		if (eventq->size() - eventq->num_non_core == 0)
-		{
-			TxSrcReviveEvent *e = new TxSrcReviveEvent(rx_packet);
-			e->time = time + rx_flow->getBaseTxDelay();
-			eventq->push(e);
-			return 0;
-		}
-	}
 	delete rx_packet;
 	return 1;
 }

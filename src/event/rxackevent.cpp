@@ -18,9 +18,10 @@ int RxAckEvent::handleEvent()
 	rx_node->receivePacket(rx_packet);
 
 #ifdef CHECK_DROP
-	std::cout << "receive src event: " << rx_packet->packet_seq_id \
-		<< std::endl;
-#endif//DEBUG
+	if (rx_packet->packet_seq_id == 18718) {
+		std::cout << "receive last packet"<<std::endl;
+	}
+#endif
 
 
 
