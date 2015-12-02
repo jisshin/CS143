@@ -42,8 +42,9 @@ public:
 	double getMinRTT(){return min_RTT;};
 	TCPAlgorithm* getTCPStrategy(){return TCP_strategy;};
 	int checkTimeout(int id);
+	int getNumByteSent();
+	void recordPacketSent(Packet* pkt);
 
-	double packet_sent = 0;
 	double packet_rcvd = 0;
 	double recent_RTT = 0;
 
@@ -53,6 +54,10 @@ private:
 	std::string flow_dest;
 	int flow_data_amt;
 	TCPAlgorithm* TCP_strategy;
+
+	// For getNumByteSent()
+	int left_over_byte = 0;
+	int packet_sent = 0;
 
 	//int last_rx_ack_id = -1;
 	int last_tx_ack_id = 0;

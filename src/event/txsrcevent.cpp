@@ -20,11 +20,8 @@ int TxSrcEvent::handleEvent()
 	EventQueue* eventq = EventQueue::getInstance();
 
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
-	tx_flow->packet_sent += tx_packet->packet_size;
-	tx_flow->getTCPStrategy()->alertPacketSent(tx_packet);
 	commonTransmit(tx_node, tx_packet);
 		
-
 	// generate timeout event for the current packet
 	tx_packet->start_t = time;
 	TCPTimeOutEvent* TimeOutEvent = new TCPTimeOutEvent(tx_flow, tx_packet->packet_seq_id);
