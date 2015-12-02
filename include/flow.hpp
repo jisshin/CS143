@@ -27,8 +27,7 @@ public:
 	operator std::string() { return flow_id; }
 	int getAckID(int packet_id);
 
-	// TODO: implement setRTT and set base tx delay when
-	// registering flow
+
 	void setRTTmin(double RTTmin);
 	void setTxDelay(double link_rate);
 
@@ -46,6 +45,7 @@ public:
 	int getNumByteSent();
 	int getNumByteReceive();
 	//double packet_rcvd = 0;
+
 	double recent_RTT = 0;
 
 private:
@@ -56,12 +56,12 @@ private:
 	TCPAlgorithm* TCP_strategy;
 
 
-
 	int last_tx_ack_id = 0;
 	int packet_receive = 0;
 	int packet_sent = 0;
 	int tx_left_over_byte =0;
 	int rx_left_over_byte = 0;
+
 
 	double base_tx_delay;
 	double base_link_rate;
@@ -74,7 +74,7 @@ private:
 	//int next_id = 0;
 	int window_full_flag = 0;
 	Packet* comGenSrcPacket();
-
+	double base_link_rate;
 };
 
 

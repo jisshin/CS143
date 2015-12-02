@@ -17,12 +17,6 @@ int RxAckEvent::handleEvent()
 	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
 
-#ifdef CHECK_DROP
-	if (rx_packet->packet_seq_id == 18718) {
-		std::cout << "receive last packet"<<std::endl;
-	}
-#endif
-
 
 
 	Packet* ack_packet = rx_flow->genAckPacket(rx_packet);

@@ -16,10 +16,10 @@ Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
 }
 
 void Flow::setTxDelay(double link_rate){
-	std::cout << "link rate" << link_rate<<std::endl;
 	base_tx_delay = SRC_SIZE/link_rate;
 	base_link_rate = link_rate;
 	std::cout<<"tx delay"<< base_tx_delay << std::endl;
+	base_link_rate = link_rate;
 }
 
 
@@ -137,6 +137,7 @@ int Flow::checkTimeout(int id){
 
 int Flow::getNumByteSent(){
 
+
 	int complete_packet = (packet_sent - 1 >= 0)?packet_sent - 1: 0;
 	int total_sent = tx_left_over_byte + \
 			(complete_packet) * SRC_SIZE;
@@ -148,6 +149,7 @@ int Flow::getNumByteSent(){
 	else{
 		int fraction = SRC_SIZE* (EventQueue::cur_time - last_transmit_t)/base_tx_delay;
 		total_sent += fraction;
+
 		tx_left_over_byte = SRC_SIZE - fraction;
 	}
 	packet_sent = 0;
