@@ -57,8 +57,6 @@ void EventQueue::initialize()
 {
 	LogEvent* logEvent = new LogEvent(0);
 	ResetEvent* resetEvent = new ResetEvent(0);
-	push(logEvent);
-	push(resetEvent);
 }
 
 int EventQueue::size(){

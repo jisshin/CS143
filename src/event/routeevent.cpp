@@ -25,9 +25,6 @@ int ResetEvent::handleEvent()
 		RouteEvent *re1 = new RouteEvent(time + ROUT_INTERVAL);
 		RouteEvent *re2 = new RouteEvent(time + ROUT_INTERVAL);
 		ResetEvent *e = new ResetEvent(time + REST_INTERVAL);
-		eq->push(re1);
-		eq->push(re2);
-		eq->push(e);
 	}
 
 #ifdef JISOO

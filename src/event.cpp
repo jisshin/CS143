@@ -8,6 +8,16 @@
 #include "../include/eventqueue.hpp"
 #include "../include/common.hpp"
 
+Event::Event()
+{
+	EventQueue::getInstance()->push(this);
+}
+
+Event::Event(double t) : time(t)
+{
+	EventQueue::getInstance()->push(this);
+}
+
 int Event::commonTransmit(Node* node, Packet* pkt)
 {
 	int result = node->transmitPacket(pkt);
@@ -22,9 +32,6 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 		RxEvent* next_rx = rx_fac.makeRxEvent(mid_link, other_node, pkt);
 
 		next_rx->time = time + mid_link->getDelay();
-		
-		EventQueue* eventq = EventQueue::getInstance();
-		eventq->push(next_rx);
 	}
 #ifdef JISOO
 	else

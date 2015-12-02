@@ -1,5 +1,4 @@
 #include "../../include/event/txsrcevent.hpp"
-#include "../../include/event/tcptimeoutevent.hpp"
 #include "../../include/networkmanager.hpp"
 #include "../../include/eventqueue.hpp"
 #include "../../include/packet.hpp"
@@ -22,16 +21,7 @@ int TxSrcEvent::handleEvent()
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 	commonTransmit(tx_node, tx_packet);
 
-	tx_flow->alertPacketSent(tx_packet);		
-	Packet* nxt_tx_pkt = tx_flow->genNextPacketFromTx();
-
-	if (nxt_tx_pkt != NULL)
-	{
-		TxEvent* next_tx = new TxSrcEvent(nxt_tx_pkt);
-
-		next_tx->time = time + tx_flow->getTxDelay();
-		eventq->push(next_tx);
-	}
-
+	tx_flow->receiveSrcAndGenTx(tx_packet);		
+	
 	return 1;
 }

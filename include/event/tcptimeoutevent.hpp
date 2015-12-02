@@ -4,11 +4,12 @@
 #include "../event.hpp"
 #include "../eventqueue.hpp"
 
-class Flow;
+
+class TCPReno;
 
 class TCPTimeOutEvent:public Event{
 public:
-	TCPTimeOutEvent(Flow* flow, int id) : Event(), src_flow(flow)\
+	TCPTimeOutEvent(TCPReno* tcp, int id) : Event(), reno(tcp)\
 	, tx_packet_id(id)
 	{
 		EventQueue::getInstance()->num_non_core++;
@@ -17,7 +18,7 @@ public:
 
 	int handleEvent() override;
 private:
-	Flow* src_flow;
+	TCPReno* reno;
 	int tx_packet_id;
 };
 

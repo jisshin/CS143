@@ -49,15 +49,13 @@ int main()
 	nm->connectLink("L5", "R4", "H2");
 
 	Flow flow("F1", "H1", "H2", 20000000);
-	TCPReno flow_alg;
-	flow.setTCPStrategy(&flow_alg);
+
+	flow.setTCPStrategy(TCP_RENO_t);
 	nm->registerFlow(flow);
 	Packet* init_tx_packet = flow.genNextPacketFromTx();
 	TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
 	init_tx->time = 0.5;
 	EventQueue* eq = EventQueue::getInstance();
-
-	eq->push(init_tx);
 
 	eq->run();
 

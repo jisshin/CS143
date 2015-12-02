@@ -12,10 +12,9 @@
 
 class EventQueue{
 	public:
-		static EventQueue* getInstance();
-
 		void push(Event* event);
 		Event* pop();
+		static EventQueue* getInstance();
 
 		int size();
 		int num_non_core;
@@ -27,6 +26,7 @@ class EventQueue{
 		static double cur_time;
 	private:
 		EventQueue(){};
+
 		static EventQueue* eventqueue;
 
 		void initialize();

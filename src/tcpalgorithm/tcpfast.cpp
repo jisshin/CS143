@@ -33,7 +33,7 @@ void TCPFast::handleDupAck(int id)
 		return;
 	}
 
-	if (time_sent[id] + 2 * flow->getAvgRTT() < EventQueue::cur_time)
+	if (time_sent[id] + 2 * getAvgRTT() < EventQueue::cur_time)
 	{
 		resetNextID();
 	}
@@ -47,11 +47,6 @@ void TCPFast::handleNewAck(int id)
 void TCPFast::alertPacketSent(Packet* pkt)
 {
 	time_sent[pkt->packet_seq_id] = EventQueue::cur_time;
-}
-
-void TCPFast::rx_timeout(int id) 
-{
-	//no time out
 }
 
 void TCPFast::resetNextID()

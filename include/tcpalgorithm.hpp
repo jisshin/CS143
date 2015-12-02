@@ -1,25 +1,30 @@
 #ifndef TCPALGORITHM_H
 #define TCPALGORITHM_H
 
+#include <limits>
 #include "common.hpp"
 
 class Flow;
 class Packet;
 
 enum TCPType{
-	TCP_RENO_t
+	TCP_RENO_t, TCP_FAST_t
 };
 
+class Flow;
 
 class TCPAlgorithm {
 public:
-	TCPAlgorithm() {}
+	TCPAlgorithm(Flow* parent) : parent_flow(parent)
+	{}
+
+	static TCPAlgorithm* makeTCPAlgorithm(Flow*, int); 
 
 	virtual void alertPacketSent(Packet*) {}
+	virtual void alertPacketReceive(Packet*);
+
 	virtual void updateTransmit();
 	virtual void updateAck(int id){}
-	//virtual void updateLoss(int id){}
-	virtual void rx_timeout(int id){}
 
 	int getNextID(){return next_id;};
 	int windowFull();
@@ -27,10 +32,11 @@ public:
 
 	void recordRTT(double);
 	double getAvgRTT();
-	double getMINRTT() { return min_RTT; }
+	double recent_RTT = 0;
 
-protected:
 	Flow* parent_flow;
+protected:
+
 
 	int last_rx_ack_id = 0; //it is important that this starts as 0.
 	int next_id = 0;
@@ -39,9 +45,6 @@ protected:
 	double sum_RTT = 0;
 	double min_RTT = std::numeric_limits<double>::max();
 	int RTT_count = 0;
-
-
-
 
 };
 

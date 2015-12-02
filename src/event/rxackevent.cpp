@@ -12,7 +12,6 @@ int RxAckEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
-	rx_flow->packet_rcvd += rx_packet->packet_size;
 
 	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
@@ -23,7 +22,6 @@ int RxAckEvent::handleEvent()
 
 	if (ack_packet)
 	{
-		//rx_flow->packet_sent += ack_packet->packet_size;
 		ack_packet->start_t = rx_packet->start_t;
 		delete rx_packet;
 		// And transmit back to sender

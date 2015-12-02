@@ -21,23 +21,9 @@ int RxEndEvent::handleEvent()
 
 
 	NetworkManager* nm = NetworkManager::getInstance();
-
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
-	rx_flow->packet_rcvd += rx_packet->packet_size;
-	Packet* new_src_packet = NULL;
 
-	rx_flow->receive_ack(rx_packet->packet_seq_id);
-	rx_flow->recordRTT(time - rx_packet->start_t);
-	// Check if suppose to send out new src packet
-	new_src_packet = rx_flow->genNextPacketFromRx();
-
-	EventQueue* eventq = EventQueue::getInstance();
-	if (new_src_packet != NULL) {
-		TxSrcEvent* next_tx = new TxSrcEvent(new_src_packet);
-		next_tx->time = time + rx_flow->getTxDelay();
-
-		eventq->push(next_tx);
-	}
+	rx_flow->receiveAckAndGenRx(rx_packet);
 
 	delete rx_packet;
 	return 1;

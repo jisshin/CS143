@@ -7,19 +7,15 @@
 #include <limits>
 #include <map>	
 
+class Flow;
 
 class TCPFast :public TCPAlgorithm {
 public:
-	TCPFast() :TCPAlgorithm() 
-	{
-		
-	}
+	TCPFast(Flow* parent_flow) :TCPAlgorithm(parent_flow) 
+	{}
 
 	void updateAck(int id) override;
-	void rx_timeout(int id) override;
 	void alertPacketSent(Packet* pkt) override;
-
-	Flow* flow;
 
 private:
 	int threshold = std::numeric_limits<int>::max();

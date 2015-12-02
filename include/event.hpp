@@ -7,13 +7,15 @@
 #include <string>
 #include <iostream>
 
+
 class Node;
 class Packet;
 
 class Event{
 	public:
-		Event() {}
-		Event(double t) : time(t) {}
+		Event();
+		
+		Event(double t);
 
 		virtual int handleEvent() { return 0; }
 

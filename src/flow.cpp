@@ -4,7 +4,9 @@
 #include "../include/packet.hpp"
 #include "../include/eventqueue.hpp"
 #include "../include/networkmanager.hpp"
+#include "../include/event/txsrcevent.hpp"
 #include "../include/common.hpp"
+#include "../include/tcpalgorithm.hpp"
 
 #include <iostream>
 
@@ -15,15 +17,47 @@ Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
   flow_data_amt(data_amt){
 }
 
+void Flow::receiveSrcAndGenTx(Packet* pkt)
+{
+	TCP_strategy->alertPacketSent(pkt);
+	packet_sent++;
+	pkt = genNextPacketFromTx();
+
+	if (pkt != NULL)
+	{
+		TxEvent* next_tx = new TxSrcEvent(pkt);
+		next_tx->time = EventQueue::cur_time + getTxDelay();
+	}
+}
+
+void Flow::receiveAckAndGenRx(Packet* pkt) 
+{
+	receive_ack(pkt->packet_seq_id);
+	TCP_strategy->alertPacketReceive(pkt);
+	pkt = genNextPacketFromRx();
+
+	if (pkt != NULL)
+	{
+		TxEvent* next_tx = new TxSrcEvent(pkt);
+		next_tx->time = EventQueue::cur_time + getTxDelay();
+	}
+}
+
+void Flow::setTCPStrategy(int type)
+{
+	TCP_strategy = TCPAlgorithm::makeTCPAlgorithm(this, type);
+}
+
 void Flow::setTxDelay(double link_rate){
-	std::cout << "link rate" << link_rate<<std::endl;
 	base_tx_delay = SRC_SIZE/link_rate;
 	std::cout<<"tx delay"<< base_tx_delay << std::endl;
+	base_link_rate = link_rate;
 }
 
 
 void Flow::receive_ack(int id){
 	TCP_strategy->updateAck(id);
+	packet_receive++;
 	//clearTimeout();
 }
 
@@ -111,49 +145,39 @@ double Flow::getTxDelay()
 	return delay;
 }
 
-void Flow::recordRTT(double RTT){
-	sum_RTT += RTT;
-	RTT_count++;
-	recent_RTT = RTT;
-	if (RTT < min_RTT){
-		min_RTT = RTT;
-	}
-}
-
-double Flow::getAvgRTT(){
-	if (RTT_count == 0){
-		return 0.1;
-	}else{
-		return sum_RTT/RTT_count;
-	}
-}
-
-int Flow::checkTimeout(int id){
-	TCP_strategy->rx_timeout(id);
-	return 0;
-}
-
 int Flow::getNumByteSent(){
-	std::cout<<"check flow rate" << std::endl;
 	int complete_packet = (packet_sent - 1 >= 0)?packet_sent - 1: 0;
-	int total_sent = left_over_byte + \
+	int total_sent = tx_left_over + \
 			(complete_packet) * SRC_SIZE;
 	// last packet is fully sent
 	if (last_transmit_t + base_tx_delay < EventQueue::cur_time){
 		total_sent += SRC_SIZE;
-		left_over_byte = 0;
+		tx_left_over = 0;
 	}
 	else{
 		int fraction = SRC_SIZE* (EventQueue::cur_time - last_transmit_t)/base_tx_delay;
 		total_sent += fraction;
-		left_over_byte = SRC_SIZE - fraction;
+		tx_left_over = SRC_SIZE - fraction;
 	}
 	packet_sent = 0;
 	return total_sent;
 }
 
-void Flow::alertPacketSent(Packet* pkt){
-	std::cout<<"send packet"<<std::endl;
-	TCP_strategy->alertPacketSent(pkt);
-	packet_sent++;
+int Flow::getNumByteReceive(){
+	int complete_packet = (packet_receive - 1 >= 0)?packet_receive - 1: 0;
+	int total_sent = rx_left_over + \
+			(complete_packet) * ACK_SIZE;
+	// last packet is fully sent
+	int base_rx_delay = ACK_SIZE/base_link_rate;
+	if (last_rx_ack_t + base_rx_delay < EventQueue::cur_time){
+		total_sent += ACK_SIZE;
+		rx_left_over = 0;
+	}
+	else{
+		int fraction = ACK_SIZE* (EventQueue::cur_time - last_rx_ack_t)/base_rx_delay;
+		total_sent += fraction;
+		rx_left_over = ACK_SIZE - fraction;
+	}
+	packet_sent = 0;
+	return total_sent;
 }

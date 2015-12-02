@@ -6,18 +6,21 @@
 #include <limits>
 #include <map>	
 
+class Flow;
+
 enum TCPState {
 	SLOW_START, CONG_AVOID, FRFR, TIMEOUT
 };
 
 class TCPReno:public TCPAlgorithm{
 public:
-	TCPReno():TCPAlgorithm(){};
+	TCPReno(Flow* parent_flow):TCPAlgorithm(parent_flow)
+	{};
 
 	void alertPacketSent(Packet*) override;
 	void updateAck(int id) override;
-	void rx_timeout(int id) override;
 
+	void rx_timeout(int id);
 private:
 	int threshold = std::numeric_limits<int>::max();
 	int fr_window = 0;
@@ -25,6 +28,7 @@ private:
 
 	void handleDupAck(int);
 	void handleNewAck(int);
+
 
 	TCPState state = SLOW_START;
 

@@ -5,6 +5,7 @@
 #include "../../include/link.hpp"
 #include "../../include/flow.hpp"
 #include "../../include/logger.hpp"
+#include "../../include/tcpalgorithm.hpp"
 
 int LogEvent::handleEvent()
 {
@@ -50,7 +51,6 @@ int LogEvent::handleEvent()
 	if (eq->size() - eq->num_non_core > 0)
 	{
 		LogEvent *e = new LogEvent(time + LOG_INTERVAL);
-		eq->push(e);
 	}
 
 	return 1;
@@ -124,9 +124,7 @@ double LogEvent::getSentRate(Flow* flow)
 
 double LogEvent::getRcvdRate(Flow* flow)
 {
-	double ret = flow->packet_rcvd;
-	flow->packet_rcvd = 0;
-	return byteToMbps(ret);
+	return 0;
 }
 
 int LogEvent::getWindowSize(Flow* flow){
@@ -135,7 +133,7 @@ int LogEvent::getWindowSize(Flow* flow){
 
 double LogEvent::getPacketRTT(Flow* flow)
 {
-	return 1000 * (flow->recent_RTT);
+	return 1000 * (flow->getTCPStrategy()->recent_RTT);
 }
 
 double LogEvent::byteToMbps(double byte)
