@@ -1,12 +1,11 @@
 #include "../../include/event/txsrcevent.hpp"
 #include "../../include/networkmanager.hpp"
-#include "../../include/eventqueue.hpp"
 #include "../../include/packet.hpp"
 #include "../../include/flow.hpp"
 #include "../../include/common.hpp"
 
 
-TxSrcEvent::TxSrcEvent(Packet* pPkt) : TxEvent(pPkt, NULL)
+TxSrcEvent::TxSrcEvent(double t, Packet* pPkt) : TxEvent(t, pPkt, NULL)
 {
 	NetworkManager* nm = NetworkManager::getInstance();
 	tx_node = nm->getNode(pPkt->packet_src);

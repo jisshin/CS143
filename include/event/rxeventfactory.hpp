@@ -11,7 +11,7 @@ class RxEventFactory
 public:
   RxEventFactory(){}
 
-  RxEvent* makeRxEvent(Link*, Node*, Packet*);
+  RxEvent* makeRxEvent(double time, Link*, Node*, Packet*);
 };
 
 #endif

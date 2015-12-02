@@ -91,9 +91,8 @@ void TCPReno::alertPacketSent(Packet* pkt)
 {
 	// generate timeout event for the current packet
 	pkt->start_t = EventQueue::cur_time;
-	TCPTimeOutEvent* timeOutEvent = new TCPTimeOutEvent(this, pkt->packet_seq_id);
-
-	timeOutEvent->time = EventQueue::cur_time + 3 * getAvgRTT();
+	double event_time = EventQueue::cur_time + 3 * getAvgRTT();
+	TCPTimeOutEvent* timeOutEvent = new TCPTimeOutEvent(event_time, this, pkt->packet_seq_id);
 }
 
 void TCPReno::rx_timeout(int id){

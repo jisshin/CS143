@@ -10,8 +10,8 @@
 
 class TxEvent :public Event {
 public:
-	TxEvent(Packet* pPkt, Node* pNode) :
-		tx_packet(pPkt), tx_node(pNode)
+	TxEvent(double t, Packet* pPkt, Node* pNode) :
+		tx_packet(pPkt), tx_node(pNode), Event(t)
 	{}
 
 	int handleEvent() { return 1; }

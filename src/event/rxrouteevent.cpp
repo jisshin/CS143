@@ -5,6 +5,12 @@
 #include "../../include/networkmanager.hpp"
 #include "../../include/eventqueue.hpp"
 
+RxRouteEvent::RxRouteEvent(double t, Link* pLink, Node* pNode, Packet* pPkt)
+	: RxEvent(t, pLink, pNode), rx_packet(pPkt)
+{
+	EventQueue::getInstance()->num_non_core++;
+}
+
 int RxRouteEvent::handleEvent()
 {
 	EventQueue::getInstance()->num_non_core--;

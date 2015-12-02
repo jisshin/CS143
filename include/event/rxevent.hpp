@@ -10,9 +10,8 @@ class Node;
 class RxEvent : public Event
 {
 public:
-	RxEvent(Link* pLink, Node* pNode) :\
-		rx_link(pLink), \
-		rx_node(pNode)
+	RxEvent(double t, Link* pLink, Node* pNode) :\
+		rx_link(pLink), rx_node(pNode), Event(t)
 	{}
 
 	int handleEvent() { return 1; }

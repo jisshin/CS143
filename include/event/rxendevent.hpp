@@ -6,8 +6,8 @@
 class RxEndEvent: public RxEvent
 {
 public:
-	RxEndEvent(Link* pLink, Node* pNode, Packet* pPkt)
-		: RxEvent(pLink, pNode), rx_packet(pPkt)
+	RxEndEvent(double t, Link* pLink, Node* pNode, Packet* pPkt)
+		: RxEvent(t, pLink, pNode), rx_packet(pPkt)
 	{}
 
 	int handleEvent();

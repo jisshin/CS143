@@ -6,8 +6,8 @@
 class RxFwdEvent : public RxEvent
 {
 public:
-	RxFwdEvent(Link* pLink, Node* pNode, Packet *pPkt) 
-		: RxEvent(pLink, pNode), rx_packet(pPkt)
+	RxFwdEvent(double t, Link* pLink, Node* pNode, Packet *pPkt) 
+		: RxEvent(t, pLink, pNode), rx_packet(pPkt)
 	{}
 
 	int handleEvent();

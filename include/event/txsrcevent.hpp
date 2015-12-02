@@ -5,7 +5,7 @@
 
 class TxSrcEvent : public TxEvent {
 public:
-	TxSrcEvent(Packet* pPkt);
+	TxSrcEvent(double time, Packet* pPkt);
 
 	int handleEvent();
 };

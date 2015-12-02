@@ -8,7 +8,7 @@ class Flow;
 
 class TCPFastUpdate :public Event {
 public:
-	TCPFastUpdate() : Event()
+	TCPFastUpdate(double t) : Event(t)
 	{
 		EventQueue::getInstance()->num_non_core++;
 	}

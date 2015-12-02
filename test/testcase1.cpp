@@ -53,8 +53,7 @@ int main()
 	flow.setTCPStrategy(TCP_RENO_t);
 	nm->registerFlow(flow);
 	Packet* init_tx_packet = flow.genNextPacketFromTx();
-	TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
-	init_tx->time = 0.5;
+	TxSrcEvent *init_tx = new TxSrcEvent(0.5, init_tx_packet);
 	EventQueue* eq = EventQueue::getInstance();
 
 	eq->run();

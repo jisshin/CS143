@@ -12,9 +12,8 @@ int TCPTimeOutEvent::handleEvent(){
 
 	if (nxt_tx_pkt != NULL)
 	{
-		TxEvent* next_tx = new TxSrcEvent(nxt_tx_pkt);
-
-		next_tx->time = time + reno->parent_flow->getTxDelay();
+		double event_time = time + reno->parent_flow->getTxDelay();
+		TxEvent* next_tx = new TxSrcEvent(event_time, nxt_tx_pkt);
 	}
 
 

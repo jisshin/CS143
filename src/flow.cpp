@@ -25,8 +25,8 @@ void Flow::receiveSrcAndGenTx(Packet* pkt)
 
 	if (pkt != NULL)
 	{
-		TxEvent* next_tx = new TxSrcEvent(pkt);
-		next_tx->time = EventQueue::cur_time + getTxDelay();
+		double event_time = EventQueue::cur_time + getTxDelay();
+		TxEvent* next_tx = new TxSrcEvent(event_time, pkt);
 	}
 }
 
@@ -38,8 +38,8 @@ void Flow::receiveAckAndGenRx(Packet* pkt)
 
 	if (pkt != NULL)
 	{
-		TxEvent* next_tx = new TxSrcEvent(pkt);
-		next_tx->time = EventQueue::cur_time + getTxDelay();
+		double event_time = EventQueue::cur_time + getTxDelay();
+		TxEvent* next_tx = new TxSrcEvent(event_time, pkt);
 	}
 }
 

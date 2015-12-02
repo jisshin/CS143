@@ -9,7 +9,7 @@ class TCPReno;
 
 class TCPTimeOutEvent:public Event{
 public:
-	TCPTimeOutEvent(TCPReno* tcp, int id) : Event(), reno(tcp)\
+	TCPTimeOutEvent(double t, TCPReno* tcp, int id) : Event(t), reno(tcp)\
 	, tx_packet_id(id)
 	{
 		EventQueue::getInstance()->num_non_core++;

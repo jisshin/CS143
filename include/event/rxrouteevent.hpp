@@ -2,16 +2,11 @@
 #define RXROUTEEVENT_H
 
 #include "rxevent.hpp"
-#include "../eventqueue.hpp"
 
 class RxRouteEvent : public RxEvent
 {
 public:
-	RxRouteEvent(Link* pLink, Node* pNode, Packet* pPkt) 
-		: RxEvent(pLink, pNode), rx_packet(pPkt) 
-	{
-		EventQueue::getInstance()->num_non_core++;
-	}
+	RxRouteEvent(double t, Link* pLink, Node* pNode, Packet* pPkt);
 
 	int handleEvent();
 

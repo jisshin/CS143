@@ -6,8 +6,8 @@
 class RxAckEvent : public RxEvent
 {
 public:
-	RxAckEvent(Link* pLink, Node* pNode, Packet *pPkt)
-		: RxEvent(pLink, pNode), rx_packet(pPkt)
+	RxAckEvent(double t, Link* pLink, Node* pNode, Packet *pPkt)
+		: RxEvent(t, pLink, pNode), rx_packet(pPkt)
 	{}
 
 
