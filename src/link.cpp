@@ -51,6 +51,51 @@ void Link::popPacket(Packet* packet){
 	link_buffers.erase(link_buffers.begin());
 }
 
+double Link::getNumBytesOnLink()
+{
+	double bytes_on_link = 0;
+
+	for (int i = 0; i < link_buffers.size(); i++)
+	{
+		if (EventQueue::cur_time < link_buffers[i].start_time)
+		{
+			bytes_on_link += link_buffers[i].size;
+		}
+		else if (EventQueue::cur_time < link_buffers[i].end_time)
+		{
+			double numerator = link_buffers[i].end_time - EventQueue::cur_time;
+			double denominator = link_buffers[i].end_time - link_buffers[i].start_time;
+			double fraction = numerator / denominator;
+			bytes_on_link += link_buffers[i].size * fraction;
+		}
+	}
+
+	return bytes_on_link;
+}
+
+double Link::getNumBytesThruLink()
+{
+	double bytes_thru_link = 0;
+
+	for (int i = 0; i < link_buffers.size(); i++)
+	{
+		if (EventQueue::cur_time > link_buffers[i].end_time)
+		{
+			bytes_thru_link += link_buffers[i].size;
+		}
+		else if (EventQueue::cur_time > link_buffers[i].start_time)
+		{
+			double numerator = EventQueue::cur_time - link_buffers[i].start_time;
+			double denominator = link_buffers[i].end_time - link_buffers[i].start_time;
+			double fraction = numerator / denominator;
+			bytes_thru_link += link_buffers[i].size * fraction;
+		}
+	}
+	
+	bytes_thru_link += packet_thru;
+	packet_thru = 0;
+	return bytes_thru_link;
+}
 
 int Link::establishLink(Node* pointA, Node* pointB)
 {

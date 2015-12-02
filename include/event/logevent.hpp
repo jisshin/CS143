@@ -14,7 +14,9 @@ class LogEvent : public Event
 {
   public:
 	LogEvent(double t) : Event(t)
-	{}
+	{
+		EventQueue::getInstance()->num_non_core++;
+	}
 
     int handleEvent();
 
