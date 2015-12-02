@@ -132,3 +132,24 @@ int Flow::checkTimeout(int id){
 	TCP_strategy->rx_timeout(id);
 	return 0;
 }
+
+int Flow::getNumByteSent(){
+	int total_sent = left_over_byte + \
+			(packet_sent - 1) * SRC_SIZE;
+	// last packet is fully sent
+	if (last_transmit_t + base_tx_delay < EventQueue::cur_time){
+		total_sent += SRC_SIZE;
+		left_over_byte = 0;
+	}
+	else{
+		int fraction = SRC_SIZE* (EventQueue::cur_time - last_transmit_t)/base_tx_delay;
+		total_sent += fraction;
+		left_over_byte = SRC_SIZE - fraction;
+	}
+	packet_sent = 0;
+	return total_sent;
+}
+
+void Flow::recordPacketSent(Packet* pkt){
+	packet_sent++;
+}
