@@ -13,22 +13,21 @@ public:
   int setNetworkInfo(string file_name);
 
   /**
-  * Creates data out of data obtained from network. 
+  * Creates data out of data obtained from network.
   */
-  int createNetwork();
+  int createNetwork(string method);
 
 private:
 	std::vector<string> link_ids;
 	std::vector<double> link_rates;
 	std::vector<double> link_delays;
-	std::vector<double> link_buffers;
+	std::vector<int> link_buffers;
 
 	std::vector<string> flow_ids;
 	std::vector<string> flow_srcs;
 	std::vector<string> flow_dests;
-	std::vector<double> data_amts;
+	std::vector<int> data_amts;
 	std::vector<double> flow_starts;
-	std::vector<int> flow_alg;
 
 	std::vector<string> all_nodes;
 

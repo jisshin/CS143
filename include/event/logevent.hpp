@@ -8,7 +8,7 @@ class Link;
 class Flow;
 class Node;
 
-const double LOG_INTERVAL = 0.01;
+const double LOG_INTERVAL = 0.05;
 
 class LogEvent : public Event
 {

@@ -50,6 +50,7 @@ void Flow::setTCPStrategy(int type)
 
 void Flow::setTxDelay(double link_rate){
 	base_tx_delay = SRC_SIZE/link_rate;
+	base_link_rate = link_rate;
 	std::cout<<"tx delay"<< base_tx_delay << std::endl;
 	base_link_rate = link_rate;
 }
@@ -146,18 +147,21 @@ double Flow::getTxDelay()
 }
 
 int Flow::getNumByteSent(){
+
+
 	int complete_packet = (packet_sent - 1 >= 0)?packet_sent - 1: 0;
-	int total_sent = tx_left_over + \
+	int total_sent = tx_left_over_byte + \
 			(complete_packet) * SRC_SIZE;
 	// last packet is fully sent
 	if (last_transmit_t + base_tx_delay < EventQueue::cur_time){
 		total_sent += SRC_SIZE;
-		tx_left_over = 0;
+		tx_left_over_byte = 0;
 	}
 	else{
 		int fraction = SRC_SIZE* (EventQueue::cur_time - last_transmit_t)/base_tx_delay;
 		total_sent += fraction;
-		tx_left_over = SRC_SIZE - fraction;
+
+		tx_left_over_byte = SRC_SIZE - fraction;
 	}
 	packet_sent = 0;
 	return total_sent;
@@ -165,19 +169,19 @@ int Flow::getNumByteSent(){
 
 int Flow::getNumByteReceive(){
 	int complete_packet = (packet_receive - 1 >= 0)?packet_receive - 1: 0;
-	int total_sent = rx_left_over + \
+	int total_receive = rx_left_over_byte + \
 			(complete_packet) * ACK_SIZE;
 	// last packet is fully sent
-	int base_rx_delay = ACK_SIZE/base_link_rate;
+	double base_rx_delay = ACK_SIZE/base_link_rate;
 	if (last_rx_ack_t + base_rx_delay < EventQueue::cur_time){
-		total_sent += ACK_SIZE;
-		rx_left_over = 0;
+		total_receive += ACK_SIZE;
+		rx_left_over_byte = 0;
 	}
 	else{
-		int fraction = ACK_SIZE* (EventQueue::cur_time - last_rx_ack_t)/base_rx_delay;
-		total_sent += fraction;
-		rx_left_over = ACK_SIZE - fraction;
+		int fraction = SRC_SIZE* (EventQueue::cur_time - last_rx_ack_t)/base_rx_delay;
+		total_receive += fraction;
+		rx_left_over_byte = ACK_SIZE - fraction;
 	}
-	packet_sent = 0;
-	return total_sent;
+	packet_receive = 0;
+	return total_receive;
 }

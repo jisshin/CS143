@@ -3,7 +3,6 @@
 #include "../../include/eventqueue.hpp"
 #include "../../include/packet.hpp"
 #include "../../include/flow.hpp"
-#include "../../include/node.hpp"
 #include "../../include/common.hpp"
 
 
@@ -16,11 +15,9 @@ TxSrcEvent::TxSrcEvent(Packet* pPkt) : TxEvent(pPkt, NULL)
 int TxSrcEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
-	EventQueue* eventq = EventQueue::getInstance();
 
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 	commonTransmit(tx_node, tx_packet);
-
 	tx_flow->receiveSrcAndGenTx(tx_packet);		
 	
 	return 1;

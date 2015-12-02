@@ -124,7 +124,7 @@ double LogEvent::getSentRate(Flow* flow)
 
 double LogEvent::getRcvdRate(Flow* flow)
 {
-	return 0;
+	return byteToMbps(flow->getNumByteReceive());
 }
 
 int LogEvent::getWindowSize(Flow* flow){

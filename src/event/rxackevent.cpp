@@ -16,8 +16,6 @@ int RxAckEvent::handleEvent()
 	rx_link->popPacket(rx_packet);
 	rx_node->receivePacket(rx_packet);
 
-
-
 	Packet* ack_packet = rx_flow->genAckPacket(rx_packet);
 
 	if (ack_packet)

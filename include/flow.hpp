@@ -40,31 +40,29 @@ public:
 private:
 	void receive_ack(int id);
 
-
 	std::string flow_id;
 	std::string flow_src;
 	std::string flow_dest;
 	int flow_data_amt;
 	TCPAlgorithm* TCP_strategy;
 
-	// For getNumByteSent()
-	int tx_left_over = 0;
-	int packet_sent = 0;
-
-	// For getNumByteReceive()
-	int packet_receive = 0;
-	int rx_left_over = 0;
 
 	int last_tx_ack_id = 0;
+	int packet_receive = 0;
+	int packet_sent = 0;
+	int tx_left_over_byte =0;
+	int rx_left_over_byte = 0;
+
 
 	double base_tx_delay;
+	double base_link_rate;
 	double last_transmit_t;
 	double last_rx_ack_t;
 
 	//int next_id = 0;
 	int window_full_flag = 0;
 	Packet* comGenSrcPacket();
-	double base_link_rate;
+
 };
 
 
