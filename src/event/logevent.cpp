@@ -10,6 +10,7 @@ int LogEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
 	EventQueue *eq = EventQueue::getInstance();
+	eq->num_non_core--;
 
 	Logger* logger = Logger::getInstance();
 
@@ -46,6 +47,12 @@ int LogEvent::handleEvent()
 
 	logger->flush_current_line();
 
+	if (eq->size() - eq->num_non_core > 0)
+	{
+		LogEvent *e = new LogEvent(time + LOG_INTERVAL);
+		eq->push(e);
+	}
+
 	return 1;
 }
 
@@ -79,7 +86,7 @@ void LogEvent::logData(Node* node)
 double LogEvent::getBufOccupancy(Link* link)
 {
 	//returns in KB
-	return (link->cur_buf_size_in_byte) / 1000;
+	return (link->getNumBytesOnLink()) / 1000;
 }
 
 int LogEvent::getPacketLoss(Link* link)
@@ -92,9 +99,7 @@ int LogEvent::getPacketLoss(Link* link)
 
 double LogEvent::getFlowRate(Link* link)
 {
-	double ret = link->packet_thru;
-	link->packet_thru = 0;
-	return ret / 1000;
+	return byteToMbps(link->getNumBytesThruLink());
 }
 
 
@@ -102,28 +107,28 @@ double LogEvent::getSentRate(Node* node)
 {
 	double ret = node->packet_sent;
 	node->packet_sent = 0;
-	return ret / 1000;
+	return byteToMbps(ret);
 }
 
 double LogEvent::getRcvdRate(Node* node)
 {
 	double ret = node->packet_rcvd;
 	node->packet_rcvd = 0;
-	return ret / 1000;
+	return byteToMbps(ret);
 }
 
 double LogEvent::getSentRate(Flow* flow)
 {
 	double ret = flow->packet_sent;
 	flow->packet_sent = 0;
-	return ret / 1000;
+	return byteToMbps(ret);
 }
 
 double LogEvent::getRcvdRate(Flow* flow)
 {
 	double ret = flow->packet_rcvd;
 	flow->packet_rcvd = 0;
-	return ret / 1000;
+	return byteToMbps(ret);
 }
 
 int LogEvent::getWindowSize(Flow* flow){
@@ -132,7 +137,7 @@ int LogEvent::getWindowSize(Flow* flow){
 
 double LogEvent::getPacketRTT(Flow* flow)
 {
-	return flow->getAvgRTT();
+	return 1000 * (flow->recent_RTT);
 }
 
 double LogEvent::byteToMbps(double byte)

@@ -47,11 +47,9 @@ int EventQueue::run()
 		cur_time = e->time;
 		e->handleEvent();
 		delete e;
-
-		LogEvent logEvent = LogEvent(cur_time);
-		logEvent.handleEvent();
 	}
 
+	std::cout << cur_time << std::endl;
 	return 1;
 }
 

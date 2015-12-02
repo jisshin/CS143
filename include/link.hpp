@@ -43,6 +43,7 @@ public:
 	double getRate() { return link_rate; }
 	double getDelay();
 	int getBufferSize() { return max_buf_size_in_byte; }
+
 	
 	Node* get_other_node(Node*);
 
@@ -52,13 +53,17 @@ public:
 	const double link_delay; // in seconds
 	const int max_buf_size_in_byte;
 
-	double cur_buf_size_in_byte = 0;
+	double getNumBytesOnLink();
+	double getNumBytesThruLink();
 	double num_packet_drop = 0;
-	double packet_thru = 0;
+
 
 private:
 	std::vector<LinkBuffer> link_buffers;
 	const std::string link_id;
+
+	double packet_thru = 0;
+	double cur_buf_size_in_byte = 0;
 
 	Node* A;
 	Node* B;

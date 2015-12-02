@@ -114,6 +114,7 @@ double Flow::getTxDelay()
 void Flow::recordRTT(double RTT){
 	sum_RTT += RTT;
 	RTT_count++;
+	recent_RTT = RTT;
 	if (RTT < min_RTT){
 		min_RTT = RTT;
 	}
