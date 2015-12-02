@@ -134,8 +134,10 @@ int Flow::checkTimeout(int id){
 }
 
 int Flow::getNumByteSent(){
+	std::cout<<"check flow rate" << std::endl;
+	int complete_packet = (packet_sent - 1 >= 0)?packet_sent - 1: 0;
 	int total_sent = left_over_byte + \
-			(packet_sent - 1) * SRC_SIZE;
+			(complete_packet) * SRC_SIZE;
 	// last packet is fully sent
 	if (last_transmit_t + base_tx_delay < EventQueue::cur_time){
 		total_sent += SRC_SIZE;
@@ -151,5 +153,6 @@ int Flow::getNumByteSent(){
 }
 
 void Flow::recordPacketSent(Packet* pkt){
+	std::cout<<"send packet"<<std::endl;
 	packet_sent++;
 }
