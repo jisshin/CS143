@@ -152,7 +152,8 @@ int Flow::getNumByteSent(){
 	return total_sent;
 }
 
-void Flow::recordPacketSent(Packet* pkt){
+void Flow::alertPacketSent(Packet* pkt){
 	std::cout<<"send packet"<<std::endl;
+	TCP_strategy->alertPacketSent(pkt);
 	packet_sent++;
 }

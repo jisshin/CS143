@@ -37,13 +37,11 @@ public:
 	Packet* genNextPacketFromRx();
 	Packet* genNextPacketFromTx();
 	Packet* genAckPacket(Packet* received_packet);
-	void recordRTT(double RTT);
-	double getAvgRTT();
-	double getMinRTT(){return min_RTT;};
+
 	TCPAlgorithm* getTCPStrategy(){return TCP_strategy;};
 	int checkTimeout(int id);
 	int getNumByteSent();
-	void recordPacketSent(Packet* pkt);
+	void alertPacketSent(Packet* pkt);
 
 	double packet_rcvd = 0;
 	double recent_RTT = 0;
@@ -66,9 +64,6 @@ private:
 	double base_tx_delay;
 	double last_transmit_t;
 
-	double sum_RTT=0;
-	double min_RTT=std::numeric_limits<double>::max();
-	int RTT_count = 0;
 	//int next_id = 0;
 	int window_full_flag = 0;
 	Packet* comGenSrcPacket();

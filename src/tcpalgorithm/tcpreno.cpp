@@ -1,5 +1,7 @@
 #include "../../include/tcpalgorithm/tcpreno.hpp"
 #include "../../include/common.hpp"
+#include "../../include/eventqueue.hpp"
+#include "../../include/event/tcptimeoutevent.hpp"
 #include <iostream>
 
 
@@ -84,6 +86,15 @@ void TCPReno::handleNewAck(int id)
 	}
 }
 
+void TCPReno::alertPacketSent(Packet* pkt)
+{
+	// generate timeout event for the current packet
+	pkt->start_t = EventQueue::cur_time;
+	TCPTimeOutEvent* timeOutEvent = new TCPTimeOutEvent(parent_flow, pkt->packet_seq_id);
+
+	timeOutEvent->time = EventQueue::cur_time + 3 * getAvgRTT();
+	EventQueue::getInstance()->push(timeOutEvent);
+}
 
 void TCPReno::rx_timeout(int id){
 

@@ -6,11 +6,15 @@
 #include <limits>
 #include <map>	
 
+enum TCPState {
+	SLOW_START, CONG_AVOID, FRFR, TIMEOUT
+};
 
 class TCPReno:public TCPAlgorithm{
 public:
 	TCPReno():TCPAlgorithm(){};
 
+	void alertPacketSent(Packet*) override;
 	void updateAck(int id) override;
 	void rx_timeout(int id) override;
 
@@ -21,6 +25,8 @@ private:
 
 	void handleDupAck(int);
 	void handleNewAck(int);
+
+	TCPState state = SLOW_START;
 
 	void resetNextID();
 	std::map<int, int> cancel_timeout;
