@@ -119,16 +119,12 @@ double LogEvent::getRcvdRate(Node* node)
 
 double LogEvent::getSentRate(Flow* flow)
 {
-	double ret = flow->packet_sent;
-	flow->packet_sent = 0;
-	return byteToMbps(ret);
+	return byteToMbps(flow->getNumByteSent());
 }
 
 double LogEvent::getRcvdRate(Flow* flow)
 {
-	double ret = flow->packet_rcvd;
-	flow->packet_rcvd = 0;
-	return byteToMbps(ret);
+	return byteToMbps(flow->getNumByteReceive());
 }
 
 int LogEvent::getWindowSize(Flow* flow){

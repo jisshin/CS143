@@ -20,7 +20,8 @@ int TxSrcEvent::handleEvent()
 	EventQueue* eventq = EventQueue::getInstance();
 
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
-	tx_flow->packet_sent += tx_packet->packet_size;
+	//tx_flow->packet_sent += tx_packet->packet_size;
+	tx_flow->updateTxPacket(tx_packet);
 	commonTransmit(tx_node, tx_packet);
 		
 

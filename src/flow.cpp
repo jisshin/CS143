@@ -18,12 +18,14 @@ Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
 void Flow::setTxDelay(double link_rate){
 	std::cout << "link rate" << link_rate<<std::endl;
 	base_tx_delay = SRC_SIZE/link_rate;
+	base_link_rate = link_rate;
 	std::cout<<"tx delay"<< base_tx_delay << std::endl;
 }
 
 
 void Flow::receive_ack(int id){
 	TCP_strategy->updateAck(id);
+	packet_receive++;
 	//clearTimeout();
 }
 
@@ -131,4 +133,48 @@ double Flow::getAvgRTT(){
 int Flow::checkTimeout(int id){
 	TCP_strategy->rx_timeout(id);
 	return 0;
+}
+
+int Flow::getNumByteSent(){
+
+	int complete_packet = (packet_sent - 1 >= 0)?packet_sent - 1: 0;
+	int total_sent = tx_left_over_byte + \
+			(complete_packet) * SRC_SIZE;
+	// last packet is fully sent
+	if (last_transmit_t + base_tx_delay < EventQueue::cur_time){
+		total_sent += SRC_SIZE;
+		tx_left_over_byte = 0;
+	}
+	else{
+		int fraction = SRC_SIZE* (EventQueue::cur_time - last_transmit_t)/base_tx_delay;
+		total_sent += fraction;
+		tx_left_over_byte = SRC_SIZE - fraction;
+	}
+	packet_sent = 0;
+	return total_sent;
+}
+
+int Flow::getNumByteReceive(){
+	int complete_packet = (packet_receive - 1 >= 0)?packet_receive - 1: 0;
+	int total_receive = rx_left_over_byte + \
+			(complete_packet) * ACK_SIZE;
+	// last packet is fully sent
+	double base_rx_delay = ACK_SIZE/base_link_rate;
+	if (last_rx_ack_t + base_rx_delay < EventQueue::cur_time){
+		total_receive += ACK_SIZE;
+		rx_left_over_byte = 0;
+	}
+	else{
+		int fraction = SRC_SIZE* (EventQueue::cur_time - last_rx_ack_t)/base_rx_delay;
+		total_receive += fraction;
+		rx_left_over_byte = ACK_SIZE - fraction;
+	}
+	packet_receive = 0;
+	return total_receive;
+}
+
+
+
+void Flow::updateTxPacket(Packet* pkt){
+	packet_sent++;
 }

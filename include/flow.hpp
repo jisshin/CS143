@@ -42,9 +42,10 @@ public:
 	double getMinRTT(){return min_RTT;};
 	TCPAlgorithm* getTCPStrategy(){return TCP_strategy;};
 	int checkTimeout(int id);
-
-	double packet_sent = 0;
-	double packet_rcvd = 0;
+	void updateTxPacket(Packet* pkt);
+	int getNumByteSent();
+	int getNumByteReceive();
+	//double packet_rcvd = 0;
 	double recent_RTT = 0;
 
 private:
@@ -54,12 +55,18 @@ private:
 	int flow_data_amt;
 	TCPAlgorithm* TCP_strategy;
 
-	//int last_rx_ack_id = -1;
+
+
 	int last_tx_ack_id = 0;
-	//int dup_count = 0;
-	//int outstanding_count = 0;
+	int packet_receive = 0;
+	int packet_sent = 0;
+	int tx_left_over_byte =0;
+	int rx_left_over_byte = 0;
+
 	double base_tx_delay;
+	double base_link_rate;
 	double last_transmit_t;
+	double last_rx_ack_t;
 
 	double sum_RTT=0;
 	double min_RTT=std::numeric_limits<double>::max();
