@@ -28,7 +28,7 @@ void TCPAlgorithm::updateTransmit(){
 
 void TCPAlgorithm::alertPacketReceive(Packet* pkt)
 {
-	recordRTT(EventQueue::cur_time - pkt->start_t);
+	recordRTT(EventQueue::cur_time - pkt->packet_start_t);
 }
 
 void TCPAlgorithm::recordRTT(double RTT) {

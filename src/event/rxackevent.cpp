@@ -20,7 +20,7 @@ int RxAckEvent::handleEvent()
 
 	if (ack_packet)
 	{
-		ack_packet->start_t = rx_packet->start_t;
+		ack_packet->packet_start_t = rx_packet->packet_start_t;
 		delete rx_packet;
 		// And transmit back to sender
 		return commonTransmit(rx_node, ack_packet);

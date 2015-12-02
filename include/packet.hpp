@@ -45,7 +45,7 @@ class Packet {
 		std::string packet_dest;
 		int packet_type;
 		int packet_seq_id;
-		double start_t;
+		double packet_start_t;
 
 		int packet_size;
 };

@@ -4,10 +4,12 @@
 #include "../../include/common.hpp"
 #include "../../include/packet.hpp"
 #include <iostream>
+#include <algorithm>
 
 TCPFast::TCPFast(Flow* parent_flow) : TCPAlgorithm(parent_flow)
 {
-	TCPFastUpdate* fastupdate = new TCPFastUpdate(getAvgRTT(), this);
+	double start_time = parent_flow->getStartTime() + getAvgRTT();
+	TCPFastUpdate* fastupdate = new TCPFastUpdate(start_time, this);
 }
 
 void TCPFast::updateAck(int id) {
@@ -37,15 +39,18 @@ void TCPFast::handleDupAck(int id)
 		return;
 	}
 
-	if (time_sent[id] + 2 * getAvgRTT() < EventQueue::cur_time)
+	if (time_sent[id] + 1.5 * getAvgRTT() < EventQueue::cur_time)
 	{
 		resetNextID();
 	}
+
 }
 
 void TCPFast::updateWindow()
 {
-
+	double temp = gamma * (min_RTT / getAvgRTT() * window_size + alpha);
+	double temp2 = (1 - gamma) * window_size;
+	window_size = std::min(2 * window_size, temp + temp2);
 }
 
 void TCPFast::alertPacketSent(Packet* pkt)

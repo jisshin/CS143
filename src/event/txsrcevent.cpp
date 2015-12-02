@@ -17,7 +17,7 @@ int TxSrcEvent::handleEvent()
 
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 	commonTransmit(tx_node, tx_packet);
-	tx_flow->receiveSrcAndGenTx(tx_packet);		
+	tx_flow->sendSrcAndGenTx(tx_packet);		
 	
 	return 1;
 }

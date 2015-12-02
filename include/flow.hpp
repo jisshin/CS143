@@ -15,7 +15,7 @@ class Flow {
 public:
 	Flow(std::string id, std::string src, std::string dest, int data_amt, int strategy_type, double start_time);
 
-	void receiveSrcAndGenTx(Packet* pkt);
+	void sendSrcAndGenTx(Packet* pkt);
 	void receiveAckAndGenRx(Packet* pkt);
 
 	void setTCPStrategy(int);
@@ -23,6 +23,8 @@ public:
 
 	std::string getSrc() { return flow_src; }
 	std::string getDest() { return flow_dest; }
+	int getDataAmt() { return flow_data_amt; }
+	double getStartTime() { return flow_start_time; }
 	operator std::string() { return flow_id; }
 
 	//TCP dependent
@@ -43,6 +45,7 @@ private:
 	std::string flow_src;
 	std::string flow_dest;
 	int flow_data_amt;
+	double flow_start_time;
 	TCPAlgorithm* TCP_strategy;
 
 
@@ -58,7 +61,6 @@ private:
 	double last_transmit_t;
 	double last_rx_ack_t;
 
-	//int next_id = 0;
 	int window_full_flag = 0;
 	Packet* comGenSrcPacket();
 
