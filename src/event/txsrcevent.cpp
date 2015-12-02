@@ -21,6 +21,7 @@ int TxSrcEvent::handleEvent()
 
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 	commonTransmit(tx_node, tx_packet);
+	tx_flow->recordPacketSent(tx_packet);
 		
 	// generate timeout event for the current packet
 	tx_packet->start_t = time;
