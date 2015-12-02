@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from matplotlib import pyplot as plt
 import numpy as np
+import sys
 
 
 color = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
@@ -59,7 +60,7 @@ def plotOutput(file_name):
     plt.show()
 
 
-def plotOutputArg(file_name, *arg):
+def plotOutputArg(file_name, arg):
 
 
     c1 = 0
@@ -74,39 +75,130 @@ def plotOutputArg(file_name, *arg):
 
 
 
-    f, grph = plt.subplots(3, sharex=True)
     if 'L' in arg[0]:
+        f, grph = plt.subplots(3, sharex=True)
         grph[0].set_title('Link Rates')
-        grph[1].set_title('Buffer Occupancy')
-        grph[2].set_title('Packet Loss')
+        grph[1].set_title('Packet Loss')
+        grph[2].set_title('Buffer Occupancy')
+
+        x = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols = (0,))
+
+        for i in xrange(1, col_n, 4):
+            if cols[i] in  arg:
+                y1, y2, y3 = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols=(i + 1, i + 2, i + 3))
+
+
+
+                grph[0].plot(x, y1, color[c1], label = cols[i])
+                grph[1].plot(x, y2, color[c1], label = cols[i])
+                grph[2].plot(x, y3, color[c1], label = cols[i])
+                c1 += 1
+
+
+            if c1 == argl:
+                break
+
+        grph[0].legend(prop={'size':8})
+        grph[0].set_ylabel('Megabits per second (Mbps)', fontsize = 8)
+
+        grph[1].legend(prop={'size':8})
+        grph[1].set_ylabel('packets per second', fontsize = 8)
+
+        grph[2].legend(prop={'size':8})
+        grph[2].set_ylabel('packets per second', fontsize = 8)
+        grph[2].set_xlabel('time (s)')
+
+
+        plt.show()
+
+
     if 'F' in arg[0]:
-        grph[0].set_title('Flow Rate')
-        grph[1].set_title('Window Size')
+        f, grph = plt.subplots(4, sharex=True)
+        startFindex = 1
+        grph[0].set_title('Flow Send Rate')
+        grph[1].set_title('Flow Receive Rate')
         grph[2].set_title('Packet Delay')
+        grph[3].set_title('Window Size')
 
-    x = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols = (0,))
+        x = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols = (0,))
 
-    for i in xrange(1, col_n, 4):
-        if cols[i] in  arg or cols[i] in arg:
-            y1, y2, y3 = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols=(i + 1, i + 2, i + 3))
+        for i in xrange(1, col_n, 4):
+            if 'F' in cols[i]:
+                startFindex = i
+
+
+        for i in xrange(startFindex, col_n, 5):
+            if cols[i] in  arg:
+                y1, y2, y3, y4 = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols=(i + 1, i + 2, i + 3, i + 4))
 
 
 
             grph[0].plot(x, y1, color[c1], label = cols[i])
             grph[1].plot(x, y2, color[c1], label = cols[i])
             grph[2].plot(x, y3, color[c1], label = cols[i])
+            grph[3].plot(x, y4, color[c1], label = cols[i])
             c1 += 1
 
 
-        if c1 == argl:
-            break
+            if c1 == argl:
+                break
+
+        grph[0].legend(prop={'size':8})
+        grph[0].set_ylabel('Megabits per second (Mbps)', fontsize = 7)
+
+        grph[1].legend(prop={'size':8})
+        grph[1].set_ylabel('Megabits per second (Mbps)', fontsize = 7)
+
+        grph[2].legend(prop={'size':8})
+        grph[2].set_ylabel('milliseconds', fontsize = 7)
+
+        grph[3].legend(prop={'size':8})
+        grph[3].set_ylabel('size', fontsize = 7)
+
+        grph[3].set_xlabel('time (s)')
+        plt.show()
+
+    if 'H' in arg[0]:
+        startHindex = 1
+        f, grph = plt.subplots(2, sharex=True)
+        grph[0].set_title('Send Rate')
+        grph[1].set_title('Receive Rate')
+
+        x = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols = (0,))
+        for i in xrange(1, col_n, 4):
+            if 'F' in cols[i]:
+                startHindex = i
+
+        for i in xrange(startHindex, col_n, 5):
+            if 'H' in cols[i]:
+                startHindex = i
+
+        for i in xrange(startHindex, col_n, 3):
+            if cols[i] in  arg:
+                y1, y2 = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols=(i + 1, i + 2))
 
 
-    grph[0].legend(prop={'size':8})
-    grph[1].legend(prop={'size':8})
-    grph[2].legend(prop={'size':8})
 
-    plt.show()
+                grph[0].plot(x, y1, color[c1], label = cols[i])
+                grph[1].plot(x, y2, color[c1], label = cols[i])
+                c1 += 1
 
 
-plotOutputArg('output.csv', "L1", "L2")
+            if c1 == argl:
+                break
+
+        grph[0].legend(prop={'size':8})
+        grph[0].set_ylabel('Megabits per second (Mbps)', fontsize = 8)
+
+        grph[1].legend(prop={'size':8})
+        grph[1].set_ylabel('Megabits per second (Mbps)', fontsize = 8)
+        grph[1].set_xlabel('time (s)')
+
+
+
+        plt.show()
+
+
+filename = sys.argv[1]
+arguments = sys.argv[2:]
+plotOutputArg(filename, arguments)

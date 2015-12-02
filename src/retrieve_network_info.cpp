@@ -1,8 +1,7 @@
 #include "../include/retrieve_network_info.hpp"
 #include "../include/networkmanager.hpp"
-#include "../include/event/txevent.hpp"
 #include "../include/eventqueue.hpp"
-//#include "../lib/include/json/json.h"
+#include "../include/logger.hpp"
 #include "../lib/json/json.h"
 #include "../lib/json/reader.h"
 #include "../lib/json/value.h"
@@ -10,14 +9,18 @@
 #include "../include/link.hpp"
 #include "../include/packet.hpp"
 #include "../include/node.hpp"
+#include "../include/event/txsrcevent.hpp"
+#include "../include/event/logevent.hpp"
+#include "../include/common.hpp"
 #include "../include/tcpalgorithm/tcpreno.hpp"
 #include "../include/tcpalgorithm.hpp"
 
 #include <iostream>
 #include <fstream>
 
-using std::vector;
-using std::string;
+#include <cstdlib>
+#include <vector>
+
 using std::cout;
 
 
@@ -49,18 +52,17 @@ int RetrieveNetworkInfo::setNetworkInfo(string file_name)
   // get all link info
   for (int i = 0; i < link_no; i++){
     link_ids.push_back(links[i]["link_id"].asString());
-    link_rates.push_back(links[i]["link_rate"].asDouble()); //check if exists
+    link_rates.push_back(links[i]["link_rate"].asDouble());
     link_delays.push_back(links[i]["link_delay"].asDouble());
-    link_buffers.push_back(links[i]["link_buffer"].asDouble());
+    link_buffers.push_back(links[i]["link_buffer"].asInt());
   }
 
   for (int i = 0; i < flow_no; i++){
     flow_ids.push_back(flows[i]["flow_id"].asString());
     flow_srcs.push_back(flows[i]["flow_src"].asString());
     flow_dests.push_back(flows[i]["flow_dest"].asString());
-    data_amts.push_back(flows[i]["data_amt"].asDouble());
-    flow_starts.push_back(flows[i]["flow_start"].asDouble()); // CHeck if exists
-    flow_alg.push_back(flows[i]["flow_alg"].asInt());
+    data_amts.push_back(flows[i]["data_amt"].asInt());
+    flow_starts.push_back(flows[i]["flow_start"].asDouble());
   }
 
   for (int i = 0; i < connection_no; i++){
@@ -77,14 +79,14 @@ int RetrieveNetworkInfo::setNetworkInfo(string file_name)
   return 1;
 }
 
-int RetrieveNetworkInfo::createNetwork()
+int RetrieveNetworkInfo::createNetwork(string method)
 {
 
   NetworkManager *manager = NetworkManager::getInstance();
 
   // register links
   for (int i = 0; i < link_no; i++){
-    Link link(link_ids[i], link_rates[i], link_delays[i], link_buffers[i]);
+    Link link(link_ids[i], link_rates[i] * 1000000, link_delays[i] * .001, link_buffers[i] * 1000);
     manager->registerLink(link);
   }
 
@@ -94,37 +96,39 @@ int RetrieveNetworkInfo::createNetwork()
   }
 
   for (int i = 0; i < connection_no; i++){
-    int result = manager->connectLink(c_link[i], c_node1[i], c_node2[i]);
-    if (result == -1)
-      return -1;
-  }
+    manager->connectLink(c_link[i], c_node1[i], c_node2[i]);
 
+  }
   EventQueue* eq = EventQueue::getInstance();
   // register flows
   for (int i = 0; i < flow_no; i++){
-    Flow* flow = new Flow(flow_ids[i], flow_srcs[i], flow_dests[i], data_amts[i]);
-    TCPAlgorithm* flow_alg = NULL;
-    if(flow_alg[i] == TCP_RENO_t){
-    	flow_alg = new TCPReno();
+    Flow flow(flow_ids[i], flow_srcs[i], flow_dests[i], data_amts[i] * 1000000);
+    TCPAlgorithm* alg = NULL;
+    if(method == "Reno"){
+    	alg = new TCPReno();
+    }
+    else if(method == "Fast"){
+      //alg = new TCPFast
     }
     else{
     	std::cout << "undefined algorithm type no." << std::endl;
-    	flow_alg = new TCPReno();
+    	alg = new TCPReno();
     	// set to some default
     }
-    flow->setTCPStrategy(flow_alg);
-    int result = manager->registerFlow(*flow);
-    if (result == -1) 
-        return -1;
+    flow.setTCPStrategy(alg);
+    manager->registerFlow(flow);
 
-    Packet packet(flow_ids[i], flow_srcs[i], flow_dests[i], -1);
-    TxEvent init_tx("H1", &packet);
-
-  	eq->push(&init_tx);
+    Packet* init_tx_packet = flow.genNextPacketFromTx();
+	  TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
+    init_tx->time = flow_starts[i];
+  	eq->push(init_tx);
 
   }
-  
+
   eq->run();
+
+  Logger * logger = Logger::getInstance();
+	delete logger;
 
 	return EXIT_SUCCESS;
 
