@@ -74,7 +74,7 @@ private:
 	//int next_id = 0;
 	int window_full_flag = 0;
 	Packet* comGenSrcPacket();
-	double base_link_rate;
+
 };
 
 
