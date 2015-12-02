@@ -146,7 +146,7 @@ Packet* Flow::genAckPacket(Packet* received_packet)
 double Flow::getTxDelay()
 {
 	double delay = \
-			((last_transmit_t + base_tx_delay) > EventQueue::cur_time)?\
+			((last_transmit_t + base_tx_delay) >= EventQueue::cur_time)?\
 					base_tx_delay:0;
 	last_transmit_t = EventQueue::cur_time;
 	return delay;

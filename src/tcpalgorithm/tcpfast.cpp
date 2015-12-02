@@ -16,7 +16,7 @@ void TCPFast::updateAck(int id) {
 
 	if (last_rx_ack_id == id)
 	{
-		if (++dup_count >= 2)
+		if (++dup_count >= 3)
 		{
 			handleDupAck(id);
 		}
@@ -43,12 +43,11 @@ void TCPFast::handleDupAck(int id)
 	{
 		resetNextID();
 	}
-
 }
 
 void TCPFast::updateWindow()
 {
-	double temp = gamma * (min_RTT / getAvgRTT() * window_size + alpha);
+	double temp = gamma * (min_RTT / recent_RTT * window_size + alpha);
 	double temp2 = (1 - gamma) * window_size;
 	window_size = std::min(2 * window_size, temp + temp2);
 }

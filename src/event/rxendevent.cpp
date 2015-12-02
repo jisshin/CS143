@@ -23,7 +23,6 @@ int RxEndEvent::handleEvent()
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
 	rx_flow->receiveAckAndGenRx(rx_packet);
-
 	delete rx_packet;
 	return 1;
 }

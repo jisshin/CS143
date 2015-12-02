@@ -14,7 +14,6 @@ TxSrcEvent::TxSrcEvent(double t, Packet* pPkt) : TxEvent(t, pPkt, NULL)
 int TxSrcEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
-
 	Flow* tx_flow = nm->getFlow(tx_packet->packet_flow_id);
 	commonTransmit(tx_node, tx_packet);
 	tx_flow->sendSrcAndGenTx(tx_packet);		
