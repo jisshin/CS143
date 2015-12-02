@@ -7,10 +7,6 @@
 class Flow;
 class Packet;
 
-enum TCPType{
-	TCP_RENO_t, TCP_FAST_t
-};
-
 class Flow;
 
 class TCPAlgorithm {

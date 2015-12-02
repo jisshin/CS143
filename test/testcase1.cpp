@@ -5,11 +5,7 @@
 #include "../include/flow.hpp"
 #include "../include/link.hpp"
 #include "../include/node.hpp"
-#include "../include/packet.hpp"
-#include "../include/event/txsrcevent.hpp"
-#include "../include/event/logevent.hpp"
 #include "../include/common.hpp"
-#include "../include/tcpalgorithm/tcpreno.hpp"
 
 #include <cstdlib>
 #include <vector>
@@ -48,14 +44,10 @@ int main()
 	nm->connectLink("L4", "R3", "R4");
 	nm->connectLink("L5", "R4", "H2");
 
-	Flow flow("F1", "H1", "H2", 20000000);
-
-	flow.setTCPStrategy(TCP_RENO_t);
+	Flow flow("F1", "H1", "H2", 20000000, TCP_RENO_t, 0.5);
 	nm->registerFlow(flow);
-	Packet* init_tx_packet = flow.genNextPacketFromTx();
-	TxSrcEvent *init_tx = new TxSrcEvent(0.5, init_tx_packet);
-	EventQueue* eq = EventQueue::getInstance();
 
+	EventQueue* eq = EventQueue::getInstance();
 	eq->run();
 
 	Logger * logger = Logger::getInstance();

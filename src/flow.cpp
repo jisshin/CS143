@@ -10,11 +10,15 @@
 
 #include <iostream>
 
-Flow::Flow(std::string id, std::string src, std::string dest, int data_amt)\
+Flow::Flow(std::string id, std::string src, std::string dest, int data_amt, int strategy_type, double start_time)\
 : flow_id(id), \
   flow_src(src), \
   flow_dest(dest), \
-  flow_data_amt(data_amt){
+  flow_data_amt(data_amt)
+{
+	setTCPStrategy(strategy_type);
+	Packet* init_tx_packet = genNextPacketFromTx();
+	TxSrcEvent *init_tx = new TxSrcEvent(start_time, init_tx_packet);
 }
 
 void Flow::receiveSrcAndGenTx(Packet* pkt)

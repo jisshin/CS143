@@ -11,9 +11,7 @@ class Flow;
 
 class TCPFast :public TCPAlgorithm {
 public:
-	TCPFast(Flow* parent_flow) :TCPAlgorithm(parent_flow) 
-	{
-	}
+	TCPFast(Flow* parent_flow);
 
 	void updateAck(int id) override;
 	void alertPacketSent(Packet* pkt) override;

@@ -1,9 +1,14 @@
 #include "../../include/tcpalgorithm/tcpfast.hpp"
+#include "../../include/event/tcpfastupdate.hpp"
 #include "../../include/eventqueue.hpp"
 #include "../../include/common.hpp"
 #include "../../include/packet.hpp"
 #include <iostream>
 
+TCPFast::TCPFast(Flow* parent_flow) : TCPAlgorithm(parent_flow)
+{
+	TCPFastUpdate* fastupdate = new TCPFastUpdate(getAvgRTT());
+}
 
 void TCPFast::updateAck(int id) {
 

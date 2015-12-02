@@ -13,13 +13,12 @@ class TCPAlgorithm;
 
 class Flow {
 public:
-	Flow(std::string id, std::string src, std::string dest, int data_amt);
+	Flow(std::string id, std::string src, std::string dest, int data_amt, int strategy_type, double start_time);
 
 	void receiveSrcAndGenTx(Packet* pkt);
 	void receiveAckAndGenRx(Packet* pkt);
 
 	void setTCPStrategy(int);
-
 	TCPAlgorithm* getTCPStrategy() { return TCP_strategy; };
 
 	std::string getSrc() { return flow_src; }
