@@ -3,6 +3,8 @@
 
 #include "common.hpp"
 
+class Packet;
+
 enum TCPType{
 	TCP_RENO_t
 };
@@ -14,7 +16,9 @@ enum TCPState {
 class TCPAlgorithm {
 public:
 	TCPAlgorithm() {}
-	void updateTransmit();
+
+	virtual void alertPacketSent(Packet*) {}
+	virtual void updateTransmit();
 	virtual void updateAck(int id){}
 	//virtual void updateLoss(int id){}
 	virtual void rx_timeout(int id){}
