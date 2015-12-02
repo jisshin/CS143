@@ -15,7 +15,7 @@ public:
   /**
   * Creates data out of data obtained from network.
   */
-  int createNetwork(string method);
+  int createNetwork();
 
 private:
 	std::vector<string> link_ids;
@@ -28,6 +28,7 @@ private:
 	std::vector<string> flow_dests;
 	std::vector<int> data_amts;
 	std::vector<double> flow_starts;
+	std::vector<int> flow_tcp;
 
 	std::vector<string> all_nodes;
 

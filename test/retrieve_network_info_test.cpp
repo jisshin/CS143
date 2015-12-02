@@ -4,13 +4,22 @@
 
 #include "../include/retrieve_network_info.hpp"
 
-#include <cassert>
-#include <cstdlib>
 
-int main() {
+#include <cstdlib>
+#include <iostream>
+
+int main(int argc, char* argv[]) {
+  if (argc != 2){
+	  std::cout << "enter json file name" << std::endl;
+	  return 0;
+  }
+
   RetrieveNetworkInfo retrieve;
 
-  retrieve.setNetworkInfo("network1.json");
-  retrieve.createNetwork("Reno");
-
+  if (retrieve.setNetworkInfo(argv[1])){
+	  retrieve.createNetwork();
+  }
+  return 0;
 }
+
+

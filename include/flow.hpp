@@ -13,7 +13,8 @@ class TCPAlgorithm;
 
 class Flow {
 public:
-	Flow(std::string id, std::string src, std::string dest, int data_amt, int strategy_type, double start_time);
+	Flow(std::string id, std::string src, std::string dest, \
+			int data_amt, int strategy_type, double start_time);
 
 	void sendSrcAndGenTx(Packet* pkt);
 	void receiveAckAndGenRx(Packet* pkt);
