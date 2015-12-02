@@ -1,12 +1,9 @@
-#include "../../include/event/txsrcevent.hpp"
 #include "../../include/event/tcpfastupdate.hpp"
-#include "../../include/eventqueue.hpp"
-#include "../../include/flow.hpp"
+#include "../../include/tcpalgorithm/tcpfast.hpp"
 
 int TCPFastUpdate::handleEvent() {
-	EventQueue::getInstance()->num_non_core--;
 
-	
+	fast->updateWindow();
 	return 1;
 }
 

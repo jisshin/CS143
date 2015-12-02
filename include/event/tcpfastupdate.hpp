@@ -4,16 +4,18 @@
 #include "../event.hpp"
 #include "../eventqueue.hpp"
 
+class TCPFast;
 class Flow;
 
 class TCPFastUpdate :public Event {
 public:
-	TCPFastUpdate(double t) : Event(t)
-	{
-		EventQueue::getInstance()->num_non_core++;
-	}
+	TCPFastUpdate(double t, TCPFast* tcp) : Event(t), fast(tcp)
+	{}
 
 	int handleEvent() override;
+
+private:
+	TCPFast* fast;
 
 };
 

@@ -7,7 +7,7 @@
 
 TCPFast::TCPFast(Flow* parent_flow) : TCPAlgorithm(parent_flow)
 {
-	TCPFastUpdate* fastupdate = new TCPFastUpdate(getAvgRTT());
+	TCPFastUpdate* fastupdate = new TCPFastUpdate(getAvgRTT(), this);
 }
 
 void TCPFast::updateAck(int id) {
@@ -23,7 +23,6 @@ void TCPFast::updateAck(int id) {
 	{
 		//the system guarantees this id is biggger
 		//than previous acknowledgement. 
-		handleNewAck(id);
 		last_rx_ack_id = id;
 		dup_count = 1;
 	}
@@ -44,7 +43,7 @@ void TCPFast::handleDupAck(int id)
 	}
 }
 
-void TCPFast::handleNewAck(int id)
+void TCPFast::updateWindow()
 {
 
 }

@@ -16,6 +16,7 @@ public:
 	void updateAck(int id) override;
 	void alertPacketSent(Packet* pkt) override;
 
+	void updateWindow();
 private:
 	int threshold = std::numeric_limits<int>::max();
 	int dup_count = 0;
