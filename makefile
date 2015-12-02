@@ -1,6 +1,6 @@
 .PHONY: test
 
-CXXFLAG=-g -std=c++11
+CXXFLAG=-g -std=c++11 -I/usr/local/include
 
 
 test:
@@ -42,7 +42,7 @@ OBJECTS := ./obj/event.o ./obj/eventqueue.o ./obj/flow.o ./obj/node.o ./obj/link
 OBJECTS += ./obj/rxackevent.o ./obj/rxendevent.o ./obj/rxeventfactory.o ./obj/logger.o
 OBJECTS += ./obj/rxfwdevent.o ./obj/rxrouteevent.o ./obj/txsrcevent.o ./obj/logevent.o
 OBJECTS += ./obj/networkmanager.o ./obj/tcpreno.o ./obj/routeevent.o
-OBJECTS += ./obj/tcptimeoutevent.o ./obj/tcpalgorithm.o
+OBJECTS += ./obj/tcptimeoutevent.o ./obj/tcpalgorithm.o ./obj/tcpfast.o
 
 testcase0:
 	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
@@ -63,7 +63,7 @@ testcase0:
 	gcc -c $(CXXFLAG) ./src/event/routeevent.cpp -o ./obj/routeevent.o
 	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
 	gcc -c $(CXXFLAG) ./src/event/tcptimeoutevent.cpp -o ./obj/tcptimeoutevent.o
-	gcc -c $(CXXFLAG) ./src/tcpalgorithm.cpp -o ./obj/tcpalgorithm.o
+	gcc -c $(CXXFLAG) ./src/tcpalgorithm.cpp -o ./obj/tcpalgorithm.o ./obj/testfastupdate.o
 
 	gcc -o ./bin/testcase0 -lstdc++ ./obj/testcase0.o $(OBJECTS)
 
@@ -82,6 +82,7 @@ testcase1:
 	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
 	gcc -c $(CXXFLAG) ./test/testcase1.cpp -o ./obj/testcase1.o
 	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpreno.cpp -o ./obj/tcpreno.o
+	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpfast.cpp -o ./obj/tcpfast.o
 	gcc -c $(CXXFLAG) ./src/event/logevent.cpp -o ./obj/logevent.o
 	gcc -c $(CXXFLAG) ./src/event/routeevent.cpp -o ./obj/routeevent.o
 	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
@@ -106,15 +107,13 @@ testretrieve:
 	gcc -c $(CXXFLAG) ./src/event/logevent.cpp -o ./obj/logevent.o
 	gcc -c $(CXXFLAG) ./src/event/routeevent.cpp -o ./obj/routeevent.o
 	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
+	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpfast.cpp -o ./obj/tcpfast.o
 	gcc -c $(CXXFLAG) ./src/event/tcptimeoutevent.cpp -o ./obj/tcptimeoutevent.o
 	gcc -c $(CXXFLAG) ./src/tcpalgorithm.cpp -o ./obj/tcpalgorithm.o
-	gcc -c $(CXXFLAG) ./lib/lib_json/json_writer.cpp -o ./obj/json_writer.o
-	gcc -c $(CXXFLAG) ./lib/lib_json/json_value.cpp -o ./obj/json_value.o
-	gcc -c $(CXXFLAG) ./lib/lib_json/json_reader.cpp -o ./obj/json_reader.o
 	gcc -c $(CXXFLAG) ./src/retrieve_network_info.cpp -o ./obj/retrieve_network_info.o
 	gcc -c $(CXXFLAG) ./test/retrieve_network_info_test.cpp -o ./obj/retrieve_network_info_test.o
-
-	gcc ./obj/*.o -o ./bin/testretrieve -lstdc++
+	gcc -c $(CXXFLAG) ./src/event/tcpfastupdate.cpp -o ./obj/tcpfastupdate.o
+	gcc ./obj/*.o -o ./bin/testretrieve -L/usr/local/lib -lstdc++ -ljsoncpp
 
 .PHONY: clean
 clean:

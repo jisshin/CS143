@@ -2,9 +2,7 @@
 #include "../include/networkmanager.hpp"
 #include "../include/eventqueue.hpp"
 #include "../include/logger.hpp"
-#include "../lib/json/json.h"
-#include "../lib/json/reader.h"
-#include "../lib/json/value.h"
+#include "json/json.h"
 #include "../include/flow.hpp"
 #include "../include/link.hpp"
 #include "../include/packet.hpp"
@@ -26,7 +24,11 @@ using std::cout;
 
 int RetrieveNetworkInfo::setNetworkInfo(string file_name)
 {
-  std::ifstream file(file_name, std::ifstream::binary);
+  std::ifstream file(file_name);
+  if (!file) {
+     cerr << "Open " << file_name << " failed" << std::endl;
+     return 0;
+   }
   Json::Value root;
   Json::Reader reader;
 
@@ -37,7 +39,7 @@ int RetrieveNetworkInfo::setNetworkInfo(string file_name)
     // report to the user the failure and their locations in the document.
     std::cout  << "Failed to parse configuration\n"
                << reader.getFormattedErrorMessages();
-    return -1;
+    return 0;
   }
   Json::Value links = root["Links"];
   Json::Value flows = root["Flows"];
@@ -63,6 +65,7 @@ int RetrieveNetworkInfo::setNetworkInfo(string file_name)
     flow_dests.push_back(flows[i]["flow_dest"].asString());
     data_amts.push_back(flows[i]["data_amt"].asInt());
     flow_starts.push_back(flows[i]["flow_start"].asDouble());
+    flow_tcp.push_back(flows[i]["flow_tcp"].asInt());
   }
 
   for (int i = 0; i < connection_no; i++){
@@ -79,50 +82,35 @@ int RetrieveNetworkInfo::setNetworkInfo(string file_name)
   return 1;
 }
 
-int RetrieveNetworkInfo::createNetwork(string method)
+int RetrieveNetworkInfo::createNetwork()
 {
 
   NetworkManager *manager = NetworkManager::getInstance();
+  EventQueue* eq = EventQueue::getInstance();
 
   // register links
   for (int i = 0; i < link_no; i++){
-    Link link(link_ids[i], link_rates[i] * 1000000, link_delays[i] * .001, link_buffers[i] * 1000);
-    manager->registerLink(link);
+    Link* myLink = new Link(link_ids[i], link_rates[i] * 1000000, link_delays[i] * .001, link_buffers[i] * 1000);
+    manager->registerLink(*myLink);
   }
 
+  // register nodes
   for (int i = 0; i < node_no; i++){
-    Node node(all_nodes[i]);
-    manager->registerNode(node);
+    Node* myNode = new Node(all_nodes[i]);
+    manager->registerNode(*myNode);
   }
 
+  // register links
   for (int i = 0; i < connection_no; i++){
     manager->connectLink(c_link[i], c_node1[i], c_node2[i]);
-
   }
-  EventQueue* eq = EventQueue::getInstance();
+
   // register flows
   for (int i = 0; i < flow_no; i++){
-    Flow flow(flow_ids[i], flow_srcs[i], flow_dests[i], data_amts[i] * 1000000);
-    TCPAlgorithm* alg = NULL;
-    if(method == "Reno"){
-    	alg = new TCPReno();
-    }
-    else if(method == "Fast"){
-      //alg = new TCPFast
-    }
-    else{
-    	std::cout << "undefined algorithm type no." << std::endl;
-    	alg = new TCPReno();
-    	// set to some default
-    }
-    flow.setTCPStrategy(alg);
-    manager->registerFlow(flow);
-
-    Packet* init_tx_packet = flow.genNextPacketFromTx();
-	  TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
-    init_tx->time = flow_starts[i];
-  	eq->push(init_tx);
-
+    Flow* myFlow= new Flow(flow_ids[i], \
+    		flow_srcs[i], flow_dests[i], data_amts[i] * 1000000, \
+			flow_tcp[i], flow_starts[i]);
+    manager->registerFlow(*myFlow);
   }
 
   eq->run();

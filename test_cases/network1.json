@@ -37,12 +37,14 @@
       "link_buffer":64
     }
   ],
-  "Flows":[{
+  "Flows":[
+    {
       "flow_id":"F1",
       "flow_src":"H1",
       "flow_dest":"H2",
       "data_amt":20,
-      "flow_start":0.5
+      "flow_start":0.5,
+      "flow_tcp":0
     }
   ],
   "Connections":[
@@ -64,8 +66,6 @@
     [
       "L5", "R4", "H2"
     ]
-
-
   ],
   "Nodes":[
     "H1", "H2","R1", "R2", "R3", "R4"

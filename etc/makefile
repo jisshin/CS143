@@ -15,16 +15,16 @@ OBJFILES := $(CXXFILES:src/%.cpp=%) $(CFILES:src/%.c=%)
 DEPFILES := $(CXXFILES:src/%.cpp=%) $(CFILES:src/%.c=%)
 OFILES := $(OBJFILES:%=obj/%.o)
 
-BINFILE = network_sim
+BINFILE = bin/network_sim
 
 COMMONFLAGS = -Wall -Wextra -pedantic
-LDFLAGS =
+LDFLAGS = —L/usr/local/lib -lstdc++ -ljsoncpp
 
 ifdef DEBUG
 		COMMONFLAGS := $(COMMONFLAGS) -g
 endif
-CFLAGS = $(COMMONFLAGS) --std=c99
-CXXFLAGS = $(COMMONFLAGS) --std=c++0x
+CFLAGS = $(COMMONFLAGS) -std=c99
+CXXFLAGS = $(COMMONFLAGS) -std=c++11 -I/usr/local/include
 DEPDIR = deps
 all: $(BINFILE)
 ifeq ($(MAKECMDGOALS),)
