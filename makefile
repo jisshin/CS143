@@ -5,7 +5,7 @@ else
 		Q = @
 		E = @echo 
 endif
-
+DEBUG = 1
 CFILES := $(shell find src -mindepth 1 -maxdepth 4 -name "*.c")
 CXXFILES := $(shell find src -mindepth 1 -maxdepth 4 -name "*.cpp")
 

@@ -7,6 +7,8 @@
 #include "../../include/logger.hpp"
 #include "../../include/tcpalgorithm.hpp"
 
+
+double LogEvent::LOG_INTERVAL = 0;
 int LogEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
@@ -151,3 +153,4 @@ double LogEvent::byteToMbps(double byte)
 {
 	return (byte * 8) / 1000000 / LOG_INTERVAL;
 }
+

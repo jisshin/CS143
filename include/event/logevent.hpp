@@ -18,6 +18,7 @@ class LogEvent : public Event
 	}
 
     int handleEvent();
+	static double LOG_INTERVAL;
 
   private:
     void logData(Link*);
@@ -36,6 +37,7 @@ class LogEvent : public Event
     double getPacketRTT(Flow* flow);
 
 	double byteToMbps(double);
+
 };
 
 #endif

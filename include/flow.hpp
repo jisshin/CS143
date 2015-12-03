@@ -18,26 +18,64 @@ public:
 	Flow(std::string id, std::string src, std::string dest, \
 			int data_amt, int strategy_type, double start_time);
 
+	/**
+	 * record transmission of a source packet and
+	 * generate the next TxSrceEvent if there is a
+	 * open window space
+	 */
 	void sendSrcAndGenTx(Packet* pkt);
+
+	/**
+	 * record receiption of a Ack packet and generate
+	 * the next TxSrcEvent if a window space just open
+	 * up due to the Ack packet
+	 */
 	void receiveAckAndGenRx(Packet* pkt);
 
+	/**
+	 * Set TCP_strategy of the flow
+	 */
 	void setTCPStrategy(int);
-	TCPAlgorithm* getTCPStrategy() { return TCP_strategy; };
 
+	// just accessors
+	TCPAlgorithm* getTCPStrategy() { return TCP_strategy; };
 	std::string getFlowID() { return flow_id; }
 	std::string getSrc() { return flow_src; }
 	std::string getDest() { return flow_dest; }
 	int getDataAmt() { return flow_data_amt; }
 	double getStartTime() { return flow_start_time; }
+
 	operator std::string() { return flow_id; }
 
-	//TCP dependent
+	/**
+	 * Set tx_base_delay according to the link rate
+	 * of the link connect to the source of the flow
+	 */
 	void setTxDelay(double link_rate);
+
+	/**
+	 * Return the transmission delay for the next
+	 * source packet
+	 */
 	double getTxDelay();
 
+	/**
+	 * Generate next source packet when an ACK or
+	 * timeout occur
+	 */
 	Packet* genNextPacketFromRx();
+
+	/**
+	 * Generate next source packet when a source
+	 * packet is successfully sent out.
+	 */
 	Packet* genNextPacketFromTx();
+
+	/**
+	 * Generate the next AckPacket
+	 */
 	Packet* genAckPacket(Packet* received_packet);
+
 
 	int getNumByteSent();
 	int getNumByteReceive();
