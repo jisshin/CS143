@@ -1,18 +1,25 @@
-#include "eventqueue.hpp"
-#include "retrieve_network_info.hpp"
-#include <stdio.h>
-#include <stdlib.h>
+/**
+* Checks the functionality of retrieving network info.
+*/
+
+#include "../include/retrieve_network_info.hpp"
+
+
+#include <cstdlib>
 #include <iostream>
 
-using namespace std;
+int main(int argc, char* argv[]) {
+	if (argc != 2) {
+		std::cout << "enter json file name" << std::endl;
+		return 0;
+	}
 
-int main(){
-	EventQueue& queue1 = EventQueue::get_instance();
-	EventQueue& queue2 = EventQueue::get_instance();
-	EventQueue& queue3 = EventQueue::get_instance();
+	RetrieveNetworkInfo retrieve;
 
-	cout<<queue1.test_count()<<endl;
-	cout<<queue2.test_count()<<endl;
-	cout<<queue3.test_count()<<endl;
-
+	if (retrieve.setNetworkInfo(argv[1])) {
+		retrieve.createNetwork();
+	}
+	return 0;
 }
+
+

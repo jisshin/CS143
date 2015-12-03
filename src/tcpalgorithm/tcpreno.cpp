@@ -3,6 +3,7 @@
 #include "../../include/eventqueue.hpp"
 #include "../../include/event/tcptimeoutevent.hpp"
 #include "../../include/packet.hpp"
+#include "../../include/flow.hpp"
 #include <iostream>
 
 
@@ -34,7 +35,10 @@ void TCPReno::handleDupAck(int id)
 	case CONG_AVOID: //move to FRFR state
 		state = FRFR;
 #ifdef JISOO
-		std::cout << "CASE 1:";
+		if (parent_flow->getFlowID() == DEBUG_FLOW)
+		{
+			std::cout << "CASE 1:";
+		}
 #endif
 		threshold = (window_size / 2 > 2) ? window_size / 2 : 2;
 		fr_window = (window_size / 2 > 1) ? window_size / 2 : 1;
@@ -97,10 +101,6 @@ void TCPReno::alertPacketSent(Packet* pkt)
 
 void TCPReno::rx_timeout(int id){
 
-#ifdef JISOO
-	if (id == 414)
-		int i = 1;
-#endif
 	if (cancel_timeout.count(id) == 1 && cancel_timeout[id] > 0)
 	{
 		cancel_timeout[id]--;
@@ -122,7 +122,10 @@ void TCPReno::rx_timeout(int id){
 		threshold = (window_size / 2 > 2) ? window_size / 2 : 2;
 		window_size = 1;
 #ifdef JISOO
-		std::cout << "CASE 2:";
+		if (parent_flow->getFlowID() == DEBUG_FLOW)
+		{
+			std::cout << "CASE 2:";
+		}
 #endif
 		resetNextID();
 		break;
@@ -132,7 +135,10 @@ void TCPReno::rx_timeout(int id){
 		//window size is already 1.
 		window_size = 1;
 #ifdef JISOO
-		std::cout << "CASE 3:";
+		if (parent_flow->getFlowID() == DEBUG_FLOW)
+		{
+			std::cout << "CASE 3:";
+		}
 #endif
 		resetNextID();
 		break;
@@ -149,7 +155,10 @@ void TCPReno::rx_timeout(int id){
 void TCPReno::resetNextID()
 {
 #ifdef JISOO
-	std::cout << "NEXT ID RESET TO " << last_rx_ack_id << " FROM " << next_id << " THRESHOLD " << threshold << std::endl;
+	if (parent_flow->getFlowID() == DEBUG_FLOW)
+	{
+		std::cout << "NEXT ID RESET TO " << last_rx_ack_id << " FROM " << next_id << " THRESHOLD " << threshold << std::endl;
+	}
 #endif
 	for (int i = last_rx_ack_id; i < next_id; i++)
 	{
