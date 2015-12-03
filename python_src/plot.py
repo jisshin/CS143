@@ -4,7 +4,7 @@ import numpy as np
 import sys
 
 
-color = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+color = ['b', 'g', 'r', 'c', 'm', 'y', 'k', '#9400D3', '#FF8C00', '#FA8072']
 
 
 def plotOutput(file_name):
@@ -77,9 +77,9 @@ def plotOutputArg(file_name, arg):
 
     if 'L' in arg[0]:
         f, grph = plt.subplots(3, sharex=True)
-        grph[0].set_title('Link Rates')
+        grph[0].set_title('Buffer Occupancy')
         grph[1].set_title('Packet Loss')
-        grph[2].set_title('Buffer Occupancy')
+        grph[2].set_title('Link Rate')
 
         x = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols = (0,))
 
@@ -99,20 +99,20 @@ def plotOutputArg(file_name, arg):
                 break
 
         grph[0].legend(prop={'size':8})
-        grph[0].set_ylabel('Megabits per second (Mbps)', fontsize = 8)
+        grph[0].set_ylabel('KB', fontsize = 8)
 
         grph[1].legend(prop={'size':8})
         grph[1].set_ylabel('packets per second', fontsize = 8)
 
         grph[2].legend(prop={'size':8})
-        grph[2].set_ylabel('packets per second', fontsize = 8)
+        grph[2].set_ylabel('Megabits per second (Mbps)', fontsize = 8)
         grph[2].set_xlabel('time (s)')
 
 
         plt.show()
 
 
-    if 'F' in arg[0]:
+    elif 'F' in arg[0]:
         f, grph = plt.subplots(4, sharex=True)
         startFindex = 1
         grph[0].set_title('Flow Send Rate')
@@ -130,7 +130,7 @@ def plotOutputArg(file_name, arg):
 
         for i in xrange(startFindex, col_n, 5):
             if cols[i] in  arg:
-                print cols[i]
+
                 y1, y2, y3, y4 = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols=(i + 1, i + 2, i + 3, i + 4))
 
 
@@ -172,8 +172,9 @@ def plotOutputArg(file_name, arg):
                 startHindex = i
 
         for i in xrange(startHindex, col_n, 5):
-            if 'H' in cols[i]:
+            if cols[i] in arg:
                 startHindex = i
+
 
         for i in xrange(startHindex, col_n, 3):
             if cols[i] in  arg:
