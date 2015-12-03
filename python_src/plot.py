@@ -5,7 +5,7 @@ import sys
 
 
 color = ['b', 'g', 'r', 'c', 'm', 'y', 'k', '#9400D3', '#FF8C00', '#FA8072']
-
+###y1, y2, y3, y4 = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols=(37, 38, 39, 40)
 
 def plotOutput(file_name):
     c1 = 0
@@ -76,6 +76,7 @@ def plotOutputArg(file_name, arg):
 
 
     if 'L' in arg[0]:
+
         f, grph = plt.subplots(3, sharex=True)
         grph[0].set_title('Buffer Occupancy')
         grph[1].set_title('Packet Loss')
@@ -113,6 +114,7 @@ def plotOutputArg(file_name, arg):
 
 
     elif 'F' in arg[0]:
+
         f, grph = plt.subplots(4, sharex=True)
         startFindex = 1
         grph[0].set_title('Flow Send Rate')
@@ -123,23 +125,25 @@ def plotOutputArg(file_name, arg):
         x = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols = (0,))
 
         for i in xrange(1, col_n, 4):
+            
             if 'F' in cols[i]:
                 startFindex = i
-
+                break
 
 
         for i in xrange(startFindex, col_n, 5):
+
             if cols[i] in  arg:
 
-                y1, y2, y3, y4 = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols=(i + 1, i + 2, i + 3, i + 4))
+                y1, y2, y3, y4 = np.genfromtxt(file_name, unpack=True, delimiter = ',', usecols=(i + 1, i + 2, i + 3, i + 4))
 
 
 
-            grph[0].plot(x, y1, color[c1], label = cols[i])
-            grph[1].plot(x, y2, color[c1], label = cols[i])
-            grph[2].plot(x, y3, color[c1], label = cols[i])
-            grph[3].plot(x, y4, color[c1], label = cols[i])
-            c1 += 1
+                grph[0].plot(x, y1, color[c1], label = cols[i])
+                grph[1].plot(x, y2, color[c1], label = cols[i])
+                grph[2].plot(x, y3, color[c1], label = cols[i])
+                grph[3].plot(x, y4, color[c1], label = cols[i])
+                c1 += 1
 
 
             if c1 == argl:
@@ -161,6 +165,7 @@ def plotOutputArg(file_name, arg):
         plt.show()
 
     else:
+
         startHindex = 1
         f, grph = plt.subplots(2, sharex=True)
         grph[0].set_title('Send Rate')
@@ -170,11 +175,11 @@ def plotOutputArg(file_name, arg):
         for i in xrange(1, col_n, 4):
             if 'F' in cols[i]:
                 startHindex = i
-
+                break
         for i in xrange(startHindex, col_n, 5):
             if cols[i] in arg:
                 startHindex = i
-
+                break
 
         for i in xrange(startHindex, col_n, 3):
             if cols[i] in  arg:
