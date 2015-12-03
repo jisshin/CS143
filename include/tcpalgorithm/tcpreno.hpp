@@ -26,6 +26,8 @@ private:
 	int fr_window = 0;
 	int dup_count = 0;
 
+
+	int fr_start_window = 0;
 	void handleDupAck(int);
 	void handleNewAck(int);
 

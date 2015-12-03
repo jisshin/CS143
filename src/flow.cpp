@@ -111,6 +111,8 @@ Packet* Flow::comGenSrcPacket() {
 	std::cout << flow_id <<"data amount" << flow_data_amt << std::endl;
 	return NULL;
 }
+
+
 //TODO: implement genAckPacket and get rid of getAckID
 Packet* Flow::genAckPacket(Packet* received_packet)
 {

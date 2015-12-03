@@ -39,6 +39,7 @@ void TCPReno::handleDupAck(int id)
 		threshold = (window_size / 2 > 2) ? window_size / 2 : 2;
 		fr_window = (window_size / 2 > 1) ? window_size / 2 : 1;
 		window_size = window_size / 2 + 3;
+		fr_start_window = window_size;
 		resetNextID();
 		break;
 
@@ -139,6 +140,8 @@ void TCPReno::rx_timeout(int id){
 	case FRFR:
 		//shouldn't happen
 		std::cout << "State Machine Error Type 3" << std::endl;
+		resetNextID();
+		window_size = fr_start_window;
 		break;
 	}
 }

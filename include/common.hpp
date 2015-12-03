@@ -8,8 +8,8 @@ enum TCPType {
 
 //#define DEBUG
 //#define CHECK_DROP
-#define JISOO
-
+//#define JISOO
+#define err_test
 #include <cassert>
 
 #endif //COMMON_H
