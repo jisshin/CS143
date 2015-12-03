@@ -8,14 +8,9 @@
 #include <map>	
 
 class Flow;
-
-<<<<<<< HEAD
 const double Gamma = 0.90;
 const double alpha = 20;
-=======
-const double gamma = 0.9;
-const double alpha = 10;
->>>>>>> 99fa83e1a0a43e4905fbcbc79d70d8c324480e01
+
 
 class TCPFast :public TCPAlgorithm {
 public:

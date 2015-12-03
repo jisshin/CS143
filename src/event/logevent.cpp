@@ -28,9 +28,11 @@ int LogEvent::handleEvent()
 		link = nm->getNextLinkIterator();
 	}
 
-	while ((flow != NULL)&&(!flow->checkFlowDone()))
+	while (flow != NULL)
 	{
-		logData(flow);
+		if (!flow->checkFlowDone()){
+			logData(flow);
+		}
 		flow = nm->getNextFlowIterator();
 	}
 

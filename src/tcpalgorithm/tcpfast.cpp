@@ -47,13 +47,9 @@ void TCPFast::handleDupAck(int id)
 
 void TCPFast::updateWindow()
 {
-<<<<<<< HEAD
 	double temp = Gamma * (min_RTT / getAvgRTT() * window_size + alpha);
 	double temp2 = (1 - Gamma) * window_size;
-=======
-	double temp = gamma * (min_RTT / recent_RTT * window_size + alpha);
-	double temp2 = (1 - gamma) * window_size;
->>>>>>> 99fa83e1a0a43e4905fbcbc79d70d8c324480e01
+
 	window_size = std::min(2 * window_size, temp + temp2);
 }
 

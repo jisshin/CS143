@@ -22,7 +22,6 @@ int RxEndEvent::handleEvent()
 
 	NetworkManager* nm = NetworkManager::getInstance();
 	Flow* rx_flow = nm->getFlow(rx_packet->packet_flow_id);
-	std::cout << "got ack : "<< rx_packet->packet_seq_id << std::endl;
 	rx_flow->receiveAckAndGenRx(rx_packet);
 	delete rx_packet;
 	return 1;
