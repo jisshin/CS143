@@ -40,8 +40,13 @@ void Flow::receiveAckAndGenRx(Packet* pkt)
 {
 	receive_ack(pkt->packet_seq_id);
 	TCP_strategy->alertPacketReceive(pkt);
-	pkt = genNextPacketFromRx();
 
+	// check termination condition
+	if ((pkt->packet_seq_id * SRC_SIZE) >= flow_data_amt){
+		flow_finish = 1;
+	}
+
+	pkt = genNextPacketFromRx();
 	if (pkt != NULL)
 	{
 		double event_time = EventQueue::cur_time + getTxDelay();
@@ -107,14 +112,13 @@ Packet* Flow::genNextPacketFromRx(){
 
 
 Packet* Flow::comGenSrcPacket() {
-	if (flow_data_amt > 0) {
+	if (TCP_strategy->getNextID()*SRC_SIZE < flow_data_amt) {
 		Packet* next_packet = new Packet(flow_id, flow_src, \
 			flow_dest, SRC_PACKET, TCP_strategy->getNextID());
-		flow_data_amt -= next_packet->packet_size;
 		TCP_strategy->updateTransmit();
 		return next_packet;
 	}
-	std::cout << "data amount" << flow_data_amt << std::endl;
+	std::cout << flow_id <<"data amount" << flow_data_amt << std::endl;
 	return NULL;
 }
 //TODO: implement genAckPacket and get rid of getAckID

@@ -9,7 +9,7 @@
 
 class Flow;
 
-const double gamma = 0.90;
+const double Gamma = 0.90;
 const double alpha = 20;
 
 class TCPFast :public TCPAlgorithm {

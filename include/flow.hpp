@@ -38,6 +38,7 @@ public:
 
 	int getNumByteSent();
 	int getNumByteReceive();
+	int checkFlowDone(){return flow_finish;}
 
 private:
 	void receive_ack(int id);
@@ -63,6 +64,7 @@ private:
 	double last_rx_ack_t;
 
 	int window_full_flag = 0;
+	int flow_finish = 0;
 	Packet* comGenSrcPacket();
 
 };
