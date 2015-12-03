@@ -36,7 +36,7 @@ void Flow::sendSrcAndGenTx(Packet* pkt)
 	}
 }
 
-void Flow::receiveAckAndGenRx(Packet* pkt) 
+void Flow::receiveAckAndGenRx(Packet* pkt)
 {
 	TCP_strategy->alertPacketReceive(pkt);
 	packet_receive++;
@@ -108,7 +108,9 @@ Packet* Flow::comGenSrcPacket() {
 			flow_dest, SRC_PACKET, TCP_strategy->getAndUpdateNextID());
 		return next_packet;
 	}
+#ifdef err_test
 	std::cout << flow_id <<"data amount" << flow_data_amt << std::endl;
+#endif
 	return NULL;
 }
 
@@ -123,7 +125,7 @@ Packet* Flow::genAckPacket(Packet* received_packet)
 		std::cout << flow_id << " : " << received_packet->packet_seq_id << " - " << last_tx_ack_id << std::endl;
 #endif
 	if (received_packet->packet_seq_id >= last_tx_ack_id)
-	{	
+	{
 		//if the new packet sequence id is equal to or bigger
 		//than current acknowledged id, then we care about it.
 		unordered_pkts.push(received_packet->packet_seq_id);
