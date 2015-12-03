@@ -6,7 +6,8 @@
 #include <vector>
 #include <string>
 
-#define LOGGER_OUTPUT "output.csv"
+#include "common.hpp"
+
 class Logger{
 	public:
 		static Logger* getInstance();

@@ -3,12 +3,11 @@
 
 #include "../event.hpp"
 #include "../eventqueue.hpp"
+#include "../common.hpp"
 
 class Link;
 class Flow;
 class Node;
-
-const double LOG_INTERVAL = 0.1;
 
 class LogEvent : public Event
 {

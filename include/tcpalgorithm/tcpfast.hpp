@@ -3,14 +3,12 @@
 
 #include "../tcpalgorithm.hpp"
 #include "../flow.hpp"
+#include "../common.hpp"
 
 #include <limits>
 #include <map>	
 
 class Flow;
-const double Gamma = 0.90;
-const double alpha = 15;
-
 
 class TCPFast :public TCPAlgorithm {
 public:

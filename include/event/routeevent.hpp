@@ -3,9 +3,8 @@
 
 #include "../event.hpp"
 #include "../eventqueue.hpp"
-	
-const double ROUT_INTERVAL = 0.000001;
-const double REST_INTERVAL = 5;
+#include "../common.hpp"
+
 
 class RouteEvent : public Event
 {
