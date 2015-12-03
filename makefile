@@ -1,121 +1,63 @@
-.PHONY: test
+ifdef VERBOSE
+		Q =
+		E = @true 
+else
+		Q = @
+		E = @echo 
+endif
 
-CXXFLAG=-g -std=c++11 -I/usr/local/include
+CFILES := $(shell find src -mindepth 1 -maxdepth 4 -name "*.c")
+CXXFILES := $(shell find src -mindepth 1 -maxdepth 4 -name "*.cpp")
+
+INFILES := $(CFILES) $(CXXFILES)
+
+OBJFILES := $(CXXFILES:src/%.cpp=%) $(CFILES:src/%.c=%)
+DEPFILES := $(CXXFILES:src/%.cpp=%) $(CFILES:src/%.c=%)
+OFILES := $(OBJFILES:%=obj/%.o)
+
+BINFILE = bin/network_sim
+
+COMMONFLAGS = -Wall
+LDFLAGS = -lstdc++ -ljsoncpp -L/usr/local/lib 
+
+ifdef DEBUG
+		COMMONFLAGS := $(COMMONFLAGS) -g
+endif
+CFLAGS = $(COMMONFLAGS) -std=c99
+CXXFLAGS = $(COMMONFLAGS) -std=c++11 -I/usr/local/include
+DEPDIR = deps
+all: $(BINFILE)
+ifeq ($(MAKECMDGOALS),)
+-include Makefile.dep
+endif
+ifneq ($(filter-out clean, $(MAKECMDGOALS)),)
+-include Makefile.dep
+endif
+
+CC = gcc
+CXX = g++
 
 
-test:
-	make testeq
-	make testnm
-	make testnl
-	make testcase0
+-include Makefile.local
 
-run:
-	@./bin/testeq
-	@./bin/testnm
-	@./bin/testnl
-	@./bin/testcase0
+.PHONY: clean all depend
+.SUFFIXES:
+obj/%.o: src/%.c
+		$(E)C-compiling $<
+		$(Q)if [ ! -d `dirname $@` ]; then mkdir -p `dirname $@`; fi
+		$(Q)$(CC) -o $@ -c $< $(CFLAGS)
+obj/%.o: src/%.cpp
+		$(E)C++-compiling $<
+		$(Q)if [ ! -d `dirname $@` ]; then mkdir -p `dirname $@`; fi
+		$(Q)$(CXX) -o $@ -c $< $(CXXFLAGS)
+Makefile.dep: $(CFILES) $(CXXFILES)
+		$(E)Depend
+		$(Q)for i in $(^); do $(CXX) $(CXXFLAGS) -MM "$${i}" -MT obj/`basename $${i%.*}`.o; done > $@
 
-testeq:
-	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
-	gcc -c $(CXXFLAG) ./test/testeq.cpp -o ./obj/testeq.o
-
-	gcc ./obj/eventqueue.o ./obj/testeq.o -o ./bin/testeq -lstdc++
-
-testnm:
-	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
-	gcc -c $(CXXFLAG) ./src/link.cpp -o ./obj/link.o
-	gcc -c $(CXXFLAG) ./src/node.cpp -o ./obj/node.o
-	gcc -c $(CXXFLAG) ./src/flow.cpp -o ./obj/flow.o
-	gcc -c $(CXXFLAG) ./test/testnm.cpp -o ./obj/testnm.o
-
-	gcc ./obj/networkmanager.o ./obj/link.o ./obj/node.o ./obj/flow.o ./obj/testnm.o -o ./bin/testnm -lstdc++
-
-testnl:
-	gcc -c $(CXXFLAG) ./src/link.cpp -o ./obj/link.o
-	gcc -c $(CXXFLAG) ./src/node.cpp -o ./obj/node.o
-	gcc -c $(CXXFLAG) ./test/testnl.cpp -o ./obj/testnl.o
-
-	gcc ./obj/link.o ./obj/node.o ./obj/testnl.o -o ./bin/testnl -lstdc++
-
-
-OBJECTS := ./obj/event.o ./obj/eventqueue.o ./obj/flow.o ./obj/node.o ./obj/link.o
-OBJECTS += ./obj/rxackevent.o ./obj/rxendevent.o ./obj/rxeventfactory.o ./obj/logger.o
-OBJECTS += ./obj/rxfwdevent.o ./obj/rxrouteevent.o ./obj/txsrcevent.o ./obj/logevent.o
-OBJECTS += ./obj/networkmanager.o ./obj/tcpreno.o ./obj/routeevent.o
-OBJECTS += ./obj/tcptimeoutevent.o ./obj/tcpalgorithm.o ./obj/tcpfast.o
-
-testcase0:
-	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
-	gcc -c $(CXXFLAG) ./src/event.cpp -o ./obj/event.o
-	gcc -c $(CXXFLAG) ./src/flow.cpp -o ./obj/flow.o
-	gcc -c $(CXXFLAG) ./src/node.cpp -o ./obj/node.o
-	gcc -c $(CXXFLAG) ./src/link.cpp -o ./obj/link.o
-	gcc -c $(CXXFLAG) ./src/event/rxackevent.cpp -o ./obj/rxackevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxendevent.cpp -o ./obj/rxendevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxeventfactory.cpp -o ./obj/rxeventfactory.o
-	gcc -c $(CXXFLAG) ./src/event/rxfwdevent.cpp -o ./obj/rxfwdevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxrouteevent.cpp -o ./obj/rxrouteevent.o
-	gcc -c $(CXXFLAG) ./src/event/txsrcevent.cpp -o ./obj/txsrcevent.o
-	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
-	gcc -c $(CXXFLAG) ./test/testcase0.cpp -o ./obj/testcase0.o
-	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpreno.cpp -o ./obj/tcpreno.o
-	gcc -c $(CXXFLAG) ./src/event/logevent.cpp -o ./obj/logevent.o
-	gcc -c $(CXXFLAG) ./src/event/routeevent.cpp -o ./obj/routeevent.o
-	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
-	gcc -c $(CXXFLAG) ./src/event/tcptimeoutevent.cpp -o ./obj/tcptimeoutevent.o
-	gcc -c $(CXXFLAG) ./src/tcpalgorithm.cpp -o ./obj/tcpalgorithm.o ./obj/testfastupdate.o
-
-	gcc -o ./bin/testcase0 -lstdc++ ./obj/testcase0.o $(OBJECTS)
-
-testcase1:
-	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
-	gcc -c $(CXXFLAG) ./src/event.cpp -o ./obj/event.o
-	gcc -c $(CXXFLAG) ./src/flow.cpp -o ./obj/flow.o
-	gcc -c $(CXXFLAG) ./src/node.cpp -o ./obj/node.o
-	gcc -c $(CXXFLAG) ./src/link.cpp -o ./obj/link.o
-	gcc -c $(CXXFLAG) ./src/event/rxackevent.cpp -o ./obj/rxackevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxendevent.cpp -o ./obj/rxendevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxeventfactory.cpp -o ./obj/rxeventfactory.o
-	gcc -c $(CXXFLAG) ./src/event/rxfwdevent.cpp -o ./obj/rxfwdevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxrouteevent.cpp -o ./obj/rxrouteevent.o
-	gcc -c $(CXXFLAG) ./src/event/txsrcevent.cpp -o ./obj/txsrcevent.o
-	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
-	gcc -c $(CXXFLAG) ./test/testcase1.cpp -o ./obj/testcase1.o
-	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpreno.cpp -o ./obj/tcpreno.o
-	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpfast.cpp -o ./obj/tcpfast.o
-	gcc -c $(CXXFLAG) ./src/event/logevent.cpp -o ./obj/logevent.o
-	gcc -c $(CXXFLAG) ./src/event/routeevent.cpp -o ./obj/routeevent.o
-	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
-	gcc -c $(CXXFLAG) ./src/event/tcptimeoutevent.cpp -o ./obj/tcptimeoutevent.o
-	gcc -c $(CXXFLAG) ./src/tcpalgorithm.cpp -o ./obj/tcpalgorithm.o
-	gcc -o ./bin/testcase1 -lstdc++ ./obj/testcase1.o $(OBJECTS)
-
-testretrieve:
-	gcc -c $(CXXFLAG) ./src/eventqueue.cpp -o ./obj/eventqueue.o
-	gcc -c $(CXXFLAG) ./src/event.cpp -o ./obj/event.o
-	gcc -c $(CXXFLAG) ./src/flow.cpp -o ./obj/flow.o
-	gcc -c $(CXXFLAG) ./src/node.cpp -o ./obj/node.o
-	gcc -c $(CXXFLAG) ./src/link.cpp -o ./obj/link.o
-	gcc -c $(CXXFLAG) ./src/event/rxackevent.cpp -o ./obj/rxackevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxendevent.cpp -o ./obj/rxendevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxeventfactory.cpp -o ./obj/rxeventfactory.o
-	gcc -c $(CXXFLAG) ./src/event/rxfwdevent.cpp -o ./obj/rxfwdevent.o
-	gcc -c $(CXXFLAG) ./src/event/rxrouteevent.cpp -o ./obj/rxrouteevent.o
-	gcc -c $(CXXFLAG) ./src/event/txsrcevent.cpp -o ./obj/txsrcevent.o
-	gcc -c $(CXXFLAG) ./src/networkmanager.cpp -o ./obj/networkmanager.o
-	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpreno.cpp -o ./obj/tcpreno.o
-	gcc -c $(CXXFLAG) ./src/event/logevent.cpp -o ./obj/logevent.o
-	gcc -c $(CXXFLAG) ./src/event/routeevent.cpp -o ./obj/routeevent.o
-	gcc -c $(CXXFLAG) ./src/logger.cpp -o ./obj/logger.o
-	gcc -c $(CXXFLAG) ./src/tcpalgorithm/tcpfast.cpp -o ./obj/tcpfast.o
-	gcc -c $(CXXFLAG) ./src/event/tcptimeoutevent.cpp -o ./obj/tcptimeoutevent.o
-	gcc -c $(CXXFLAG) ./src/tcpalgorithm.cpp -o ./obj/tcpalgorithm.o
-	gcc -c $(CXXFLAG) ./src/retrieve_network_info.cpp -o ./obj/retrieve_network_info.o
-	gcc -c $(CXXFLAG) ./test/retrieve_network_info_test.cpp -o ./obj/retrieve_network_info_test.o
-	gcc -c $(CXXFLAG) ./src/event/tcpfastupdate.cpp -o ./obj/tcpfastupdate.o
-	gcc ./obj/*.o -o ./bin/testretrieve -L/usr/local/lib -lstdc++ -ljsoncpp
-
-.PHONY: clean
+		
+$(BINFILE): $(OFILES)
+		$(E)Linking $@
+		$(Q)$(CXX) -o $@ $(OFILES) $(LDFLAGS)
 clean:
-	rm -rf ./obj/*
-	rm -rf ./bin/*
+		$(E)Removing files
+		$(Q)rm -f $(BINFILE) obj/* Makefile.dep
