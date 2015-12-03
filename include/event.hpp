@@ -11,15 +11,19 @@
 class Node;
 class Packet;
 
+
+
 class Event{
 	public:
 		Event(double t);
 
+
 		virtual int handleEvent() { return 0; }
 
+		int commonTransmit(Node* node, Packet* pkt);
 		double time = -1;
 
-		int commonTransmit(Node* node, Packet* pkt);
+
 
 };
 
