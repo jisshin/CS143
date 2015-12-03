@@ -144,8 +144,6 @@ void TCPReno::rx_timeout(int id){
 		break;
 
 	case FRFR:
-		//shouldn't happen
-		std::cout << "State Machine Error Type 3" << std::endl;
 		resetNextID();
 		window_size = fr_start_window;
 		break;

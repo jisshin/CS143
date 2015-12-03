@@ -42,12 +42,6 @@ int EventQueue::run()
 
 	while (registered_events.size() > 0)
 	{
-
-		if (registered_events.size() < 10)
-		{
-			int i = 1;
-		}
-
 		Event* e = registered_events.top();
 		registered_events.pop();
 		cur_time = e->time;
