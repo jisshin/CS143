@@ -1,0 +1,73 @@
+{
+  "Links":[
+    {
+      "link_id":"L0",
+      "link_rate":12.5,
+      "link_delay":10,
+      "link_buffer":64
+    },
+    {
+      "link_id":"L1",
+      "link_rate":10,
+      "link_delay":10,
+      "link_buffer":64
+    },
+    {
+      "link_id":"L2",
+      "link_rate":10,
+      "link_delay":10,
+      "link_buffer":64
+    },
+    {
+      "link_id":"L3",
+      "link_rate":10,
+      "link_delay":10,
+      "link_buffer":64
+    },
+    {
+      "link_id":"L4",
+      "link_rate":10,
+      "link_delay":10,
+      "link_buffer":64
+    },
+    {
+      "link_id":"L5",
+      "link_rate":12.5,
+      "link_delay":10,
+      "link_buffer":64
+    }
+  ],
+  "Flows":[
+    {
+      "flow_id":"F1",
+      "flow_src":"H1",
+      "flow_dest":"H2",
+      "data_amt":20,
+      "flow_start":0.5,
+      "flow_tcp":1
+    }
+  ],
+  "Connections":[
+    [
+      "L0", "H1", "R1"
+    ],
+    [
+      "L1", "R1", "R2"
+    ],
+    [
+      "L2", "R1", "R3"
+    ],
+    [
+      "L3", "R2", "R4"
+    ],
+    [
+      "L4", "R3", "R4"
+    ],
+    [
+      "L5", "R4", "H2"
+    ]
+  ],
+  "Nodes":[
+    "H1", "H2","R1", "R2", "R3", "R4"
+  ]
+}

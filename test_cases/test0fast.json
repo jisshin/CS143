@@ -1,0 +1,28 @@
+{
+  "Links":[
+    {
+      "link_id":"L1",
+      "link_rate":10,
+      "link_delay":10,
+      "link_buffer":64
+    }
+  ],
+  "Flows":[{
+      "flow_id":"F1",
+      "flow_src":"H1",
+      "flow_dest":"H2",
+      "data_amt":20,
+      "flow_start":1.0,
+      "flow_tcp":1
+    }
+  ],
+  "Connections":[
+    [
+      "L1", "H1", "H2"
+    ]
+
+  ],
+  "Nodes":[
+    "H1", "H2"
+  ]
+}

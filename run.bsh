@@ -1,0 +1,6 @@
+#!/bin/bash
+
+mkdir output
+> output/output.csv
+./bin/network_sim $1
+python python_src/plot.py output/output.csv $2 $3 $4
