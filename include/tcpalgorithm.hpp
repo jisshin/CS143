@@ -19,10 +19,9 @@ public:
 	virtual void alertPacketSent(Packet*) {}
 	virtual void alertPacketReceive(Packet*);
 
-	virtual void updateTransmit();
-	virtual void updateAck(int id){}
+	int probeNextID(){return next_id;};
+	int getAndUpdateNextID() { return next_id++; }
 
-	int getNextID(){return next_id;};
 	int windowFull();
 	int getWindow(){return (int)window_size;};
 
@@ -31,8 +30,9 @@ public:
 	double recent_RTT = 0;
 
 	Flow* parent_flow;
-protected:
 
+protected:
+	virtual void updateAck(int id) {}
 
 	int last_rx_ack_id = 0; //it is important that this starts as 0.
 	int next_id = 0;

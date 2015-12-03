@@ -42,6 +42,12 @@ int EventQueue::run()
 
 	while (registered_events.size() > 0)
 	{
+#ifdef JISOO
+		if (registered_events.size() < 10)
+		{
+			int i = 1;
+		}
+#endif
 		Event* e = registered_events.top();
 		registered_events.pop();
 		cur_time = e->time;

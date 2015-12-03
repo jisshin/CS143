@@ -41,6 +41,7 @@ void TCPFast::handleDupAck(int id)
 
 	if (time_sent[id] + 1.5 * getAvgRTT() < EventQueue::cur_time)
 	{
+		window_size = window_size / 2;
 		resetNextID();
 	}
 }

@@ -22,12 +22,9 @@ int TCPAlgorithm::windowFull(){
 	return (next_id > window_size + last_rx_ack_id);
 }
 
-void TCPAlgorithm::updateTransmit(){
-	next_id++;
-}
-
 void TCPAlgorithm::alertPacketReceive(Packet* pkt)
 {
+	updateAck(pkt->packet_seq_id);
 	recordRTT(EventQueue::cur_time - pkt->packet_start_t);
 }
 

@@ -96,7 +96,11 @@ void TCPReno::alertPacketSent(Packet* pkt)
 
 void TCPReno::rx_timeout(int id){
 
-	if (cancel_timeout.count(id) > 0)
+#ifdef JISOO
+	if (id == 414)
+		int i = 1;
+#endif
+	if (cancel_timeout.count(id) == 1 && cancel_timeout[id] > 0)
 	{
 		cancel_timeout[id]--;
 		return;

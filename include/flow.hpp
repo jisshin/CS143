@@ -3,6 +3,8 @@
 
 #include <string>
 #include <queue>
+#include <map>
+#include <functional>
 //TODO move status constant to a ENUM
 //const int PACKET_DROPPED = 0;
 const int PACKET_RECEIVED = 1;
@@ -40,7 +42,6 @@ public:
 	int getNumByteReceive();
 
 private:
-	void receive_ack(int id);
 
 	std::string flow_id;
 	std::string flow_src;
@@ -49,6 +50,8 @@ private:
 	double flow_start_time;
 	TCPAlgorithm* TCP_strategy;
 
+	std::priority_queue<int, std::vector<int>, \
+		std::greater<int> > unordered_pkts;
 
 	int last_tx_ack_id = 0;
 	int packet_receive = 0;

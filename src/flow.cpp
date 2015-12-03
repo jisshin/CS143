@@ -38,8 +38,8 @@ void Flow::sendSrcAndGenTx(Packet* pkt)
 
 void Flow::receiveAckAndGenRx(Packet* pkt) 
 {
-	receive_ack(pkt->packet_seq_id);
 	TCP_strategy->alertPacketReceive(pkt);
+	packet_receive++;
 	pkt = genNextPacketFromRx();
 
 	if (pkt != NULL)
@@ -57,15 +57,6 @@ void Flow::setTCPStrategy(int type)
 void Flow::setTxDelay(double link_rate){
 	base_tx_delay = SRC_SIZE/link_rate;
 	base_link_rate = link_rate;
-	std::cout<<"tx delay"<< base_tx_delay << std::endl;
-	base_link_rate = link_rate;
-}
-
-
-void Flow::receive_ack(int id){
-	TCP_strategy->updateAck(id);
-	packet_receive++;
-	//clearTimeout();
 }
 
 Packet* Flow::genNextPacketFromTx(){
@@ -87,7 +78,7 @@ Packet* Flow::genNextPacketFromTx(){
 	// send next packet, if window is not full, and have more
 	// data to send
 #ifdef DEBUG
-	std::cout<<"gen src packet from TX: "<< TCP_strategy->getNextID()<< std::endl;
+	std::cout<<"gen src packet from TX: "<< TCP_strategy->probeNextID()<< std::endl;
 #endif
 	window_full_flag = 0;
 	return comGenSrcPacket();
@@ -98,7 +89,7 @@ Packet* Flow::genNextPacketFromRx(){
 	if((window_full_flag)&&(!TCP_strategy->windowFull())){
 		window_full_flag = 0;
 #ifdef DEBUG
-	std::cout<<"gen src packet from RX: "<< TCP_strategy->getNextID()<< std::endl;
+	std::cout<<"gen src packet from RX: "<< TCP_strategy->probeNextID()<< std::endl;
 #endif
 		return comGenSrcPacket();
 	}
@@ -109,9 +100,8 @@ Packet* Flow::genNextPacketFromRx(){
 Packet* Flow::comGenSrcPacket() {
 	if (flow_data_amt > 0) {
 		Packet* next_packet = new Packet(flow_id, flow_src, \
-			flow_dest, SRC_PACKET, TCP_strategy->getNextID());
+			flow_dest, SRC_PACKET, TCP_strategy->getAndUpdateNextID());
 		flow_data_amt -= next_packet->packet_size;
-		TCP_strategy->updateTransmit();
 		return next_packet;
 	}
 	std::cout << "data amount" << flow_data_amt << std::endl;
@@ -121,26 +111,40 @@ Packet* Flow::comGenSrcPacket() {
 Packet* Flow::genAckPacket(Packet* received_packet)
 {
 	Packet* ack_packet = NULL;
-	int new_ack_flag = 0;
-	if (received_packet->packet_seq_id == last_tx_ack_id)
-	{
-		last_tx_ack_id++;
-		new_ack_flag = 1;
-	}
-
-	if ((received_packet->packet_seq_id > last_tx_ack_id) || (new_ack_flag))
-	{
-		ack_packet = new Packet(flow_id, flow_dest, \
-			flow_src, ACK_PACKET, last_tx_ack_id);
-	}
 
 #ifdef JISOO
+	if (received_packet->packet_seq_id == 1088)
+		int i = 1;
 	if (received_packet->packet_seq_id > last_tx_ack_id)
-		std::cout << flow_id << " : " << received_packet->packet_seq_id << " " << last_tx_ack_id << std::endl;
+		std::cout << received_packet->packet_seq_id << " - " << last_tx_ack_id << std::endl;
 #endif
+	if (received_packet->packet_seq_id >= last_tx_ack_id)
+	{	
+		//if the new packet sequence id is equal to or bigger
+		//than current acknowledged id, then we care about it.
+		unordered_pkts.push(received_packet->packet_seq_id);
+	}
+	else
+	{
+		//if the new packet sequence id is smaller than the
+		//current acknowledged id, nothing can happen.
+		return NULL;
+	}
 
+	//from the top, update as many as ack possible
+	while (unordered_pkts.top() == last_tx_ack_id)
+	{
+		while (unordered_pkts.top() == last_tx_ack_id)
+		{
+			unordered_pkts.pop();
+			if (unordered_pkts.size() == 0) break;
+		}
+		last_tx_ack_id++;
+		if (unordered_pkts.size() == 0) break;
+	}
 
-	return ack_packet;
+	return new Packet(flow_id, flow_dest, \
+			flow_src, ACK_PACKET, last_tx_ack_id);
 }
 
 double Flow::getTxDelay()
