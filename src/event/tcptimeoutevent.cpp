@@ -5,7 +5,6 @@
 #include "../../include/flow.hpp"
 
 int TCPTimeOutEvent::handleEvent(){
-	EventQueue::getInstance()->num_non_core--;
 	reno->rx_timeout(tx_packet_id);
 
 	Packet* nxt_tx_pkt = reno->parent_flow->genNextPacketFromRx();

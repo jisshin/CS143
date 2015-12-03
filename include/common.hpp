@@ -4,7 +4,7 @@
 
 #define LOGGER_OUTPUT "output/output.csv"
 
-const double LOG_INTERVAL = 0.1;
+const double LOG_INTERVAL = 0.06;
 
 const double ROUT_INTERVAL = 0.000001;
 const double REST_INTERVAL = 5;
