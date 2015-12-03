@@ -55,4 +55,4 @@ Makefile.dep: $(CFILES) $(CXXFILES)
 $(BINFILE): $(OFILES)
 		$(CXX) -o $@ $(OFILES) $(LDFLAGS)
 clean:
-		rm -rf $(BINFILE) obj/
+		rm -rf $(BINFILE) obj/*
