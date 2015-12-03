@@ -127,8 +127,10 @@ def plotOutputArg(file_name, arg):
                 startFindex = i
 
 
+
         for i in xrange(startFindex, col_n, 5):
             if cols[i] in  arg:
+                print cols[i]
                 y1, y2, y3, y4 = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols=(i + 1, i + 2, i + 3, i + 4))
 
 
@@ -158,7 +160,7 @@ def plotOutputArg(file_name, arg):
         grph[3].set_xlabel('time (s)')
         plt.show()
 
-    if 'H' in arg[0]:
+    else:
         startHindex = 1
         f, grph = plt.subplots(2, sharex=True)
         grph[0].set_title('Send Rate')
