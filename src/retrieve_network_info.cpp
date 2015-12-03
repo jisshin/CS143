@@ -2,6 +2,7 @@
 #include "../include/networkmanager.hpp"
 #include "../include/eventqueue.hpp"
 #include "../include/logger.hpp"
+#include "../include/event/logevent.hpp"
 #include "json/json.h"
 #include "../include/flow.hpp"
 #include "../include/link.hpp"
@@ -41,6 +42,7 @@ int RetrieveNetworkInfo::setNetworkInfo(string file_name)
                << reader.getFormattedErrorMessages();
     return 0;
   }
+  LogEvent::LOG_INTERVAL = root["log_interval"].asDouble();
   Json::Value links = root["Links"];
   Json::Value flows = root["Flows"];
   Json::Value connections = root["Connections"];

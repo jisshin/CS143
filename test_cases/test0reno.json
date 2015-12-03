@@ -11,7 +11,7 @@
       "flow_id":"F1",
       "flow_src":"H1",
       "flow_dest":"H2",
-      "data_amt":20,
+      "data_amt":100,
       "flow_start":1.0,
       "flow_tcp":0
     }
@@ -24,5 +24,6 @@
   ],
   "Nodes":[
     "H1", "H2"
-  ]
+  ],
+  "log_interval":0.5
 }
