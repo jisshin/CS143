@@ -29,12 +29,6 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 		double event_time = time + mid_link->getDelay();
 		RxEvent* next_rx = rx_fac.makeRxEvent(event_time, mid_link, other_node, pkt);
 	}
-#ifdef JISOO
-	else
-	{
-		if (pkt->packet_flow_id == DEBUG_FLOW)
-			std::cout << (std::string)*node << " : " << pkt->packet_type << "-" << pkt->packet_seq_id << " dropped" << std::endl;
-	}
-#endif
+
   return result;
 }

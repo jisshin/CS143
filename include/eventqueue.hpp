@@ -12,6 +12,10 @@
 
 class EventQueue{
 	public:
+
+		/**
+		 * push the event on EventQueue
+		 */
 		void push(Event* event);
 		Event* pop();
 		static EventQueue* getInstance();

@@ -3,8 +3,8 @@
     {
       "link_id":"L1",
       "link_rate":10,
-      "link_delay":.01,
-      "link_buffer":64000
+      "link_delay":10,
+      "link_buffer":64
     }
   ],
   "Flows":[{
@@ -12,7 +12,8 @@
       "flow_src":"H1",
       "flow_dest":"H2",
       "data_amt":20,
-      "flow_start":1.0
+      "flow_start":1.0,
+      "flow_tcp":0
     }
   ],
   "Connections":[
