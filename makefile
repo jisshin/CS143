@@ -17,7 +17,7 @@ OFILES := $(OBJFILES:%=obj/%.o)
 
 BINFILE = bin/network_sim
 
-COMMONFLAGS = -Wall
+COMMONFLAGS = 
 LDFLAGS = -lstdc++ -ljsoncpp -L/usr/local/lib 
 
 ifdef DEBUG
@@ -43,21 +43,18 @@ CXX = g++
 .PHONY: clean all depend
 .SUFFIXES:
 obj/%.o: src/%.c
-		$(E)C-compiling $<
 		$(Q)if [ ! -d `dirname $@` ]; then mkdir -p `dirname $@`; fi
 		$(Q)$(CC) -o $@ -c $< $(CFLAGS)
 obj/%.o: src/%.cpp
-		$(E)C++-compiling $<
 		$(Q)if [ ! -d `dirname $@` ]; then mkdir -p `dirname $@`; fi
-		$(Q)$(CXX) -o $@ -c $< $(CXXFLAGS)
+		$(CXX) -o $@ -c $< $(CXXFLAGS)
 Makefile.dep: $(CFILES) $(CXXFILES)
-		$(E)Depend
-		$(Q)for i in $(^); do $(CXX) $(CXXFLAGS) -MM "$${i}" -MT obj/`basename $${i%.*}`.o; done > $@
+		$(Q)xsfor i in $(^); do $(CXX) $(CXXFLAGS) -MM "$${i}" -MT obj/`basename $${i%.*}`.o; done > $@
 
 		
 $(BINFILE): $(OFILES)
-		$(E)Linking $@
-		$(Q)$(CXX) -o $@ $(OFILES) $(LDFLAGS)
+		$(CXX) -o $@ $(OFILES) $(LDFLAGS)
 clean:
-		$(E)Removing files
-		$(Q)rm -f $(BINFILE) obj/* Makefile.dep
+		rm -f $(BINFILE) obj/*.o 
+		rm -f obj/event/*.o 
+		rm -f obj/tcpalgorithm/*.o
