@@ -40,7 +40,6 @@ void Flow::receiveAckAndGenRx(Packet* pkt)
 {
 	TCP_strategy->alertPacketReceive(pkt);
 	packet_receive++;
-	pkt = genNextPacketFromRx();
 
 	// check termination condition
 	if ((pkt->packet_seq_id * SRC_SIZE) >= flow_data_amt){

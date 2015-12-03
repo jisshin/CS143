@@ -7,7 +7,7 @@ int TCPFastUpdate::handleEvent() {
 
 	fast->updateWindow();
 	
-	if (fast->parent_flow->checkFlowDone())
+	if (!fast->parent_flow->checkFlowDone())
 	{
 		TCPFastUpdate* next = new TCPFastUpdate(time + fast->getAvgRTT(), fast);
 	}

@@ -30,9 +30,7 @@ int LogEvent::handleEvent()
 
 	while (flow != NULL)
 	{
-		if (!flow->checkFlowDone()){
-			logData(flow);
-		}
+		logData(flow);
 		flow = nm->getNextFlowIterator();
 	}
 
@@ -71,10 +69,21 @@ void LogEvent::logData(Flow* flow)
 {
 	Logger* logger = Logger::getInstance();
 	logger->log_str((std::string) *flow);
-	logger->log_num(getSentRate(flow));
-	logger->log_num(getRcvdRate(flow));
-	logger->log_num(getPacketRTT(flow));
-	logger->log_num(getWindowSize(flow));
+
+	if (flow->checkFlowDone())
+	{
+		logger->log_str(" ");
+		logger->log_str(" ");
+		logger->log_str(" ");
+		logger->log_str(" ");
+	}
+	else
+	{
+		logger->log_num(getSentRate(flow));
+		logger->log_num(getRcvdRate(flow));
+		logger->log_num(getPacketRTT(flow));
+		logger->log_num(getWindowSize(flow));
+	}
 }
 
 void LogEvent::logData(Node* node)

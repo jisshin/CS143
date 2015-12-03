@@ -44,7 +44,7 @@ int main()
 	nm->connectLink("L4", "R3", "R4");
 	nm->connectLink("L5", "R4", "H2");
 
-	Flow flow("F1", "H1", "H2", 20000000, TCP_RENO_t, 0.5);
+	Flow flow("F1", "H1", "H2", 20000000, TCP_FAST_t, 0.5);
 	nm->registerFlow(flow);
 
 	EventQueue* eq = EventQueue::getInstance();
