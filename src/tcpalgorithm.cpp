@@ -39,7 +39,7 @@ void TCPAlgorithm::recordRTT(double RTT) {
 
 double TCPAlgorithm::getAvgRTT() {
 	if (RTT_count == 0) {
-		return 0.5;
+		return 0.1;
 	}
 	else {
 		return sum_RTT / RTT_count;
