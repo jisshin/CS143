@@ -55,6 +55,4 @@ Makefile.dep: $(CFILES) $(CXXFILES)
 $(BINFILE): $(OFILES)
 		$(CXX) -o $@ $(OFILES) $(LDFLAGS)
 clean:
-		rm -f $(BINFILE) obj/*.o 
-		rm -f obj/event/*.o 
-		rm -f obj/tcpalgorithm/*.o
+		rm -rf $(BINFILE) obj/
