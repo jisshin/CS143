@@ -5,7 +5,7 @@ import sys
 
 
 color = ['b', 'g', 'r', 'c', 'm', 'y', 'k', '#9400D3', '#FF8C00', '#FA8072']
-###y1, y2, y3, y4 = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols=(37, 38, 39, 40)
+
 
 def plotOutput(file_name):
     c1 = 0
@@ -125,7 +125,7 @@ def plotOutputArg(file_name, arg):
         x = np.loadtxt(file_name, unpack=True, delimiter = ',', usecols = (0,))
 
         for i in xrange(1, col_n, 4):
-            
+
             if 'F' in cols[i]:
                 startFindex = i
                 break
