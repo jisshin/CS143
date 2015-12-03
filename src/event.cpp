@@ -16,6 +16,7 @@ Event::Event(double t)
 
 int Event::commonTransmit(Node* node, Packet* pkt)
 {
+
 	int result = node->transmitPacket(pkt);
 
 	// Create receive event if not dropped;
@@ -31,7 +32,8 @@ int Event::commonTransmit(Node* node, Packet* pkt)
 #ifdef JISOO
 	else
 	{
-		std::cout << (std::string)*node << " : " << pkt->packet_type << "-" << pkt->packet_seq_id << " dropped" << std::endl;
+		if (pkt->packet_flow_id == DEBUG_FLOW)
+			std::cout << (std::string)*node << " : " << pkt->packet_type << "-" << pkt->packet_seq_id << " dropped" << std::endl;
 	}
 #endif
   return result;

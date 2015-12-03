@@ -9,6 +9,7 @@ enum TCPType {
 //#define DEBUG
 //#define CHECK_DROP
 #define JISOO
+#define DEBUG_FLOW "F1"
 
 #include <cassert>
 

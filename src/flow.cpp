@@ -117,10 +117,8 @@ Packet* Flow::genAckPacket(Packet* received_packet)
 	Packet* ack_packet = NULL;
 
 #ifdef JISOO
-	if (received_packet->packet_seq_id == 1088)
-		int i = 1;
-	if (received_packet->packet_seq_id > last_tx_ack_id)
-		std::cout << received_packet->packet_seq_id << " - " << last_tx_ack_id << std::endl;
+	if (received_packet->packet_flow_id == DEBUG_FLOW && received_packet->packet_seq_id > last_tx_ack_id)
+		std::cout << flow_id << " : " << received_packet->packet_seq_id << " - " << last_tx_ack_id << std::endl;
 #endif
 	if (received_packet->packet_seq_id >= last_tx_ack_id)
 	{	

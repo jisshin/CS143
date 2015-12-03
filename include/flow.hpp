@@ -24,6 +24,7 @@ public:
 	void setTCPStrategy(int);
 	TCPAlgorithm* getTCPStrategy() { return TCP_strategy; };
 
+	std::string getFlowID() { return flow_id; }
 	std::string getSrc() { return flow_src; }
 	std::string getDest() { return flow_dest; }
 	int getDataAmt() { return flow_data_amt; }
