@@ -19,29 +19,18 @@ int main()
 
 	Node node1("H1");
 	Node node2("H2");
-	Flow flow("F1", "H1", "H2", 20000000);
 	NetworkManager* nm = NetworkManager::getInstance();
-	TCPReno flow_alg;
-	flow.setTCPStrategy(&flow_alg);
+
 	nm->registerLink(link);
 	nm->registerNode(node1);
 	nm->registerNode(node2);
 
 	nm->connectLink("L1", "H1", "H2");
-	//temporarily moved here.
-	// registerFLow need to be called after all
-	// initialization
+
+	Flow flow("F1", "H1", "H2", 20000000, TCP_RENO_t, 1);
 	nm->registerFlow(flow);
 
-	Packet* init_tx_packet = flow.genNextPacketFromTx();
-
-
-	TxSrcEvent *init_tx = new TxSrcEvent(init_tx_packet);
-	init_tx->time = 1;
 	EventQueue* eq = EventQueue::getInstance();
-
-	eq->push(init_tx);
-
 	eq->run();
 
 	Logger * logger = Logger::getInstance();
