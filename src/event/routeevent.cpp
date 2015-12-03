@@ -24,6 +24,7 @@ int ResetEvent::handleEvent()
 	{
 		RouteEvent *re1 = new RouteEvent(time + ROUT_INTERVAL);
 		RouteEvent *re2 = new RouteEvent(time + ROUT_INTERVAL);
+		RouteEvent *re3 = new RouteEvent(time + ROUT_INTERVAL);
 		ResetEvent *e = new ResetEvent(time + REST_INTERVAL);
 	}
 

@@ -55,7 +55,6 @@ int EventQueue::run()
 		delete e;
 	}
 
-	std::cout << cur_time << std::endl;
 	return 1;
 }
 

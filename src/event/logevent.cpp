@@ -30,7 +30,9 @@ int LogEvent::handleEvent()
 
 	while (flow != NULL)
 	{
-		logData(flow);
+		if (!flow->checkFlowDone()){
+			logData(flow);
+		}
 		flow = nm->getNextFlowIterator();
 	}
 
