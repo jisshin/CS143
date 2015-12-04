@@ -24,7 +24,7 @@ void TCPFast::updateAck(int id) {
 	else
 	{
 		//the system guarantees this id is biggger
-		//than previous acknowledgement. 
+		//than previous acknowledgement.
 		last_rx_ack_id = id;
 		dup_count = 1;
 	}
@@ -48,7 +48,7 @@ void TCPFast::handleDupAck(int id)
 
 void TCPFast::updateWindow()
 {
-	double temp = Gamma * (min_RTT / getAvgRTT() * window_size + alpha);
+	double temp = Gamma * (min_RTT / recent_RTT * window_size + alpha);
 	double temp2 = (1 - Gamma) * window_size;
 
 	window_size = std::min(2 * window_size, temp + temp2);
