@@ -16,6 +16,7 @@ public:
 
 	int handleEvent();
 
+
 };
 
 class ResetEvent : public Event
@@ -27,6 +28,7 @@ public:
 	}
 
 	int handleEvent();
+	static int network_complexity;
 
 };
 

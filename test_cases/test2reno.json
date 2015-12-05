@@ -114,5 +114,6 @@
   "Nodes":[
     "S1", "S2", "S3", "T1", "T2", "T3", "R1", "R2", "R3", "R4"
   ],
-  "log_interval":0.1
+  "log_interval":0.1,
+  "network_complexity":4
 }

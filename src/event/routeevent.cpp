@@ -4,7 +4,7 @@
 #include "../../include/packet.hpp"
 #include "../../include/node.hpp"
 
-
+int ResetEvent::network_complexity = 0;
 int ResetEvent::handleEvent()
 {
 	NetworkManager* nm = NetworkManager::getInstance();
@@ -22,10 +22,11 @@ int ResetEvent::handleEvent()
 
 	if (eq->size() - eq->num_non_core > 0)
 	{
-		RouteEvent *re1 = new RouteEvent(time + ROUT_INTERVAL);
-		RouteEvent *re2 = new RouteEvent(time + ROUT_INTERVAL);
-		RouteEvent *re3 = new RouteEvent(time + ROUT_INTERVAL);
-		ResetEvent *e = new ResetEvent(time + REST_INTERVAL);
+
+		RouteEvent *e = NULL;
+		for (int i = 0; i < network_complexity; i++){
+			e = new RouteEvent(time + ROUT_INTERVAL);
+		}
 	}
 
 #ifdef JISOO

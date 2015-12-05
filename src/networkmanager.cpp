@@ -2,6 +2,8 @@
 #include "../include/flow.hpp"
 #include "../include/link.hpp"
 #include "../include/node.hpp"
+#include "../include/event/logevent.hpp"
+#include "../include/event/routeevent.hpp"
 
 using namespace std;
 
@@ -148,3 +150,9 @@ Link* NetworkManager::getNextLinkIterator()
 		return NULL;
 	}
 }
+
+void NetworkManager::initNetworkSim(double interval, int complexity){
+	LogEvent::LOG_INTERVAL = interval;
+	ResetEvent::network_complexity = complexity;
+}
+

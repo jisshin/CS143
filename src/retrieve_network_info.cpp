@@ -42,7 +42,8 @@ int RetrieveNetworkInfo::setNetworkInfo(string file_name)
                << reader.getFormattedErrorMessages();
     return 0;
   }
-  LogEvent::LOG_INTERVAL = root["log_interval"].asDouble();
+  log_interval = root["log_interval"].asDouble();
+  network_complexity = root["network_complexity"].asInt();
   Json::Value links = root["Links"];
   Json::Value flows = root["Flows"];
   Json::Value connections = root["Connections"];
@@ -89,6 +90,8 @@ int RetrieveNetworkInfo::createNetwork()
 
   NetworkManager *manager = NetworkManager::getInstance();
   EventQueue* eq = EventQueue::getInstance();
+
+  manager->initNetworkSim(log_interval, network_complexity);
 
   // register links
   for (int i = 0; i < link_no; i++){

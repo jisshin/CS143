@@ -25,5 +25,6 @@
   "Nodes":[
     "H1", "H2"
   ],
-  "log_interval":0.05
+  "log_interval":0.05,
+  "network_complexity":3
 }

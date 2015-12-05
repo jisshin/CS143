@@ -21,6 +21,7 @@ public:
 	int registerLink(Link&);
 	int registerNode(Node&);
 
+	void initNetworkSim(double log_interval, int complexity);
 	int connectLink(std::string link_id, std::string node1_id, std::string node2_id);
 
 	Flow* getFlow(std::string id);

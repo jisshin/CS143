@@ -42,5 +42,8 @@ private:
 	int packet_no;
 	int node_no;
 
+	double log_interval;
+	int network_complexity;
+
 };
 #endif //RETRIEVENETWORKINFO_H
