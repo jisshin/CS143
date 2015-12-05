@@ -28,6 +28,8 @@ int NetworkManager::registerFlow(Flow& flow)
 	m_flows[(std::string) flow] = &flow;
 	flow.setTxDelay(m_nodes[flow.getSrc()]->\
 			getAdjLinks().front()->link_rate);
+	flow.setRxDelay(m_nodes[flow.getDest()]->\
+			getAdjLinks().front()->link_rate);
 	return 1;
 }
 

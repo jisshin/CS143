@@ -32,10 +32,6 @@ public:
 	 */
 	void receiveAckAndGenRx(Packet* pkt);
 
-	/**
-	 * Set TCP_strategy of the flow
-	 */
-	void setTCPStrategy(int);
 
 	// just accessors
 	TCPAlgorithm* getTCPStrategy() { return TCP_strategy; };
@@ -52,6 +48,13 @@ public:
 	 * of the link connect to the source of the flow
 	 */
 	void setTxDelay(double link_rate);
+
+	/**
+	 * Set rx_base_delay according to the link rate
+	 * of the link connect to the dest of the flow
+	 */
+	void setRxDelay(double link_rate);
+
 
 	/**
 	 * Return the transmission delay for the next
@@ -83,6 +86,11 @@ public:
 
 private:
 
+	/**
+	 * Set TCP_strategy of the flow
+	 */
+	void setTCPStrategy(int);
+
 	std::string flow_id;
 	std::string flow_src;
 	std::string flow_dest;
@@ -101,9 +109,10 @@ private:
 
 
 	double base_tx_delay;
-	double base_link_rate;
+	double base_rx_delay;
 	double last_transmit_t;
 	double last_rx_ack_t;
+	double last_rx_src_t;
 
 	int window_full_flag = 0;
 	int flow_finish = 0;

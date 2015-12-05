@@ -39,7 +39,6 @@ void Flow::sendSrcAndGenTx(Packet* pkt)
 void Flow::receiveAckAndGenRx(Packet* pkt)
 {
 	TCP_strategy->alertPacketReceive(pkt);
-	packet_receive++;
 
 	// check termination condition
 	if ((pkt->packet_seq_id * SRC_SIZE) >= flow_data_amt){
@@ -61,7 +60,10 @@ void Flow::setTCPStrategy(int type)
 
 void Flow::setTxDelay(double link_rate){
 	base_tx_delay = SRC_SIZE/link_rate;
-	base_link_rate = link_rate;
+}
+
+void Flow::setRxDelay(double link_rate){
+	base_rx_delay = SRC_SIZE/link_rate;
 }
 
 Packet* Flow::genNextPacketFromTx(){
@@ -119,7 +121,8 @@ Packet* Flow::comGenSrcPacket() {
 Packet* Flow::genAckPacket(Packet* received_packet)
 {
 	Packet* ack_packet = NULL;
-
+	packet_receive++;
+	last_rx_src_t = EventQueue::cur_time;
 #ifdef JISOO
 	if (received_packet->packet_flow_id == DEBUG_FLOW && received_packet->packet_seq_id > last_tx_ack_id)
 		std::cout << flow_id << " : " << received_packet->packet_seq_id << " - " << last_tx_ack_id << std::endl;
@@ -186,17 +189,17 @@ int Flow::getNumByteSent(){
 int Flow::getNumByteReceive(){
 	int complete_packet = (packet_receive - 1 >= 0)?packet_receive - 1: 0;
 	int total_receive = rx_left_over_byte + \
-			(complete_packet) * ACK_SIZE;
-	// last packet is fully sent
-	double base_rx_delay = ACK_SIZE/base_link_rate;
-	if (last_rx_ack_t + base_rx_delay < EventQueue::cur_time){
-		total_receive += ACK_SIZE;
+			(complete_packet) * SRC_SIZE;
+	// last packet is fully received
+	if (last_rx_src_t + base_rx_delay < EventQueue::cur_time){
+		total_receive += SRC_SIZE;
 		rx_left_over_byte = 0;
 	}
+	// Only fraction of packet was received
 	else{
-		int fraction = SRC_SIZE* (EventQueue::cur_time - last_rx_ack_t)/base_rx_delay;
+		int fraction = SRC_SIZE* (EventQueue::cur_time - last_rx_src_t)/base_rx_delay;
 		total_receive += fraction;
-		rx_left_over_byte = ACK_SIZE - fraction;
+		rx_left_over_byte = SRC_SIZE - fraction;
 	}
 	packet_receive = 0;
 	return total_receive;
