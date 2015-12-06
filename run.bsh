@@ -1,6 +1,34 @@
 #!/bin/bash
 
+function sim
+{
+  > output/output.csv
+  ./bin/network_sim $1
+  python python_src/plot.py output/output.csv $2 $3 $4 $5 $6 $7 $8 $9
+}
+
 mkdir output
-> output/output.csv
-./bin/network_sim $1
-python python_src/plot.py output/output.csv $2 $3 $4 $5 $6 $7 $8 $9
+
+sim ./test_cases/test1fast.json L1 L2
+mv output.png ./output/test1fastL.png
+
+sim ./test_cases/test1fast.json F1
+mv output.png ./output/test1fastF.png
+
+sim ./test_cases/test1reno.json L1 L2
+mv output.png ./output/test1renoL.png
+
+sim ./test_cases/test1reno.json F1
+mv output.png ./output/test1renoF.png
+
+sim ./test_cases/test2fast.json L1 L2 L3
+mv output.png ./output/test2fastL.png
+
+sim ./test_cases/test2fast.json F1 F2 F3
+mv output.png ./output/test2fastF.png
+
+sim ./test_cases/test2reno.json L1 L2 L3
+mv output.png ./output/test2renoL.png
+
+sim ./test_cases/test2reno.json F1 F2 F3
+mv output.png ./output/test2renoF.png

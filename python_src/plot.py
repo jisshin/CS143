@@ -110,7 +110,6 @@ def plotOutputArg(file_name, arg):
         grph[2].set_xlabel('time (s)')
 
 
-        plt.show()
 
 
     elif 'F' in arg[0]:
@@ -162,7 +161,7 @@ def plotOutputArg(file_name, arg):
         grph[3].set_ylabel('size', fontsize = 7)
 
         grph[3].set_xlabel('time (s)')
-        plt.show()
+
 
     else:
 
@@ -203,10 +202,7 @@ def plotOutputArg(file_name, arg):
         grph[1].set_xlabel('time (s)')
 
 
-
-        plt.show()
-
-
 filename = sys.argv[1]
 arguments = sys.argv[2:]
 plotOutputArg(filename, arguments)
+plt.savefig('output.png')
