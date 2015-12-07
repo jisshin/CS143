@@ -22,10 +22,9 @@ int ResetEvent::handleEvent()
 
 	if (eq->size() - eq->num_non_core > 0)
 	{
-
-		RouteEvent *e = NULL;
+		ResetEvent *e = new ResetEvent(time + REST_INTERVAL);
 		for (int i = 0; i < network_complexity; i++){
-			e = new RouteEvent(time + ROUT_INTERVAL);
+			RouteEvent *e = new RouteEvent(time + ROUT_INTERVAL);
 		}
 	}
 
@@ -42,12 +41,12 @@ int RouteEvent::handleEvent()
 	eq->num_non_core--;
 	Node* node = nm->resetNodeIterator();
 	std::vector<Node*> adj_nodes;
-	
+
 	while (node != NULL)
 	{
 		//send routing packet to every neighbor
 		adj_nodes = node->getAdjNodes();
-		for(std::vector<Node*>::size_type i = 0; i != adj_nodes.size(); i++) 
+		for(std::vector<Node*>::size_type i = 0; i != adj_nodes.size(); i++)
 		{
 			Packet* route_pkt = new Packet("", *node, *adj_nodes[i], ROUT_PACKET);
 			commonTransmit(node, route_pkt);
