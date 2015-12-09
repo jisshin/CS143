@@ -79,7 +79,7 @@ public:
 	 */
 	Packet* genAckPacket(Packet* received_packet);
 
-
+	// Accessor functions
 	int getNumByteSent();
 	int getNumByteReceive();
 	int checkFlowDone(){return flow_finish;}
@@ -91,6 +91,12 @@ private:
 	 */
 	void setTCPStrategy(int);
 
+	/**
+	 * Generate the next SRC packet
+	 */
+	Packet* comGenSrcPacket();
+
+	// Flow spec
 	std::string flow_id;
 	std::string flow_src;
 	std::string flow_dest;
@@ -98,25 +104,44 @@ private:
 	double flow_start_time;
 	TCPAlgorithm* TCP_strategy;
 
+	// queue to keep tracks of the received
+	// ACK packet.
 	std::priority_queue<int, std::vector<int>, \
 		std::greater<int> > unordered_pkts;
 
-	int last_tx_ack_id = 0;
+	// number of SRC packet received at dest
 	int packet_receive = 0;
+	// number of SRC packet sent from source
 	int packet_sent = 0;
+	// left over byte from the last TxSRC/RxACK packet
+	// from the last LogEvent
 	int tx_left_over_byte =0;
 	int rx_left_over_byte = 0;
 
+	// time of last transmitted ack id
+	int last_tx_ack_id = 0;
 
+	// minimum delay time in sec between two
+	// packets sent out from source node
 	double base_tx_delay;
+	// minimum delay time in sec between two
+	// packets sent out from dest node
 	double base_rx_delay;
+
+
 	double last_transmit_t;
 	double last_rx_ack_t;
 	double last_rx_src_t;
 
+	// Flag indicates that the window was full
+	// since last call to genNextPacketFromTx
 	int window_full_flag = 0;
+
+	// Flag indicates all SRC packet is successfully
+	// transmitted and acknowledged
 	int flow_finish = 0;
-	Packet* comGenSrcPacket();
+
+
 
 };
 

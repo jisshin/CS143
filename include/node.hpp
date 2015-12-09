@@ -10,7 +10,7 @@ class Packet;
 class Node;
 class Link;
 
-//host destination address -> link to use
+//map for host destination address -> link to use
 typedef std::map<std::string, Link*> routing_table_t;
 typedef std::map<std::string, double> routing_table_helper_t;
 

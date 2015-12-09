@@ -7,6 +7,11 @@
 class Link;
 class Node;
 
+/**
+ * RxEvent implement Event class. This class is the common
+ * interface class for RxACK, RxEND, RxRout event for
+ * RxEventFactory
+ */
 class RxEvent : public Event
 {
 public:

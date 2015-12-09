@@ -8,8 +8,10 @@
 const double ROUT_INTERVAL = 0.000001;
 const double REST_INTERVAL = 5;
 
+// const for TCP fast
 const double Gamma = 0.90;
 const double alpha = 15;
+
 
 enum TCPType {
 	TCP_RENO_t, TCP_FAST_t

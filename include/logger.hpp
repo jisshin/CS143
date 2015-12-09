@@ -8,6 +8,10 @@
 
 #include "common.hpp"
 
+/**
+ * Singleton class to log data periodically from
+ * node, flow and link and store at LOGGER_OUTPUT
+ */
 class Logger{
 	public:
 		static Logger* getInstance();

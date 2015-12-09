@@ -12,15 +12,22 @@ class Node;
 class Packet;
 
 
-
+/**
+ * Base class for all types of event.
+ */
 class Event{
 	public:
 		Event(double t);
 
-
-		virtual int handleEvent() { return 0; }
-
+		/**
+		 * commonTransmit puts packet on the link and
+		 * generate corresponding receive event from RxEventFactory
+		 * if necessary
+		 */
 		int commonTransmit(Node* node, Packet* pkt);
+
+		// Abstract handler function
+		virtual int handleEvent() { return 0; }
 		double time = -1;
 
 

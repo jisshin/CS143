@@ -13,6 +13,11 @@ typedef std::map<std::string, Flow*> flow_t;
 typedef std::map<std::string, Node*> node_t;
 typedef std::map<std::string, Link*> link_t;
 
+
+/**
+ * Singleton class to create and retrieve network
+ * structure
+ */
 class NetworkManager {
 public:
 	static NetworkManager* getInstance();

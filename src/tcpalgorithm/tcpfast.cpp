@@ -62,7 +62,7 @@ void TCPFast::alertPacketSent(Packet* pkt)
 void TCPFast::resetNextID()
 {
 #ifdef JISOO
-	std::cout << "NEXT ID RESET TO " << last_rx_ack_id << " FROM " << next_id << " THRESHOLD " << threshold << std::endl;
+	std::cout << "NEXT ID RESET TO " << last_rx_ack_id << " FROM " << next_id << std::endl;
 #endif
 
 	next_id = last_rx_ack_id;

@@ -6,8 +6,10 @@
 #include <iostream>
 #include <string>
 
-/* Forward declaration */
-
+/**
+ * TxEvent implement Event. This is the interface class
+ * for TxSrcEvent and other possible transmission events.
+ */
 class TxEvent :public Event {
 public:
 	TxEvent(double t, Packet* pPkt, Node* pNode) :

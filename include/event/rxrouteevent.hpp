@@ -3,6 +3,11 @@
 
 #include "rxevent.hpp"
 
+/**
+ * RxRouteEvent implement RxEvent class. This event represent
+ * the event when a routing packet is received.
+ * Routing table will be updated in the handler.
+ */
 class RxRouteEvent : public RxEvent
 {
 public:
