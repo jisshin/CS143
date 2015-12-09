@@ -3,6 +3,10 @@
 
 #include "rxevent.hpp"
 
+/**
+ * RxEndEvent implement RxEvent class. It represents event
+ * when a ACK packet is received at source.
+ */
 class RxEndEvent: public RxEvent
 {
 public:
@@ -10,6 +14,10 @@ public:
 		: RxEvent(t, pLink, pNode), rx_packet(pPkt)
 	{}
 
+	/**
+	 * RxEndEvent handler pop the ACK packet off from link and
+	 * update flow with the ACK packet info.
+	 */
 	int handleEvent();
 
 private:

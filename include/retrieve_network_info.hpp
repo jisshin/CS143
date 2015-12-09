@@ -5,15 +5,22 @@
 #include <vector>
 using namespace std;
 
+/**
+ * This class process the input JSON file and create
+ * the network strucuture.
+ */
 class RetrieveNetworkInfo {
 public:
   RetrieveNetworkInfo(){}
 
-  // Set the JSON data
+  /**
+   * Takes a valid Json file path and parse the JSON data
+   */
   int setNetworkInfo(string file_name);
 
   /**
-  * Creates data out of data obtained from network.
+  * Creates data out of data obtained from input and
+  * create network with NetworkManager
   */
   int createNetwork();
 

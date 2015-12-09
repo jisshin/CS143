@@ -21,27 +21,36 @@ public:
 	Node(std::string id): node_id(id)
 	{}
 
-
+	/**
+	 * transmit a packet by look up routing table and
+	 * push the packet to the corresponding link.
+	 */
 	int transmitPacket(Packet* tx_packet);
+
+	/**
+	 * receive a packet. just update packet_rcvd
+	 */
 	int receivePacket(Packet*);
-	
-	double packet_sent = 0;
-	double packet_rcvd = 0;
 
 
-	// lookupRouting return the link for routing to dest
+	/**
+	 * lookupRouting return the link for routing to dest
+	 */
 	Link* lookupRouting(std::string dest);
+
+
 	void routePacket(Node*, Link*);
 	void resetRouting();
-
-	routing_table_t routing_table;
-	routing_table_helper_t routing_helper_table;
-
-
 	std::vector<Node*> getAdjNodes();
 	std::vector<Link*> getAdjLinks() { return adj_links; };
 	operator std::string() { return node_id; }
 	void establishLink(Link* link);
+
+
+	double packet_sent = 0;
+	double packet_rcvd = 0;
+	routing_table_t routing_table;
+	routing_table_helper_t routing_helper_table;
 
 private:
 	std::string node_id;

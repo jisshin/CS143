@@ -27,7 +27,9 @@ static std::unordered_map<int, const int> SIZE_TABLE( {
 } );
 
 
-// Assume that packet size are fix
+/**
+ * Data structure for all type of packet
+ */
 class Packet {
 	public:
 		Packet(std::string flow_id, std::string src, std::string dest, int type, int seq_id = 0)\
@@ -44,6 +46,8 @@ class Packet {
 		std::string packet_src;
 		std::string packet_dest;
 		int packet_type;
+		// packet_seq_id may be ACK id or SRC id depends on
+		// packet_type
 		int packet_seq_id;
 		double packet_start_t;
 

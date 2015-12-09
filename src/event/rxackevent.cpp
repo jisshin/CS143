@@ -18,11 +18,13 @@ int RxAckEvent::handleEvent()
 
 	Packet* ack_packet = rx_flow->genAckPacket(rx_packet);
 
+	// If not NULL
 	if (ack_packet)
 	{
 		ack_packet->packet_start_t = rx_packet->packet_start_t;
 		delete rx_packet;
-		// And transmit back to sender
+
+		//Transmit back to sender
 		return commonTransmit(rx_node, ack_packet);
 	}
 	
